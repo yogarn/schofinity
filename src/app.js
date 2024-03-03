@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('./config/sequelize')
 
 const express = require('express');
 
