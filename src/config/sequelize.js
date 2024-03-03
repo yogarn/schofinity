@@ -7,20 +7,19 @@ const sequelize = new Sequelize(
     {
         host: 'localhost',
         dialect: 'mariadb',
-        logging: console.log,
-        define: {
-            underscored: true
-        }
+        logging: false,
     }
 );
 
-try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-} catch (error) {
-    console.error('Unable to connect to the database:', error);
+async function connect() {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
 }
 
-module.exports = {
-    sequelize
-}
+connect();
+
+module.exports = sequelize;
