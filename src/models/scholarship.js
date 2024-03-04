@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Scholarship extends Model {
     static associate(models) {
       Scholarship.belongsTo(models.EducationLevel, { foreignKey: 'educationId', allowNull: false });
-      Scholarship.belongsTo(models.FuncingType, { foreignKey: 'typeId', allowNull: false });
+      Scholarship.belongsTo(models.FundingType, { foreignKey: 'typeId', allowNull: false });
       Scholarship.belongsTo(models.Location, { foreignKey: 'locationId', allowNull: false });
       Scholarship.belongsTo(models.Category, { foreignKey: 'categoryId', allowNull: false });
     }
