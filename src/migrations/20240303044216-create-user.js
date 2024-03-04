@@ -23,7 +23,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       contact: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
+      },
+      email: {
+        allowNull: false,
+        unique: true,
+        type: Sequelize.STRING
       },
       profilePict: {
         type: Sequelize.STRING
