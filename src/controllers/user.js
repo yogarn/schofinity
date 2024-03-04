@@ -22,7 +22,7 @@ async function getUsers(req, res, next) {
     }
 };
 
-async function updateUser(req, res) {
+async function updateUser(req, res, next) {
     try {
         const username = req.params.username;
         const updateDetails = req.body;

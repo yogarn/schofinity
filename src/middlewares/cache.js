@@ -22,7 +22,16 @@ function get(req, res, next) {
     }
 }
 
+function clear(req, res, next) {
+    const cacheKeys = cache.keys();
+    let resourceUrl = req.baseUrl;
+    const resourceKeys = cacheKeys.filter(cacheKeys => cacheKeys.includes(resourceUrl));
+    cache.del(resourceKeys);
+    next();
+}
+
 module.exports = {
     set,
-    get
+    get,
+    clear
 }

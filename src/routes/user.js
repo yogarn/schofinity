@@ -6,7 +6,7 @@ const cache = require('../middlewares/cache');
 
 router
     .get('/', authToken, cache.get, getUsers, cache.set)
-    .post('/', addUser)
-    .patch('/:username', authToken, updateUser);
+    .post('/', cache.clear, addUser)
+    .patch('/:username', authToken, cache.clear, updateUser);
 
 module.exports = router;
