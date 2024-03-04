@@ -1,20 +1,20 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Role extends Model {
+  class FundingType extends Model {
     static associate(models) {
-      Role.hasMany(models.User, { foreignKey: 'roleId', allowNull: false });
+      FundingType.hasMany(models.Scholarship, { foreignKey: 'typeId', allowNull: false });
     }
   }
-  Role.init({
-    roleName: {
+  FundingType.init({
+    typeName: {
       allowNull: false,
       unique: true,
       type: DataTypes.STRING
     }
   }, {
     sequelize,
-    modelName: 'Role',
+    modelName: 'FundingType',
   });
-  return Role;
+  return FundingType;
 };
