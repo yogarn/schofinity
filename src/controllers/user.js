@@ -11,10 +11,12 @@ async function addUser(req, res) {
     }
 };
 
-async function getUsers(req, res) {
+async function getUsers(req, res, next) {
     try {
         const users = await find();
         sendResponse(res, 200, users);
+        res.locals.data = users;
+        next();
     } catch (e) {
         sendResponse(res, 500, e.message);
     }
