@@ -1,4 +1,4 @@
-const { find, create } = require('../services/user');
+const { find, create, update } = require('../services/user');
 const sendResponse = require('../middlewares/responseHandler');
 
 async function addUser(req, res) {
@@ -22,7 +22,19 @@ async function getUsers(req, res, next) {
     }
 };
 
+async function updateUser(req, res) {
+    try {
+        const username = req.params.username;
+        const updateDetails = req.body;
+        await update(username, updateDetails);
+        sendResponse(res, 200, updateDetails);
+    } catch (e) {
+        sendResponse(res, 500, e.message);
+    }
+}
+
 module.exports = {
     addUser,
-    getUsers
+    getUsers,
+    updateUser
 }

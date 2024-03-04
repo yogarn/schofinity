@@ -23,7 +23,14 @@ async function create(data) {
     });
 };
 
+async function update(username, data) {
+    return await sequelize.transaction(async (t) => {
+        return await User.update(data, { where: { username } }, { transaction: t });
+    });
+}
+
 module.exports = {
     find,
-    create
+    create,
+    update
 }
