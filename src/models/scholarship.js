@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Scholarship.init({
+    id: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
+    },
     name: {
       allowNull: false,
       type: DataTypes.STRING
