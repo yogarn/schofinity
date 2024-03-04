@@ -1,4 +1,4 @@
-const { find, create, update } = require('../services/user');
+const { find, create, update, validate } = require('../services/user');
 const sendResponse = require('../middlewares/responseHandler');
 
 async function addUser(req, res) {
@@ -7,7 +7,7 @@ async function addUser(req, res) {
         await create(userDetails);
         sendResponse(res, 200, userDetails);
     } catch (e) {
-        sendResponse(res, 500, e.message);
+        sendResponse(res, 500, e.errors);
     }
 };
 
@@ -18,7 +18,7 @@ async function getUsers(req, res, next) {
         res.locals.data = users;
         next();
     } catch (e) {
-        sendResponse(res, 500, e.message);
+        sendResponse(res, 500, e.errors);
     }
 };
 
@@ -29,7 +29,7 @@ async function updateUser(req, res, next) {
         await update(username, updateDetails);
         sendResponse(res, 200, updateDetails);
     } catch (e) {
-        sendResponse(res, 500, e.message);
+        sendResponse(res, 500, e.errors);
     }
 }
 

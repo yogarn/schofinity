@@ -15,10 +15,10 @@ async function find() {
 
 async function create(data) {
     return sequelize.transaction(async (t) => {
-        const { username, name, password, contact, profilePict, roleId } = data;
+        const { username, name, password, contact, email, profilePict, roleId } = data;
         const hashedPassword = await bcrypt.hash(password, 10);
         return User.create({
-            username, password: hashedPassword, name, contact, profilePict, roleId
+            username, password: hashedPassword, name, contact, email, profilePict, roleId
         }, { transaction: t });
     });
 };

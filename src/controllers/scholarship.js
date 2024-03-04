@@ -8,7 +8,7 @@ async function getScholarships(req, res, next) {
         res.locals.data = scholarships;
         next();
     } catch (e) {
-        sendResponse(res, 500, e.message);
+        sendResponse(res, 500, e.errors);
     }
 };
 
@@ -18,7 +18,7 @@ async function addScholarship(req, res) {
         await create(scholarshipDetails);
         sendResponse(res, 200, scholarshipDetails);
     } catch (e) {
-        sendResponse(res, 500, e.message);
+        sendResponse(res, 500, e.errors);
     }
 };
 
@@ -29,7 +29,7 @@ async function updateScholarship(req, res, next) {
         await update(id, updateDetails);
         sendResponse(res, 200, updateDetails);
     } catch (e) {
-        sendResponse(res, 500, e.message);
+        sendResponse(res, 500, e.errors);
     }
 }
 
