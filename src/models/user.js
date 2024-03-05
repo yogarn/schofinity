@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       type: DataTypes.STRING
     },
-    profilePict: {
+    image: {
       type: DataTypes.STRING
     },
     roleId: {

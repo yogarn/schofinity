@@ -30,7 +30,7 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
-      profilePict: {
+      image: {
         type: Sequelize.STRING
       },
       roleId: {

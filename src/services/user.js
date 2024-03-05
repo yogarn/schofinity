@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const { User, Role } = db;
 
-async function find() {
+async function findAll() {
     return sequelize.transaction(async (t) => {
         return User.findAll({
             include: [{ model: Role }],
@@ -13,12 +13,21 @@ async function find() {
     });
 };
 
+async function find(username) {
+    return sequelize.transaction(async (t) => {
+        return User.findOne({
+            include: [{ model: Role }],
+            attributes: { exclude: ['roleId', 'password'] }
+        }, { where: { username } }, { transaction: t });
+    });
+}
+
 async function create(data) {
     return sequelize.transaction(async (t) => {
-        const { username, name, password, contact, email, profilePict, roleId } = data;
+        const { username, name, password, contact, email, image, roleId } = data;
         const hashedPassword = await bcrypt.hash(password, 10);
         return User.create({
-            username, password: hashedPassword, name, contact, email, profilePict, roleId
+            username, password: hashedPassword, name, contact, email, image, roleId
         }, { transaction: t });
     });
 };
@@ -31,6 +40,7 @@ async function update(username, data) {
 
 module.exports = {
     find,
+    findAll,
     create,
     update
 }
