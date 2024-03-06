@@ -13,7 +13,7 @@ function authenticateToken(req, res, next) {
             return sendResponse(res, 403, 'Invalid token');
         } else {
             console.log(`logged in as ${decoded.user.id}`);
-            req.user = decoded;
+            req.jwt = decoded.user;
             next();
         }
     });

@@ -16,8 +16,9 @@ async function find(id) {
     return sequelize.transaction(async (t) => {
         return Scholarship.findOne({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
-            attributes: { exclude: ['educationId', 'typeId', 'locationId', 'categoryId', 'statusId'] }
-        }, { where: { id } }, { transaction: t });
+            attributes: { exclude: ['educationId', 'typeId', 'locationId', 'categoryId', 'statusId'] },
+            where: { id }
+        }, { transaction: t });
     });
 }
 

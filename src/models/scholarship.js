@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       Scholarship.belongsTo(models.Location, { foreignKey: 'locationId', allowNull: false });
       Scholarship.belongsTo(models.Category, { foreignKey: 'categoryId', allowNull: false });
       Scholarship.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
+      Scholarship.hasMany(models.Favorite, { foreignKey: 'scholarshipId', allowNull: false });
     }
   }
   Scholarship.init({

@@ -1,6 +1,6 @@
 const { findAll, find, create, update } = require('../services/scholarship');
 const sendResponse = require('../middlewares/responseHandler');
-const { uploadImage } = require('../services/supabase');
+const { uploadImage, deleteImage } = require('../services/supabase');
 const scholarshipBucket = process.env.SCHOLARSHIP_BUCKET;
 
 async function getScholarships(req, res, next) {

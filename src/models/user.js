@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.belongsTo(models.Role, { foreignKey: 'roleId', allowNull: false });
+      User.hasMany(models.Favorite, { foreignKey: 'userId', allowNull: false });
     }
   }
   User.init({
@@ -39,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     roleId: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      defaultValue: 1
     }
   }, {
     sequelize,

@@ -17,8 +17,9 @@ async function find(username) {
     return sequelize.transaction(async (t) => {
         return User.findOne({
             include: [{ model: Role }],
-            attributes: { exclude: ['roleId', 'password'] }
-        }, { where: { username } }, { transaction: t });
+            attributes: { exclude: ['roleId', 'password'] },
+            where: { username }
+        }, { transaction: t });
     });
 }
 
