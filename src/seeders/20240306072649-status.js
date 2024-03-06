@@ -3,24 +3,19 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
-    return queryInterface.bulkInsert('EducationLevels', [
+    return queryInterface.bulkInsert('Statuses', [
       {
-        levelName: 'd3',
+        statusName: 'pending',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        levelName: 's1/d4',
+        statusName: 'success',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        levelName: 's2',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        levelName: 's4',
+        statusName: 'failed',
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -28,6 +23,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    return queryInterface.bulkDelete('EducationLevels', null, {});
+    return queryInterface.bulkDelete('Statuses', null, {});
   }
 };

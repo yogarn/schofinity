@@ -18,6 +18,12 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
+      benefit: {
+        type: Sequelize.STRING
+      },
+      requirement: {
+        type: Sequelize.STRING
+      },
       startDate: {
         allowNull: false,
         type: Sequelize.DATE
@@ -25,10 +31,6 @@ module.exports = {
       endDate: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      maxSemester: {
-        allowNull: false,
-        type: Sequelize.INTEGER
       },
       educationId: {
         allowNull: false,
@@ -38,6 +40,10 @@ module.exports = {
           key: 'id',
           as: 'educationId',
         }
+      },
+      maxSemester: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       typeId: {
         allowNull: false,
@@ -64,6 +70,15 @@ module.exports = {
           model: 'Categories',
           key: 'id',
           as: 'categoryId',
+        }
+      },
+      statusId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Statuses',
+          key: 'id',
+          as: 'statusId',
         }
       },
       createdAt: {

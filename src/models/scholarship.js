@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       Scholarship.belongsTo(models.FundingType, { foreignKey: 'typeId', allowNull: false });
       Scholarship.belongsTo(models.Location, { foreignKey: 'locationId', allowNull: false });
       Scholarship.belongsTo(models.Category, { foreignKey: 'categoryId', allowNull: false });
+      Scholarship.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
     }
   }
   Scholarship.init({
@@ -26,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
     image: {
       type: DataTypes.STRING
     },
+    benefit: {
+      type: DataTypes.STRING,
+    },
+    requirement: {
+      type: DataTypes.STRING
+    },
     startDate: {
       allowNull: false,
       type: DataTypes.DATE
@@ -34,11 +41,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE
     },
-    maxSemester: {
+    educationId: {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    educationId: {
+    maxSemester: {
       allowNull: false,
       type: DataTypes.INTEGER
     },
@@ -54,6 +61,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
+    statusId: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'Scholarship',
