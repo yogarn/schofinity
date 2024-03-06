@@ -1,13 +1,14 @@
 const { find, create, update, validate, findAll } = require('../services/user');
 const sendResponse = require('../middlewares/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
+const userBucket = process.env.USER_BUCKET;
 
 async function addUser(req, res) {
     try {
         const userDetails = req.body;
         
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            userDetails.image = await uploadImage(req.file.buffer, 'users', `${userDetails.username}-${req.file.originalname}`);
+            userDetails.image = await uploadImage(req.file.buffer, userBucket, `${userDetails.username}-${req.file.originalname}`);
         }
 
         await create(userDetails);
@@ -36,9 +37,9 @@ async function updateUser(req, res, next) {
         const user = await find(username);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            updateDetails.image = await uploadImage(req.file.buffer, 'users', `${username}-${req.file.originalname}`);
+            updateDetails.image = await uploadImage(req.file.buffer, userBucket, `${username}-${req.file.originalname}`);
             if (user.image) {
-                await deleteImage('users', user.image);
+                await deleteImage(userBucket, user.image);
             }
         }
 
