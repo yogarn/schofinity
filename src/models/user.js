@@ -42,6 +42,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
       defaultValue: 1
+    },
+    statusId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
+    otp: {
+      allowNull: true,
+      type: DataTypes.STRING,
     }
   }, {
     sequelize,

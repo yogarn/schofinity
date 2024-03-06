@@ -42,6 +42,19 @@ module.exports = {
           as: 'roleId',
         }
       },
+      statusId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Statuses',
+          key: 'id',
+          as: 'statusId',
+        }
+      },
+      otp: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
