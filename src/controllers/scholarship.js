@@ -5,7 +5,8 @@ const scholarshipBucket = process.env.SCHOLARSHIP_BUCKET;
 
 async function getScholarships(req, res, next) {
     try {
-        const scholarships = await findAll();
+        const scholarships = await findAll(req.query);
+        
         sendResponse(res, 200, scholarships);
         res.locals.data = scholarships;
         next();
