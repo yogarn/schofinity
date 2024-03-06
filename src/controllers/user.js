@@ -7,7 +7,7 @@ async function addUser(req, res) {
         const userDetails = req.body;
         
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            userDetails.image = await uploadImage(req.file.buffer, 'users', `${req.body.username}-${req.file.originalname}`);
+            userDetails.image = await uploadImage(req.file.buffer, 'users', `${userDetails.username}-${req.file.originalname}`);
         }
 
         await create(userDetails);
