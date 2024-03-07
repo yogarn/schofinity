@@ -2,7 +2,7 @@ const transporter = require("../config/nodemailer");
 
 async function sendEmail(userEmail, subject, html) {
     transporter.sendMail({
-        from: 'Schofinity',
+        from: process.env.NODEMAILER_USER,
         to: userEmail,
         subject,
         html,
