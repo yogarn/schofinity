@@ -7,8 +7,9 @@ async function findAll() {
     return sequelize.transaction(async (t) => {
         return Favorite.findAll({
             include: [{ model: Scholarship }],
-            attributes: { exclude: ['scholarshipId'] }
-        }, { transaction: t });
+            attributes: { exclude: ['scholarshipId'] },
+            transaction: t
+        });
     });
 };
 
@@ -17,8 +18,9 @@ async function find(userId) {
         return Favorite.findOne({
             include: [{ model: Scholarship }],
             attributes: { exclude: ['scholarshipId'] },
-            where: { userId }
-        }, { transaction: t });
+            where: { userId },
+            transaction: t
+        });
     });
 }
 

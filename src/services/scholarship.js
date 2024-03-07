@@ -32,8 +32,9 @@ async function findAll(query) {
         return Scholarship.findAll({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
             attributes: { exclude: ['educationId', 'typeId', 'locationId', 'categoryId', 'statusId'] },
-            where: query
-        }, { transaction: t });
+            where: query,
+            transaction: t
+        });
     });
 };
 
@@ -42,8 +43,9 @@ async function find(id) {
         return Scholarship.findOne({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
             attributes: { exclude: ['educationId', 'typeId', 'locationId', 'categoryId', 'statusId'] },
-            where: { id }
-        }, { transaction: t });
+            where: { id },
+            transaction: t
+        });
     });
 }
 
@@ -55,7 +57,7 @@ async function create(data) {
 
 async function update(id, data) {
     return await sequelize.transaction(async (t) => {
-        return await Scholarship.update(data, { where: { id } }, { transaction: t });
+        return await Scholarship.update(data, { where: { id }, transaction: t });
     });
 }
 

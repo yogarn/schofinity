@@ -8,8 +8,9 @@ async function findAll() {
     return sequelize.transaction(async (t) => {
         return User.findAll({
             include: [{ model: Role }],
-            attributes: { exclude: ['roleId', 'password'] }
-        }, { transaction: t });
+            attributes: { exclude: ['roleId', 'password'] },
+            transaction: t
+        });
     });
 };
 
@@ -18,8 +19,9 @@ async function find(username) {
         return User.findOne({
             include: [{ model: Role }],
             attributes: { exclude: ['roleId', 'password'] },
-            where: { username }
-        }, { transaction: t });
+            where: { username },
+            transaction: t
+        });
     });
 }
 
@@ -38,7 +40,7 @@ async function update(username, data) {
         data.password = await bcrypt.hash(data.password, 10);
     }
     return await sequelize.transaction(async (t) => {
-        return await User.update(data, { where: { username } }, { transaction: t });
+        return await User.update(data, { where: { username }, transaction: t });
     });
 }
 

@@ -37,6 +37,10 @@ async function updateUser(req, res, next) {
         const username = req.params.username;
         const user = await find(username);
 
+        if (!user) {
+            throw new Error("User doesn't exists");
+        }
+
         if (req.file && req.file.mimetype === 'image/jpeg') {
             updateDetails.image = await uploadImage(req.file.buffer, userBucket, `${username}-${req.file.originalname}`);
             if (user.image) {

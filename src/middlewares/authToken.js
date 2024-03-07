@@ -12,7 +12,6 @@ function authenticateToken(req, res, next) {
         if (err) {
             return sendResponse(res, 403, 'Invalid token');
         } else {
-            console.log(`logged in as ${decoded.user.id}`);
             req.jwt = decoded.user;
             next();
         }

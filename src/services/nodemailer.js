@@ -1,11 +1,11 @@
 const transporter = require("../config/nodemailer");
 
-async function sendEmail(userEmail, subject, text) {
+async function sendEmail(userEmail, subject, html) {
     transporter.sendMail({
-        from: process.env.NODEMAILER_USER,
+        from: 'Schofinity',
         to: userEmail,
-        subject: subject,
-        text: text,
+        subject,
+        html,
     }, (error, info) => {
         if (error) {
             console.error("Error sending email: ", error);
