@@ -1,5 +1,5 @@
 const NodeCache = require('node-cache');
-const sendResponse = require('./responseHandler');
+const { sendResponse } = require('../services/responseHandler');
 const cache = new NodeCache({ stdTTL: 5 * 60 });
 
 function getUrlFromRequest(req, res, next) {

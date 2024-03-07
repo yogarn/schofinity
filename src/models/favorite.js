@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Favorite',
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'scholarshipId'],
+      },
+    ],
   });
   return Favorite;
 };

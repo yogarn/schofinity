@@ -1,18 +1,17 @@
 const { findAll, find, create, update } = require('../services/scholarship');
-const sendResponse = require('../middlewares/responseHandler');
+const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const scholarshipBucket = process.env.SCHOLARSHIP_BUCKET;
 
 async function getScholarships(req, res, next) {
     try {
         const scholarships = await findAll(req.query);
-        
-        sendResponse(res, 200, scholarships);
+        sendResponse(res, scholarships);
         res.locals.data = scholarships;
         next();
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 };
 
@@ -25,10 +24,10 @@ async function addScholarship(req, res) {
         }
 
         await create(scholarshipDetails);
-        sendResponse(res, 200, scholarshipDetails);
+        sendResponse(res, scholarshipDetails);
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 };
 
@@ -46,10 +45,10 @@ async function updateScholarship(req, res, next) {
         }
 
         await update(id, updateDetails);
-        sendResponse(res, 200, updateDetails);
+        sendResponse(res, updateDetails);
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 }
 

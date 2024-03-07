@@ -6,7 +6,7 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       userId: {
         allowNull: false,
@@ -14,8 +14,9 @@ module.exports = {
         references: {
           model: 'Users',
           key: 'id',
-          as: 'userId',
-        }
+          as: 'userId'
+        },
+        onDelete: 'CASCADE',
       },
       scholarshipId: {
         allowNull: false,
@@ -23,17 +24,23 @@ module.exports = {
         references: {
           model: 'Scholarships',
           key: 'id',
-          as: 'scholarshipId',
-        }
+          as: 'scholarshipId'
+        },
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
+    });
+
+    await queryInterface.addIndex('Favorites', ['userId', 'scholarshipId'], {
+      unique: true,
+      name: 'unique_user_scholarship_combination'
     });
   },
   async down(queryInterface, Sequelize) {

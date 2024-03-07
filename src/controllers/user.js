@@ -1,7 +1,6 @@
 const { find, create, update, validate, findAll } = require('../services/user');
-const sendResponse = require('../middlewares/responseHandler');
+const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
-const { generateOTP } = require('../services/auth');
 const userBucket = process.env.USER_BUCKET;
 
 async function addUser(req, res) {
@@ -13,21 +12,22 @@ async function addUser(req, res) {
         }
 
         await create(userDetails);
-        sendResponse(res, 200, userDetails);
+        sendResponse(res, userDetails);
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 };
 
 async function getUsers(req, res, next) {
     try {
         const users = await findAll();
-        sendResponse(res, 200, users);
+        sendResponse(res, users);
         res.locals.data = users;
         next();
     } catch (e) {
-        sendResponse(res, 500, e.errors);
+        console.log(e);
+        sendError(res, e.message);
     }
 };
 
@@ -49,10 +49,10 @@ async function updateUser(req, res, next) {
         }
 
         await update(username, updateDetails);
-        sendResponse(res, 200, updateDetails);
+        sendResponse(res, updateDetails);
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 }
 

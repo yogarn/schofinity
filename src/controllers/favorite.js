@@ -1,5 +1,5 @@
 const { find, findAll, create } = require('../services/favorite');
-const sendResponse = require('../middlewares/responseHandler');
+const { sendResponse, sendError } = require('../services/responseHandler');
 const userServices = require('../services/user');
 
 async function addFavorite(req, res) {
@@ -7,22 +7,22 @@ async function addFavorite(req, res) {
         let favDetails = req.body;
         favDetails.userId = req.jwt.id;
         await create(favDetails);
-        sendResponse(res, 200, favDetails);
+        sendResponse(res, favDetails);
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 };
 
 async function getFavorites(req, res, next) {
     try {
         const favorites = await findAll();
-        sendResponse(res, 200, favorites);
+        sendResponse(res, favorites);
         res.locals.data = favorites;
         next();
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 };
 
@@ -31,12 +31,12 @@ async function getFavorite(req, res, next) {
         const user = await userServices.find(req.params.username);
         const favorites = await find(user.id);
         console.log(user.id)
-        sendResponse(res, 200, favorites);
+        sendResponse(res, favorites);
         res.locals.data = favorites;
         next();
     } catch (e) {
         console.log(e);
-        sendResponse(res, 500, e.errors);
+        sendError(res, e.message);
     }
 };
 

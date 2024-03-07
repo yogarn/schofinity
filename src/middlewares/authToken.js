@@ -1,16 +1,16 @@
 const jwt = require('jsonwebtoken');
-const sendResponse = require('./responseHandler');
+const { sendError } = require('../services/responseHandler');
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
-        return sendResponse(res, 401, 'No token provided');
+        return sendError(res, 'No token provided');
     }
 
     jwt.verify(token, 'secret_key', (err, decoded) => {
         if (err) {
-            return sendResponse(res, 403, 'Invalid token');
+            return sendError(res, 'Invalid jwt token');
         } else {
             req.jwt = decoded.user;
             next();
