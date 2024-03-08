@@ -25,6 +25,16 @@ async function find(username) {
     });
 }
 
+async function getRole(id) {
+    return sequelize.transaction(async (t) => {
+        return User.findOne({
+            where: { id },
+            attributes: ['roleId'],
+            transaction: t
+        });
+    });
+}
+
 async function create(data) {
     return sequelize.transaction(async (t) => {
         const { username, name, password, contact, email, image, roleId } = data;
@@ -47,6 +57,7 @@ async function update(username, data) {
 module.exports = {
     find,
     findAll,
+    getRole,
     create,
     update
 }

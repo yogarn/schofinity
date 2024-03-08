@@ -23,6 +23,9 @@ function sendError(res, error) {
         case 'Incorrect password':
             status = 401;
             break;
+        case 'Insufficient privilege':
+            status = 401;
+            break;
         case 'Incorrect OTP':
             status = 401;
             break;

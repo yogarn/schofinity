@@ -16,7 +16,7 @@ function get(req, res, next) {
     const url = getUrlFromRequest(req);
     const content = cache.get(url);
     if (content) {
-        sendResponse(res, 200, content);
+        sendResponse(res, content);
     } else {
         next();
     }
