@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       Mentor.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
       Mentor.belongsTo(models.User, { foreignKey: 'userId', allowNull: false });
       Mentor.hasMany(models.MentorSchedule, { foreignKey: 'mentorId', allowNull: false });
+      Mentor.hasMany(models.Mentoring, { foreignKey: 'mentorId', allowNull: false });
     }
   }
   Mentor.init({
