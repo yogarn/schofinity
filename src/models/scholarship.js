@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       Scholarship.belongsTo(models.Category, { foreignKey: 'categoryId', allowNull: false });
       Scholarship.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
       Scholarship.hasMany(models.Favorite, { foreignKey: 'scholarshipId', allowNull: false });
+      Scholarship.belongsTo(models.User, { foreignKey: 'userId', allowNull: false });
     }
   }
   Scholarship.init({
@@ -17,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
+    },
+    userId: {
+      allowNull: false,
+      type: DataTypes.UUID
     },
     name: {
       allowNull: false,
