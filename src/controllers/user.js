@@ -1,4 +1,4 @@
-const { find, create, update, validate, findAll } = require('../services/user');
+const { find, create, update, validate, findAll, getUsername } = require('../services/user');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const userBucket = process.env.USER_BUCKET;
@@ -19,7 +19,20 @@ async function addUser(req, res) {
     }
 };
 
-async function getUsers(req, res, next) {
+async function getUser(req, res, next) {
+    try {
+        const username = req.params.username;
+        const user = await find(username);
+        sendResponse(res, user);
+        res.locals.data = user;
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+};
+
+async function getAllUsers(req, res, next) {
     try {
         const users = await findAll();
         sendResponse(res, users);
@@ -34,11 +47,12 @@ async function getUsers(req, res, next) {
 async function updateUser(req, res, next) {
     try {
         const updateDetails = req.body;
-        const username = req.params.username;
+        const { username } = req.params.username ? req.params : await getUsername(req.jwt.id);
+
         const user = await find(username);
 
         if (!user) {
-            throw new Error("User doesn't exists");
+            throw new Error("Username not found");
         }
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
@@ -58,6 +72,7 @@ async function updateUser(req, res, next) {
 
 module.exports = {
     addUser,
-    getUsers,
+    getUser,
+    getAllUsers,
     updateUser
 }
