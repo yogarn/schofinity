@@ -40,9 +40,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
+    price: {
+      allowNull: false,
+      type: DataTypes.DOUBLE
+    },
     statusId: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      defaultValue: 1
     },
     rating: {
       type: DataTypes.INTEGER

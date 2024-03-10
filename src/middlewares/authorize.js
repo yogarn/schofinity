@@ -2,7 +2,7 @@ const { sendError } = require('../services/responseHandler');
 const scholarshipServices = require('../services/scholarship');
 const scheduleServices = require('../services/mentorSchedule');
 const { getRoleByUserId } = require('../services/user');
-const { getMentorId, getMentorByUserId } = require('../services/mentor');
+const { getMentorByUserId } = require('../services/mentor');
 
 function checkRoleId(requiredRoleId) {
     return async function (req, res, next) {

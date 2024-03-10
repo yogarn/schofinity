@@ -43,6 +43,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      price: {
+        allowNull: false,
+        type: Sequelize.DOUBLE
+      },
       statusId: {
         allowNull: false,
         type: Sequelize.INTEGER,
