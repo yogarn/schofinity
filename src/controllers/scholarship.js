@@ -34,9 +34,9 @@ async function addScholarship(req, res) {
 
 async function updateScholarship(req, res, next) {
     try {
-        const id = req.params.id;
+        const scholarshipId = req.params.id;
         const updateDetails = req.body;
-        const scholarship = await find(id);
+        const scholarship = await find(scholarshipId);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
             updateDetails.image = await uploadImage(req.file.buffer, scholarshipBucket, `${Date.now()}-${req.file.originalname}`);
@@ -45,7 +45,7 @@ async function updateScholarship(req, res, next) {
             }
         }
 
-        await update(id, updateDetails);
+        await update(scholarshipId, updateDetails);
         sendResponse(res, updateDetails);
     } catch (e) {
         console.log(e);

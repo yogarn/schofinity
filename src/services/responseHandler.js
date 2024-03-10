@@ -38,6 +38,9 @@ function sendError(res, error) {
         case 'Username not found':
             status = 404;
             break;
+        case 'Scholarship not found':
+            status = 404;
+            break;
         // else
         default:
             status = 500;
