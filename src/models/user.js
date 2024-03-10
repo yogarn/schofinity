@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.belongsTo(models.Role, { foreignKey: 'roleId', allowNull: false });
       User.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
+      User.hasOne(models.Mentor, { foreignKey: 'userId', allowNull: false });
       User.hasMany(models.Favorite, { foreignKey: 'userId', allowNull: false });
       User.hasMany(models.Scholarship, { foreignKey: 'userId', allowNull: false });
       User.hasMany(models.Mentor, { foreignKey: 'userId', allowNull: false });

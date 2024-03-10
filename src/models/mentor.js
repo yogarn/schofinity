@@ -3,8 +3,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Mentor extends Model {
     static associate(models) {
-      Favorite.belongsTo(models.User, { foreignKey: 'userId', allowNull: false });
       Mentor.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
+      Mentor.belongsTo(models.User, { foreignKey: 'userId', allowNull: false });
       Mentor.hasMany(models.MentorSchedule, { foreignKey: 'mentorId', allowNull: false });
     }
   }
@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       allowNull: false,
+      unique: true,
       type: DataTypes.UUID,
     },
     mentoringInterval: {
@@ -33,7 +34,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     statusId: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      defaultValue: 1
     }
   }, {
     sequelize,

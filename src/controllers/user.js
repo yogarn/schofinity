@@ -1,6 +1,7 @@
 const { find, create, update, validate, findAll, getUsername } = require('../services/user');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
+const { generateOTP } = require('../services/auth');
 const userBucket = process.env.USER_BUCKET;
 
 async function addUser(req, res) {
@@ -12,6 +13,7 @@ async function addUser(req, res) {
         }
 
         await create(userDetails);
+        await generateOTP(userDetails.username);
         sendResponse(res, userDetails);
     } catch (e) {
         console.log(e);

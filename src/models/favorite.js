@@ -16,10 +16,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       allowNull: false,
-      type: DataTypes.UUID,
+      unique: 'unique_user_scholarship_combination',
+      type: DataTypes.UUID
     },
     scholarshipId: {
       allowNull: false,
+      unique: 'unique_user_scholarship_combination',
       type: DataTypes.UUID
     }
   }, {
