@@ -5,34 +5,39 @@ const sequelize = require('../config/sequelize')
 const { Scholarship, EducationLevel, FundingType, Location, Category, Status } = db;
 
 async function findAll(query) {
+
+    const whereClause = {};
+
     if (query.name) {
-        query.name = { [Op.like]: `%${query.name}%` };
+        whereClause.name = { [Op.like]: `%${query.name}%` };
     }
 
     if (query.description) {
-        query.description = { [Op.like]: `%${query.description}%` };
+        whereClause.description = { [Op.like]: `%${query.description}%` };
     }
 
     if (query.benefit) {
-        query.benefit = { [Op.like]: `%${query.benefit}%` };
+        whereClause.benefit = { [Op.like]: `%${query.benefit}%` };
     }
 
     if (query.requirement) {
-        query.requirement = { [Op.like]: `%${query.requirement}%` };
+        whereClause.requirement = { [Op.like]: `%${query.requirement}%` };
     }
 
     if (query.startDate) {
-        query.startDate = { [Op.like]: `%${query.startDate}%` };
+        whereClause.startDate = { [Op.like]: `%${query.startDate}%` };
     }
 
     if (query.maxSemester) {
-        query.maxSemester = { [Op.gte]: parseInt(query.maxSemester) };
+        whereClause.maxSemester = { [Op.gte]: parseInt(query.maxSemester) };
     }
+
     return sequelize.transaction(async (t) => {
         return Scholarship.findAll({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
             attributes: { exclude: ['educationId', 'typeId', 'locationId', 'categoryId', 'statusId'] },
-            where: query,
+            where: whereClause,
+            limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
         });
     });
