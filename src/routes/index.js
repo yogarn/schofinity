@@ -6,11 +6,13 @@ const usersRoute = require('./user');
 const scholarshipsRoute = require('./scholarship');
 const favoritesRoute = require('./favorite');
 const mentorsRoute = require('./mentor');
+const schedulesRoute = require('./mentorSchedule');
 
 router.use('/auths', authsRoute);
 router.use('/users', usersRoute);
 router.use('/scholarships', scholarshipsRoute);
 router.use('/favorites', favoritesRoute);
 router.use('/mentors', mentorsRoute);
+router.use('/schedules', schedulesRoute);
 
 module.exports = router;

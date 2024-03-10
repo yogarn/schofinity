@@ -41,6 +41,9 @@ function sendError(res, error) {
         case 'Scholarship not found':
             status = 404;
             break;
+        case 'Schedule not found':
+            status = 404;
+            break;
         // else
         default:
             status = 500;

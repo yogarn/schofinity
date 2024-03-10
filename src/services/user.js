@@ -8,7 +8,7 @@ async function findAll() {
     return sequelize.transaction(async (t) => {
         return User.findAll({
             include: [{ model: Role }],
-            attributes: { exclude: ['roleId', 'password'] },
+            attributes: { exclude: ['roleId', 'password', 'otp'] },
             transaction: t
         });
     });
@@ -18,14 +18,14 @@ async function find(username) {
     return sequelize.transaction(async (t) => {
         return User.findOne({
             include: [{ model: Role }],
-            attributes: { exclude: ['roleId', 'password'] },
+            attributes: { exclude: ['roleId', 'password', 'otp'] },
             where: { username },
             transaction: t
         });
     });
 }
 
-async function getRole(id) {
+async function getRoleByUserId(id) {
     return sequelize.transaction(async (t) => {
         return User.findOne({
             where: { id },
@@ -77,7 +77,7 @@ async function update(username, data) {
 module.exports = {
     find,
     findAll,
-    getRole,
+    getRoleByUserId,
     getUsername,
     getUserId,
     create,

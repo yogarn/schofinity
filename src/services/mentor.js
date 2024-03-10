@@ -1,6 +1,5 @@
 const db = require('../models/index');
 const sequelize = require('../config/sequelize')
-const bcrypt = require('bcrypt');
 
 const { User, Mentor, MentorSchedule } = db;
 
@@ -19,6 +18,26 @@ async function findAll() {
     });
 };
 
+async function find(id) {
+    return sequelize.transaction(async (t) => {
+        return Mentor.findOne({
+            include: [{ model: User, attributes: { exclude: ['roleId', 'password'] } }, { model: MentorSchedule }],
+            where: { id },
+            transaction: t
+        });
+    });
+};
+
+async function getMentorByUserId(userId) {
+    return sequelize.transaction(async (t) => {
+        return Mentor.findOne({
+            where: { userId },
+            attributes: ['id'],
+            transaction: t
+        });
+    });
+}
+
 async function update(userId, data) {
     return await sequelize.transaction(async (t) => {
         return await Mentor.update(data, { where: { userId }, transaction: t });
@@ -28,5 +47,7 @@ async function update(userId, data) {
 module.exports = {
     create,
     findAll,
+    find,
+    getMentorByUserId,
     update
 }
