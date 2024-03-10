@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./config/nodecron');
 
 const express = require('express');
 const bodyParser = require('body-parser');
