@@ -4,6 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   class Status extends Model {
     static associate(models) {
       Status.hasMany(models.Scholarship, { foreignKey: 'statusId', allowNull: false });
+      Status.hasMany(models.User, { foreignKey: 'statusId', allowNull: false });
+      Status.hasMany(models.Mentor, { foreignKey: 'statusId', allowNull: false });
     }
   }
   Status.init({
