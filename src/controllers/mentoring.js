@@ -1,7 +1,6 @@
 const { create, update, findAll } = require('../services/mentoring');
 const mentorServices = require('../services/mentor');
 const userServices = require('../services/user');
-const generatePayments = require('../services/midtrans');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { v4: uuidv4 } = require('uuid');
 
@@ -30,7 +29,9 @@ async function addMentoring(req, res) {
         mentoringDetails.user = user;
         mentoringDetails.mentor = mentor;
 
-        await create(mentoringDetails);
+        const transactionToken = await create(mentoringDetails);
+        mentoringDetails.transactionToken = transactionToken;
+
         sendResponse(res, mentoringDetails);
     } catch (e) {
         console.log(e);

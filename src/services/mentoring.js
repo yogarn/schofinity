@@ -23,6 +23,8 @@ async function create(data) {
         }
 
         await mentoring.update({ transactionToken }, { transaction: t });
+
+        return transactionToken;
     });
 };
 

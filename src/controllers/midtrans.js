@@ -1,5 +1,6 @@
 const midtrans = require("../config/midtrans");
 const { mentoringPayments } = require('../services/mentoring');
+const { classPayment } = require('../services/onlineclass');
 const { sendResponse, sendError } = require('../services/responseHandler');
 
 async function resolvePayments(req, res, next) {
@@ -18,6 +19,8 @@ async function resolvePayments(req, res, next) {
         if (classType == "mentoring") {
           await mentoringPayments(id, transactionStatus, fraudStatus);
           sendResponse(res, orderId);
+        } else if (classType == "class") {
+          await classPayment(id, transactionStatus, fraudStatus);
         }
       } catch (e) {
         console.log(e);

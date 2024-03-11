@@ -1,7 +1,9 @@
-const { findAll, find, create, update } = require('../services/onlineclass');
+const { findAll, find, create, update, buy } = require('../services/onlineclass');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { getMentorByUserId } = require('../services/mentor');
+const userServices = require('../services/user');
+const { v4: uuidv4 } = require('uuid');
 const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
 
 async function getOnlineClass(req, res, next) {
@@ -55,8 +57,43 @@ async function updateOnlineClass(req, res, next) {
     }
 }
 
+async function buyOnlineClass(req, res, next) {
+    try {
+        const classPaymentDetails = req.body;
+        const uuid = uuidv4();
+        const userId = req.jwt.id;
+
+        const onlineClass = await find(classPaymentDetails.classId);
+        const user = await userServices.findByUserId(userId);
+
+        if (!onlineClass) {
+            throw new Error("Class not found")
+        }
+
+        if (!user) {
+            throw new Error("User not found")
+        }
+
+        classPaymentDetails.id = uuid;
+        classPaymentDetails.userId = userId;
+        classPaymentDetails.orderId = `class ${uuid}`;
+        classPaymentDetails.price = onlineClass.price;
+        classPaymentDetails.user = user;
+        classPaymentDetails.onlineClass = onlineClass;
+
+        const transactionToken = await buy(classPaymentDetails);
+        classPaymentDetails.transactionToken = transactionToken;
+
+        sendResponse(res, classPaymentDetails);
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
 module.exports = {
     getOnlineClass,
     addOnlineClass,
-    updateOnlineClass
+    updateOnlineClass,
+    buyOnlineClass
 }

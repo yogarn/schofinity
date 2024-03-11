@@ -30,6 +30,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      price: {
+        allowNull: false,
+        type: Sequelize.DOUBLE
+      },
       statusId: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -38,6 +42,9 @@ module.exports = {
           key: 'id',
           as: 'statusId',
         },
+      },
+      transactionToken: {
+        type: Sequelize.UUID
       },
       rating: {
         type: Sequelize.INTEGER
