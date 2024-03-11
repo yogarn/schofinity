@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Workshops', {
+    await queryInterface.createTable('OnlineClasses', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -14,10 +14,23 @@ module.exports = {
       },
       description: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },
+      community: {
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
+      typeId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'ClassTypes',
+          key: 'id',
+          as: 'typeId',
+        },
       },
       categoryId: {
         allowNull: false,
@@ -60,6 +73,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Workshops');
+    await queryInterface.dropTable('OnlineClasses');
   }
 };

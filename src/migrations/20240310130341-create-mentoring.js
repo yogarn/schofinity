@@ -27,7 +27,7 @@ module.exports = {
         },
       },
       resource: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       startDate: {
         allowNull: false,

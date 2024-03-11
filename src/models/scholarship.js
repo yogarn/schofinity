@@ -28,16 +28,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     description: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     image: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     benefit: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     requirement: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
+    },
+    link: {
+      allowNull: false,
+      type: DataTypes.TEXT
     },
     startDate: {
       allowNull: false,
