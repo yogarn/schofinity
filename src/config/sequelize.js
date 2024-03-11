@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
     {
         host: 'localhost',
         dialect: 'mariadb',
-        logging: console.log,
+        logging: false,
         dialectOptions: {
             useUTC: false
         },
