@@ -3,12 +3,16 @@ function sendResponse(res, data) {
     return res.status(200).json({ message, data });
 }
 
-function sendError(res, error) {
+function sendError(res, error, data) {
     let status = ''
     switch (error) {
         // validation
         case 'Validation error':
             status = 400;
+            break;
+        case 'ExpressValidationError':
+            status = 400;
+            error = data;
             break;
         case 'Invalid password':
             status = 400;
