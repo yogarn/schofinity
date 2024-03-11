@@ -27,12 +27,10 @@ async function addMentoring(req, res) {
         mentoringDetails.userId = userId;
         mentoringDetails.orderId = orderId;
         mentoringDetails.price = mentor.salaryRate;
+        mentoringDetails.user = user;
+        mentoringDetails.mentor = mentor;
 
-        const transactionToken = await generatePayments(orderId, mentor.salaryRate, user.name, user.email, user.contact);
-        mentoringDetails.transactionToken = transactionToken;
-        
         await create(mentoringDetails);
-        
         sendResponse(res, mentoringDetails);
     } catch (e) {
         console.log(e);

@@ -57,7 +57,6 @@ module.exports = {
         },
       },
       transactionToken: {
-        allowNull: false,
         type: Sequelize.UUID
       },
       rating: {

@@ -50,7 +50,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 1
     },
     transactionToken: {
-      allowNull: false,
       type: DataTypes.UUID
     },
     rating: {

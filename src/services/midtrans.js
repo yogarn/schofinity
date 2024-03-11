@@ -1,4 +1,4 @@
-const snap = require("../config/midtrans");
+const midtrans = require("../config/midtrans");
 
 async function generatePayments(orderId, grossAmount, name, email, contact) {
     let parameter = {
@@ -16,7 +16,7 @@ async function generatePayments(orderId, grossAmount, name, email, contact) {
         }
     };
 
-    return snap.createTransaction(parameter)
+    return midtrans.createTransaction(parameter)
         .then((transaction) => {
             return transaction.token;
         });

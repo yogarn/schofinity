@@ -50,6 +50,9 @@ function sendError(res, error) {
         case 'Schedule not found':
             status = 404;
             break;
+        case 'Failed to generate payment':
+            status = 500;
+            break;
         // else
         default:
             status = 500;
