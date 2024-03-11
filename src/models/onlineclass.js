@@ -1,13 +1,14 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Workshop extends Model {
+  class OnlineClass extends Model {
     static associate(models) {
-      Workshop.belongsTo(models.Category, { foreignKey: 'categoryId', allowNull: false });
-      Workshop.belongsTo(models.Mentor, { foreignKey: 'mentorId', allowNull: false });
+      OnlineClass.belongsTo(models.Category, { foreignKey: 'categoryId', allowNull: false });
+      OnlineClass.belongsTo(models.Mentor, { foreignKey: 'mentorId', allowNull: false });
+      OnlineClass.belongsTo(models.ClassType, { foreignKey: 'typeId', allowNull: false });
     }
   }
-  Workshop.init({
+  OnlineClass.init({
     id: {
       allowNull: false,
       primaryKey: true,
@@ -20,10 +21,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     image: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
+    },
+    community: {
+      allowNull: false,
+      type: DataTypes.TEXT
+    },
+    typeId: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     },
     categoryId: {
       allowNull: false,
@@ -47,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Workshop',
+    modelName: 'OnlineClass',
   });
-  return Workshop;
+  return OnlineClass;
 };

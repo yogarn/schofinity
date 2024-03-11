@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID
     },
     resource: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     startDate: {
       allowNull: false,

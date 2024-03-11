@@ -22,16 +22,20 @@ module.exports = {
         type: Sequelize.STRING
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       benefit: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       requirement: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },
+      link: {
+        allowNull: false,
+        type: Sequelize.TEXT
       },
       startDate: {
         allowNull: false,
