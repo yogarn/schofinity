@@ -56,6 +56,10 @@ module.exports = {
           as: 'statusId',
         },
       },
+      transactionToken: {
+        allowNull: false,
+        type: Sequelize.UUID
+      },
       rating: {
         type: Sequelize.INTEGER
       },
