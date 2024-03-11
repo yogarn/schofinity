@@ -32,7 +32,7 @@ async function getMentorByUserId(userId) {
     return sequelize.transaction(async (t) => {
         return Mentor.findOne({
             where: { userId },
-            attributes: ['id'],
+            include: [{ model: User, attributes: { exclude: ['roleId', 'password'] } }, { model: MentorSchedule }],
             transaction: t
         });
     });
