@@ -1,13 +1,22 @@
-const { find, create, update, validate, findAll, getUsername } = require('../services/user');
+const { find, create, update, findAll, getUsername } = require('../services/user');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { generateOTP } = require('../services/auth');
+const validator = require('validator');
 const userBucket = process.env.USER_BUCKET;
 
 async function addUser(req, res) {
     try {
         const userDetails = req.body;
-        
+
+        if (!validator.isStrongPassword(userDetails.password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
+            throw new Error("Invalid password");
+        } else if (!validator.isMobilePhone(userDetails.contact, ['id-ID'])) {
+            throw new Error("Invalid contact");
+        } else if (!validator.isEmail(userDetails.email)) {
+            throw new Error("Invalid email");
+        }
+
         if (req.file && req.file.mimetype === 'image/jpeg') {
             userDetails.image = await uploadImage(req.file.buffer, userBucket, `${userDetails.username}-${req.file.originalname}`);
         }
@@ -48,8 +57,16 @@ async function getAllUsers(req, res, next) {
 
 async function updateUser(req, res, next) {
     try {
-        const updateDetails = req.body;
         const { username } = req.params.username ? req.params : await getUsername(req.jwt.id);
+        
+        const updateDetails = req.body;
+        if (updateDetails.password && !validator.isStrongPassword(updateDetails.password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
+            throw new Error("Invalid password");
+        } else if (updateDetails.contact && !validator.isMobilePhone(updateDetails.contact, ['id-ID'])) {
+            throw new Error("Invalid contact");
+        } else if (updateDetails.email && !validator.isEmail(updateDetails.email)) {
+            throw new Error("Invalid email");
+        }
 
         const user = await find(username);
 
