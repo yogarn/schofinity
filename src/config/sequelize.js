@@ -1,18 +1,24 @@
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME || 'schofinity',
-    process.env.DB_USER || 'root',
-    process.env.DB_PASS || '',
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASS,
     {
         host: 'localhost',
         dialect: 'mariadb',
-        logging: false,
+        logging: console.log,
         dialectOptions: {
             useUTC: false
         },
-        timezone: 'Asia/Jakarta'
-    }
+        timezone: 'Asia/Jakarta',
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30 * 1000,
+            idle: 10 * 1000
+        }
+    },
 );
 
 async function connect() {
