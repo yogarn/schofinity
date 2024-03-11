@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       Status.hasMany(models.Scholarship, { foreignKey: 'statusId', allowNull: false });
       Status.hasMany(models.User, { foreignKey: 'statusId', allowNull: false });
       Status.hasMany(models.Mentor, { foreignKey: 'statusId', allowNull: false });
+      Status.hasMany(models.ClassPayment, { foreignKey: 'statusId', allowNull: false });
     }
   }
   Status.init({

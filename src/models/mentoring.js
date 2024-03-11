@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     feedback: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     }
   }, {
     sequelize,

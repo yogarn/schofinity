@@ -2,11 +2,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Mentorings', {
+    await queryInterface.createTable('ClassPayments', {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
+        type: Sequelize.UUID
       },
       userId: {
         allowNull: false,
@@ -17,35 +17,18 @@ module.exports = {
           as: 'userId',
         },
       },
-      mentorId: {
+      classId: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'Mentors',
+          model: 'OnlineClasses',
           key: 'id',
-          as: 'mentorId',
+          as: 'classId',
         },
-      },
-      resource: {
-        type: Sequelize.TEXT
-      },
-      startDate: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        unique: 'unique_mentoring_combination',
-      },
-      endDate: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        unique: 'unique_mentoring_combination',
       },
       orderId: {
         allowNull: false,
         type: Sequelize.STRING
-      },
-      price: {
-        allowNull: false,
-        type: Sequelize.DOUBLE
       },
       statusId: {
         allowNull: false,
@@ -55,9 +38,6 @@ module.exports = {
           key: 'id',
           as: 'statusId',
         },
-      },
-      transactionToken: {
-        type: Sequelize.UUID
       },
       rating: {
         type: Sequelize.INTEGER
@@ -75,12 +55,12 @@ module.exports = {
       }
     });
 
-    await queryInterface.addIndex('Mentorings', ['startDate', 'endDate'], {
+    await queryInterface.addIndex('ClassPayments', ['userId', 'classId'], {
       unique: true,
-      name: 'unique_mentoring_combination'
+      name: 'unique_class_combination'
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Mentorings');
+    await queryInterface.dropTable('ClassPayments');
   }
 };

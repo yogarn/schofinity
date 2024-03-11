@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Favorite, { foreignKey: 'userId', allowNull: false });
       User.hasMany(models.Scholarship, { foreignKey: 'userId', allowNull: false });
       User.hasMany(models.Mentoring, { foreignKey: 'userId', allowNull: false });
+      User.hasMany(models.ClassPayment, { foreignKey: 'userId', allowNull: false });
     }
   }
   User.init({
