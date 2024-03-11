@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       OnlineClass.belongsTo(models.Mentor, { foreignKey: 'mentorId', allowNull: false });
       OnlineClass.belongsTo(models.ClassType, { foreignKey: 'typeId', allowNull: false });
       OnlineClass.hasMany(models.ClassPayment, { foreignKey: 'classId', allowNull: false });
+      OnlineClass.hasMany(models.ClassResource, { foreignKey: 'classId', allowNull: false });
     }
   }
   OnlineClass.init({
