@@ -1,4 +1,4 @@
-const { findAll, find, create, update, buy } = require('../services/onlineclass');
+const { findAll, find, create, update, buy } = require('../services/onlineClass');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { getMentorByUserId } = require('../services/mentor');

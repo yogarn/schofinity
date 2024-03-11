@@ -1,6 +1,6 @@
 const midtrans = require("../config/midtrans");
 const { mentoringPayments } = require('../services/mentoring');
-const { classPayment } = require('../services/onlineclass');
+const { classPayment } = require('../services/onlineClass');
 const { sendResponse, sendError } = require('../services/responseHandler');
 
 async function resolvePayments(req, res, next) {
