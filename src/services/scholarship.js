@@ -28,8 +28,32 @@ async function findAll(query) {
         whereClause.startDate = { [Op.like]: `%${query.startDate}%` };
     }
 
+    if (query.endDate) {
+        whereClause.endDate = { [Op.like]: `%${query.endDate}%` };
+    }
+
     if (query.maxSemester) {
         whereClause.maxSemester = { [Op.gte]: parseInt(query.maxSemester) };
+    }
+
+    if (query.educationId) {
+        whereClause.educationId = { [Op.eq]: query.educationId };
+    }
+
+    if (query.typeId) {
+        whereClause.typeId = { [Op.eq]: query.typeId };
+    }
+
+    if (query.locationId) {
+        whereClause.locationId = { [Op.eq]: query.locationId };
+    }
+
+    if (query.categoryId) {
+        whereClause.categoryId = { [Op.eq]: query.categoryId };
+    }
+    
+    if (query.statusId) {
+        whereClause.statusId = { [Op.eq]: query.statusId };
     }
 
     return sequelize.transaction(async (t) => {
