@@ -8,7 +8,7 @@ const { idValidate, addValidate } = require('../middlewares/validators/mentor');
 
 router
     .get('/', authToken, cache.get, getAllMentors, cache.set)
-    .get('/:id', authToken, idValidate, cache.get, getMentorById, cache.set)
+    .get('/:id', authToken, cache.get, getMentorById, cache.set)
     .post('/:id/accept', authToken, checkRoleId([3]), idValidate, cache.clear, acceptMentor)
     .post('/', authToken, addValidate, cache.clear, addMentor)
     .patch('/', authToken, checkRoleId([2]), cache.clear, updateMentor)

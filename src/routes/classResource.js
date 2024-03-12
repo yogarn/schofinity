@@ -10,7 +10,7 @@ const { getValidate, addValidate, updateValidate, getIdValidate, deleteValidate 
 
 router
     .get('/', authToken, checkClassPayment, getValidate, cache.get, getClassResource, cache.set)
-    .get('/:id', authToken, getIdValidate, cache.get, getClassResourceById, cache.set)
+    .get('/:id', authToken, checkClassPayment, getIdValidate, cache.get, getClassResourceById, cache.set)
     .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, cache.clear, addClassResource)
     .patch('/:id', upload.single('image'), authToken, checkClassOwnership, updateValidate, cache.clear, updateClassResource)
     .delete('/:id', authToken, checkClassOwnership, deleteValidate, cache.clear, deleteClassResource);

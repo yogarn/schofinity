@@ -4,7 +4,7 @@ const { addScholarship, getScholarships, updateScholarship, deleteScholarship } 
 const authToken = require('../middlewares/authToken');
 const cache = require('../middlewares/cache');
 const upload = require('../config/multer');
-const { checkRoleId, checkScholarshipOwnership } = require('../middlewares/authorize');
+const { checkScholarshipOwnership } = require('../middlewares/authorize');
 const { addValidate } = require('../middlewares/validators/scholarship');
 
 router
