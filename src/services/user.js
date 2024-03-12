@@ -85,6 +85,12 @@ async function update(id, data) {
     });
 }
 
+async function destroy(id) {
+    return await sequelize.transaction(async (t) => {
+        return await User.destroy({ where: { id }, transaction: t });
+    });
+}
+
 module.exports = {
     find,
     findAll,
@@ -93,5 +99,6 @@ module.exports = {
     getUsername,
     getUserId,
     create,
-    update
+    update,
+    destroy
 }

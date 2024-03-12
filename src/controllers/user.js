@@ -1,4 +1,4 @@
-const { find, create, update, findAll, getUsername } = require('../services/user');
+const { find, create, update, findAll, getUsername, destroy, findByUserId } = require('../services/user');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { generateOTP } = require('../services/auth');
@@ -32,8 +32,8 @@ async function addUser(req, res) {
 
 async function getUser(req, res, next) {
     try {
-        const username = req.params.username;
-        const user = await find(username);
+        const userId = req.params.id;
+        const user = await findByUserId(userId);
         sendResponse(res, user);
         res.locals.data = user;
         next();
@@ -57,8 +57,8 @@ async function getAllUsers(req, res, next) {
 
 async function updateUser(req, res, next) {
     try {
-        const { username } = req.params.username ? req.params : await getUsername(req.jwt.id);
-        
+        const { username } = await getUsername(req.jwt.id);
+
         const updateDetails = req.body;
         if (updateDetails.password && !validator.isStrongPassword(updateDetails.password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
             throw new Error("Invalid password");
@@ -89,9 +89,22 @@ async function updateUser(req, res, next) {
     }
 }
 
+async function deleteUser(req, res, next) {
+    try {
+        const userId = req.params.id;
+
+        await destroy(userId);
+        sendResponse(res, { userId });
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
 module.exports = {
     addUser,
     getUser,
     getAllUsers,
-    updateUser
+    updateUser,
+    deleteUser
 }
