@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addOnlineClass, getOnlineClass, updateOnlineClass, buyOnlineClass, deleteOnlineClass } = require('../controllers/onlineClass');
+const { addOnlineClass, getOnlineClass, updateOnlineClass, buyOnlineClass, deleteOnlineClass, getPayments, getPaymentsById } = require('../controllers/onlineClass');
 const authToken = require('../middlewares/authToken');
 const cache = require('../middlewares/cache');
 const upload = require('../config/multer');
@@ -9,6 +9,8 @@ const { addValidate, idValidate } = require('../middlewares/validators/onlineCla
 
 router
     .get('/', cache.get, getOnlineClass, cache.set)
+    .get('/payments', cache.get, getPayments, cache.set)
+    .get('/payments/:id', cache.get, getPaymentsById, cache.set)
     .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, cache.clear, addOnlineClass)
     .post('/:classId/buy', authToken, idValidate, cache.clear, buyOnlineClass)
     .patch('/:classId', upload.single('image'), authToken, checkClassOwnership, cache.clear, updateOnlineClass)

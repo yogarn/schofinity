@@ -3,7 +3,7 @@ const sequelize = require('../config/sequelize');
 const { Op } = require('sequelize');
 const generatePayments = require('./midtrans');
 
-const { OnlineClass, ClassPayment, Mentor } = db;
+const { OnlineClass, ClassPayment, Mentor, User } = db;
 
 async function findAll(query) {
 
@@ -38,6 +38,41 @@ async function find(id) {
     return sequelize.transaction(async (t) => {
         return OnlineClass.findOne({
             include: [{ model: Mentor }],
+            where: { id },
+            transaction: t
+        });
+    });
+};
+
+async function findAllPayments(query) {
+
+    const whereClause = {};
+
+    if (query.userId) {
+        whereClause.userId = { [Op.eq]: query.userId };
+    }
+
+    if (query.classId) {
+        whereClause.classId = { [Op.eq]: query.classId };
+    }
+
+    if (query.statusId) {
+        whereClause.statusId = { [Op.eq]: query.statusId };
+    }
+
+    return sequelize.transaction(async (t) => {
+        return ClassPayment.findAll({
+            include: [{ model: User }, { model: OnlineClass }],
+            where: whereClause,
+            transaction: t
+        });
+    });
+};
+
+async function findPayment(id) {
+    return sequelize.transaction(async (t) => {
+        return ClassPayment.findOne({
+            include: [{ model: User }, { model: OnlineClass }],
             where: { id },
             transaction: t
         });
@@ -111,6 +146,8 @@ async function checkPayment(userId, classId) {
 module.exports = {
     findAll,
     find,
+    findAllPayments,
+    findPayment,
     create,
     update,
     destroy,

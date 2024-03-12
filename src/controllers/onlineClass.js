@@ -1,4 +1,4 @@
-const { findAll, find, create, update, buy, destroy } = require('../services/onlineClass');
+const { findAll, find, create, update, buy, destroy, findAllPayments, findPayment } = require('../services/onlineClass');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { findByUserId } = require('../services/mentor');
@@ -97,10 +97,36 @@ async function buyOnlineClass(req, res, next) {
     }
 }
 
+async function getPayments(req, res, next) {
+    try {
+        const payments = await findAllPayments(req.query);
+        sendResponse(res, payments);
+        res.locals.data = payments;
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+};
+
+async function getPaymentsById(req, res, next) {
+    try {
+        const payment = await findPayment(req.params.id);
+        sendResponse(res, payment);
+        res.locals.data = payment;
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+};
+
 module.exports = {
     getOnlineClass,
     addOnlineClass,
     updateOnlineClass,
     deleteOnlineClass,
-    buyOnlineClass
+    buyOnlineClass,
+    getPayments,
+    getPaymentsById
 }
