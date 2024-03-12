@@ -13,6 +13,16 @@ async function findAll() {
     });
 };
 
+async function find(id) {
+    return sequelize.transaction(async (t) => {
+        return Mentoring.findOne({
+            include: [{ model: Mentor }, { model: User }],
+            where: { id },
+            transaction: t
+        });
+    });
+};
+
 async function create(data) {
     return sequelize.transaction(async (t) => {
         const mentoring = await Mentoring.create(data, { transaction: t });
@@ -52,6 +62,7 @@ async function mentoringPayments(id, transactionStatus, fraudStatus) {
 
 module.exports = {
     findAll,
+    find,
     create,
     update,
     mentoringPayments

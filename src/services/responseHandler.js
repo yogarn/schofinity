@@ -45,6 +45,9 @@ function sendError(res, error, data) {
         case 'Mentor not found':
             status = 404;
             break;
+        case 'Mentoring not found':
+            status = 404;
+            break;
         case 'User not found':
             status = 404;
             break;
