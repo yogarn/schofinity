@@ -35,6 +35,12 @@ async function update(id, data) {
     });
 };
 
+async function destroy(id) {
+    return await sequelize.transaction(async (t) => {
+        return await OnlineClass.destroy({ where: { id }, transaction: t });
+    });
+};
+
 async function buy(data) {
     return sequelize.transaction(async (t) => {
         const classPayment = await ClassPayment.create(data, { transaction: t });
@@ -77,6 +83,7 @@ module.exports = {
     find,
     create,
     update,
+    destroy,
     buy,
     classPayment
 }

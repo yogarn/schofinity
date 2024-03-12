@@ -26,6 +26,7 @@ module.exports = {
           key: 'id',
           as: 'classId',
         },
+        onDelete: 'CASCADE'
       },
       orderId: {
         allowNull: false,

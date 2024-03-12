@@ -1,4 +1,4 @@
-const { findAll, find, create, update, buy } = require('../services/onlineClass');
+const { findAll, find, create, update, buy, destroy } = require('../services/onlineClass');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { findByUserId } = require('../services/mentor');
@@ -38,7 +38,7 @@ async function addOnlineClass(req, res) {
 
 async function updateOnlineClass(req, res, next) {
     try {
-        const onlineClassId = req.params.id;
+        const onlineClassId = req.params.classId;
         const updateDetails = req.body;
         const onlineClass = await find(onlineClassId);
 
@@ -57,26 +57,32 @@ async function updateOnlineClass(req, res, next) {
     }
 }
 
+async function deleteOnlineClass(req, res, next) {
+    try {
+        const onlineClassId = req.params.classId;
+
+        await destroy(onlineClassId);
+        sendResponse(res, { onlineClassId });
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
 async function buyOnlineClass(req, res, next) {
     try {
-        const classPaymentDetails = req.body;
+        const classId = req.params.classId;
+        const classPaymentDetails = {};
         const uuid = uuidv4();
         const userId = req.jwt.id;
 
-        const onlineClass = await find(classPaymentDetails.classId);
+        const onlineClass = await find(classId);
         const user = await userServices.findByUserId(userId);
-
-        if (!onlineClass) {
-            throw new Error("Class not found")
-        }
-
-        if (!user) {
-            throw new Error("User not found")
-        }
 
         classPaymentDetails.id = uuid;
         classPaymentDetails.userId = userId;
         classPaymentDetails.orderId = `class ${uuid}`;
+        classPaymentDetails.classId = classId;
         classPaymentDetails.price = onlineClass.price;
         classPaymentDetails.user = user;
         classPaymentDetails.onlineClass = onlineClass;
@@ -95,5 +101,6 @@ module.exports = {
     getOnlineClass,
     addOnlineClass,
     updateOnlineClass,
+    deleteOnlineClass,
     buyOnlineClass
 }
