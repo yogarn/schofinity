@@ -21,6 +21,7 @@ async function findAll(query) {
             include: [{ model: Mentor }, { model: User }],
             attributes: { exclude: ['resource'] },
             where: whereClause,
+            limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
         });
     });

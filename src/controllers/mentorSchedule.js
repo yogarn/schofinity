@@ -23,7 +23,7 @@ async function addSchedule(req, res) {
 
 async function getAllSchedule(req, res, next) {
     try {
-        const schedules = await findAll();
+        const schedules = await findAll(req.query);
         sendResponse(res, schedules);
         res.locals.data = schedules;
         next();
