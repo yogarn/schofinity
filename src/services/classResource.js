@@ -12,10 +12,10 @@ async function findAll(classId) {
     });
 };
 
-async function find(id) {
+async function find(classId, id) {
     return sequelize.transaction(async (t) => {
         return ClassResource.findOne({
-            where: { id },
+            where: { classId, id },
             transaction: t
         });
     });

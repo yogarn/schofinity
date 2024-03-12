@@ -16,6 +16,19 @@ async function getClassResource(req, res, next) {
     }
 };
 
+async function getClassResourceById(req, res, next) {
+    try {
+        const { classId, id } = req.params;
+        const classResource = await find(classId, id);
+        sendResponse(res, classResource);
+        res.locals.data = classResource;
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+};
+
 async function addClassResource(req, res, next) {
     try {
         const classResourceDetails = req.body;
@@ -29,7 +42,6 @@ async function addClassResource(req, res, next) {
         await create(classResourceDetails);
         sendResponse(res, classResourceDetails);
     } catch (e) {
-        console.log(e);
         sendError(res, e.message);
     }
 };
@@ -59,5 +71,6 @@ async function updateClassResource(req, res, next) {
 module.exports = {
     addClassResource,
     getClassResource,
+    getClassResourceById,
     updateClassResource
 }
