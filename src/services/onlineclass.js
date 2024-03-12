@@ -29,6 +29,7 @@ async function findAll(query) {
         return OnlineClass.findAll({
             include: [{ model: Mentor }],
             where: whereClause,
+            limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
         });
     });
@@ -64,6 +65,7 @@ async function findAllPayments(query) {
         return ClassPayment.findAll({
             include: [{ model: User }, { model: OnlineClass }],
             where: whereClause,
+            limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
         });
     });

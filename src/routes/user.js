@@ -8,7 +8,7 @@ const { checkRoleId } = require('../middlewares/authorize');
 const { addValidate, idValidate } = require('../middlewares/validators/user');
 
 router
-    .get('/', authToken, checkRoleId([3]), cache.get, getAllUsers, cache.set)
+    .get('/', authToken, cache.get, getAllUsers, cache.set)
     .get('/:id', authToken, cache.get, getUser, cache.set)
     .post('/', upload.single('image'), addValidate, cache.clear, addUser)
     .patch('/', upload.single('image'), authToken, cache.clear, updateUser)

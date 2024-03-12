@@ -45,7 +45,7 @@ async function getUser(req, res, next) {
 
 async function getAllUsers(req, res, next) {
     try {
-        const users = await findAll();
+        const users = await findAll(req.query);
         sendResponse(res, users);
         res.locals.data = users;
         next();

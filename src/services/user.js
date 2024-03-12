@@ -1,14 +1,40 @@
 const db = require('../models/index');
+const { Op } = require('sequelize');
 const sequelize = require('../config/sequelize')
 const bcrypt = require('bcrypt');
 
 const { User, Role } = db;
 
-async function findAll() {
+async function findAll(query) {
+
+    const whereClause = {};
+
+    if (query.id) {
+        whereClause.id = { [Op.eq]: query.id };
+    }
+    
+    if (query.name) {
+        whereClause.name = { [Op.like]: `%${query.name}%` };
+    }
+
+    if (query.username) {
+        whereClause.username = { [Op.like]: `%${query.username}%` };
+    }
+
+    if (query.email) {
+        whereClause.email = { [Op.like]: `%${query.email}%` };
+    }
+
+    if (query.statusId) {
+        whereClause.statusId = { [Op.eq]: query.statusId };
+    }
+
     return sequelize.transaction(async (t) => {
         return User.findAll({
             include: [{ model: Role }],
             attributes: { exclude: ['roleId', 'password', 'otp'] },
+            where: whereClause,
+            limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
         });
     });
