@@ -78,6 +78,15 @@ async function classPayment(id, transactionStatus, fraudStatus) {
     }
 }
 
+async function checkPayment(userId, classId) {
+    return sequelize.transaction(async (t) => {
+        return ClassPayment.findOne({
+            where: { classId, userId, statusId: 2 },
+            transaction: t
+        });
+    });
+}
+
 module.exports = {
     findAll,
     find,
@@ -85,5 +94,6 @@ module.exports = {
     update,
     destroy,
     buy,
-    classPayment
+    classPayment,
+    checkPayment
 }

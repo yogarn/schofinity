@@ -33,7 +33,7 @@ async function update(classId, id, data) {
     });
 };
 
-async function destroy (classId, id) {
+async function destroy(classId, id) {
     return await sequelize.transaction(async (t) => {
         return await ClassResource.destroy({ where: { classId, id }, transaction: t });
     });

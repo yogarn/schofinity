@@ -87,10 +87,32 @@ async function checkClassOwnership(req, res, next) {
     }
 }
 
+async function checkClassPayment(req, res, next) {
+    const classId = req.params.classId;
+    const userId = req.jwt.id;
+    const { roleId } = await getRoleByUserId(userId);
+
+    const mentor = await findByUserId(userId);
+    const onlineClass = await onlineClassServices.find(classId);
+    const payment = await onlineClassServices.checkPayment(userId, classId);
+
+    if (!onlineClass) {
+        sendError(res, "Class not found");
+    } else {
+        if (roleId === 3 || payment || (mentor && mentor.id === onlineClass.mentorId)) {
+            next();
+        } else {
+            sendError(res, "Payment not found");
+        }
+    }
+
+}
+
 module.exports = {
     checkRoleId,
     checkScholarshipOwnership,
     checkScheduleOwnership,
     checkMentoringOwnership,
-    checkClassOwnership
+    checkClassOwnership,
+    checkClassPayment
 };
