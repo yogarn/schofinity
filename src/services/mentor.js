@@ -1,4 +1,5 @@
 const db = require('../models/index');
+const { Op } = require('sequelize');
 const sequelize = require('../config/sequelize')
 
 const { User, Mentor, MentorSchedule } = db;
@@ -9,10 +10,27 @@ async function create(data) {
     });
 };
 
-async function findAll() {
+async function findAll(query) {
+
+    const whereClause = {};
+
+    if (query.salaryRate) {
+        whereClause.salaryRate = { [Op.eq]: query.salaryRate };
+    }
+
+    if (query.mentoringInterval) {
+        whereClause.mentoringInterval = { [Op.eq]: query.mentoringInterval };
+    }
+
+    if (query.statusId) {
+        whereClause.statusId = { [Op.eq]: query.statusId };
+    }
+
     return sequelize.transaction(async (t) => {
         return Mentor.findAll({
             include: [{ model: User, attributes: { exclude: ['roleId', 'password'] } }, { model: MentorSchedule }],
+            where: whereClause,
+            limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
         });
     });

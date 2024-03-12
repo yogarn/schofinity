@@ -16,7 +16,7 @@ async function addMentor(req, res) {
 
 async function getAllMentors(req, res, next) {
     try {
-        const mentors = await findAll();
+        const mentors = await findAll(req.query);
         sendResponse(res, mentors);
         res.locals.data = mentors;
         next();
