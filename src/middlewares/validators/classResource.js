@@ -49,8 +49,24 @@ const updateValidate = [
             throw new Error('Class not found');
         }
     }),
-    param('id').custom(async value => {
-        const classResource = await classResourceServices.find(value);
+    param('id').custom(async (value, { req }) => {
+        const classResource = await classResourceServices.find(req.params.classId, value);
+        if (!classResource) {
+            throw new Error('Resource not found');
+        }
+    }),
+    validate
+];
+
+const deleteValidate = [
+    param('classId').custom(async value => {
+        const onlineClass = await onlineClassServices.find(value);
+        if (!onlineClass) {
+            throw new Error('Class not found');
+        }
+    }),
+    param('id').custom(async (value, { req }) => {
+        const classResource = await classResourceServices.find(req.params.classId, value);
         if (!classResource) {
             throw new Error('Resource not found');
         }
@@ -62,5 +78,6 @@ module.exports = {
     getValidate,
     getIdValidate,
     addValidate,
-    updateValidate
+    updateValidate,
+    deleteValidate
 };

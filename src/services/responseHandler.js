@@ -54,6 +54,9 @@ function sendError(res, error, data) {
         case 'Schedule not found':
             status = 404;
             break;
+        case 'Class not found':
+            status = 404;
+            break;
         case 'Failed to generate payment':
             status = 500;
             break;
@@ -63,7 +66,7 @@ function sendError(res, error, data) {
             error = 'Internal Server Error';
             break;
     }
-    return res.status(status).json({ error });
+    return res.status(status).json({ message: "error", data: error });
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { findAll, find, create, update } = require('../services/classResource');
+const { findAll, find, create, update, destroy } = require('../services/classResource');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
@@ -49,10 +49,9 @@ async function addClassResource(req, res, next) {
 
 async function updateClassResource(req, res, next) {
     try {
-        const classId = req.params.classId;
-        const classResourceId = req.params.id;
+        const { classId, id } = req.params;
         const updateDetails = req.body;
-        const classResource = await find(classResourceId);
+        const classResource = await find(classId, id);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
             updateDetails.image = await uploadImage(req.file.buffer, onlineClassBucket, `${Date.now()}-${req.file.originalname}`);
@@ -61,8 +60,19 @@ async function updateClassResource(req, res, next) {
             }
         }
 
-        await update(classId, classResourceId, updateDetails);
+        await update(classId, id, updateDetails);
         sendResponse(res, updateDetails);
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
+async function deleteClassResource(req, res, next) {
+    try {
+        const { classId, id } = req.params;
+        await destroy(classId, id)
+        sendResponse(res, id);
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -73,5 +83,6 @@ module.exports = {
     addClassResource,
     getClassResource,
     getClassResourceById,
-    updateClassResource
+    updateClassResource,
+    deleteClassResource
 }

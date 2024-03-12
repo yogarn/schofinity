@@ -1,6 +1,8 @@
 const { sendError } = require('../services/responseHandler');
 const scholarshipServices = require('../services/scholarship');
 const scheduleServices = require('../services/mentorSchedule');
+const onlineClassServices = require('../services/onlineClass');
+
 const { getRoleByUserId } = require('../services/user');
 const { getMentorByUserId } = require('../services/mentor');
 
@@ -42,7 +44,24 @@ async function checkScheduleOwnership(req, res, next) {
     if (!schedule) {
         sendError(res, "Schedule not found");
     } else {
-        if (roleId === 3 || mentor.id === schedule.mentorId) {
+        if (roleId === 3 || (mentor && mentor.id === schedule.mentorId)) {
+            next();
+        } else {
+            sendError(res, "Insufficient privilege");
+        }
+    }
+}
+
+async function checkClassOwnership(req, res, next) {
+    const classId = req.params.classId;
+    const onlineClass = await onlineClassServices.find(classId);
+    const mentor = await getMentorByUserId(req.jwt.id);
+    const { roleId } = await getRoleByUserId(req.jwt.id);
+
+    if (!onlineClass) {
+        sendError(res, "Class not found");
+    } else {
+        if (roleId === 3 || (mentor && mentor.id === onlineClass.mentorId)) {
             next();
         } else {
             sendError(res, "Insufficient privilege");
@@ -53,5 +72,6 @@ async function checkScheduleOwnership(req, res, next) {
 module.exports = {
     checkRoleId,
     checkScholarshipOwnership,
-    checkScheduleOwnership
+    checkScheduleOwnership,
+    checkClassOwnership
 };
