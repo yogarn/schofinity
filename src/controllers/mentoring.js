@@ -14,14 +14,6 @@ async function addMentoring(req, res) {
         const mentor = await mentorServices.find(mentoringDetails.mentorId);
         const user = await userServices.findByUserId(userId);
 
-        if (!mentor) {
-            throw new Error("Mentor not found")
-        }
-
-        if (!user) {
-            throw new Error("User not found")
-        }
-
         mentoringDetails.id = uuid;
         mentoringDetails.userId = userId;
         mentoringDetails.orderId = orderId;

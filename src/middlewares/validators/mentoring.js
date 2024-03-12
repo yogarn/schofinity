@@ -1,11 +1,13 @@
 const { body, param } = require('express-validator');
 const { validate } = require('./validator');
-const mentoringServices = require('../../services/mentoring');
+const mentorServices = require('../../services/mentor');
 
-const idValidate = [
-    param('id').custom(async value => {
-        const mentoring = await mentoringServices.find(value);
-        if (!mentoring) {
+const addValidate = [
+    body('startDate').notEmpty(),
+    body('endDate').notEmpty(),
+    body('mentorId').custom(async value => {
+        const mentor = await mentorServices.find(value);
+        if (!mentor) {
             throw new Error('Mentor not found');
         }
     }),
@@ -13,5 +15,5 @@ const idValidate = [
 ];
 
 module.exports = {
-    idValidate
+    addValidate
 };
