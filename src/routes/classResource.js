@@ -9,9 +9,9 @@ const { checkRoleId } = require('../middlewares/authorize');
 const { getValidate, addValidate, updateValidate, getIdValidate } = require('../middlewares/validators/classResource');
 
 router
-    .get('/', cache.get, getValidate, getClassResource, cache.set)
-    .get('/:id', cache.get, getIdValidate, getClassResourceById, cache.set)
-    .post('/', upload.single('image'), authToken, checkRoleId([2]), cache.clear, addValidate, addClassResource)
-    .patch('/:id', upload.single('image'), authToken, checkRoleId([2]), cache.clear, updateValidate, updateClassResource);
+    .get('/', getValidate, cache.get, getClassResource, cache.set)
+    .get('/:id', getIdValidate, cache.get, getClassResourceById, cache.set)
+    .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, cache.clear, addClassResource)
+    .patch('/:id', upload.single('image'), authToken, checkRoleId([2]), updateValidate, cache.clear, updateClassResource);
 
 module.exports = router;

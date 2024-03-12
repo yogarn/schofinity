@@ -42,6 +42,7 @@ async function addClassResource(req, res, next) {
         await create(classResourceDetails);
         sendResponse(res, classResourceDetails);
     } catch (e) {
+        console.log(e);
         sendError(res, e.message);
     }
 };
