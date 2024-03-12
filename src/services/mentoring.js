@@ -6,20 +6,36 @@ const { Mentoring, Mentor, User } = db;
 
 async function findAll() {
     return sequelize.transaction(async (t) => {
-        return Mentoring.findAll({
+        const mentoring = await Mentoring.findAll({
             include: [{ model: Mentor }, { model: User }],
             transaction: t
         });
+
+        mentoring.forEach(element => {
+            if (element.statusId !== 2) {
+                element.resource = null;
+            }
+        });
+
+        return mentoring;
     });
 };
 
+
+
 async function find(id) {
     return sequelize.transaction(async (t) => {
-        return Mentoring.findOne({
+        const mentoring = await Mentoring.findOne({
             include: [{ model: Mentor }, { model: User }],
             where: { id },
             transaction: t
         });
+
+        if (mentoring && mentoring.statusId !== 2) {
+            mentoring.resource = null;
+        }
+
+        return mentoring;
     });
 };
 
@@ -60,10 +76,20 @@ async function mentoringPayments(id, transactionStatus, fraudStatus) {
     }
 }
 
+async function checkPayment(id) {
+    return sequelize.transaction(async (t) => {
+        return Mentoring.findOne({
+            where: { id, statusId: 2 },
+            transaction: t
+        });
+    });
+}
+
 module.exports = {
     findAll,
     find,
     create,
     update,
-    mentoringPayments
+    mentoringPayments,
+    checkPayment
 }

@@ -1,4 +1,4 @@
-const { create, update, findAll } = require('../services/mentoring');
+const { create, update, findAll, find, checkPayment } = require('../services/mentoring');
 const mentorServices = require('../services/mentor');
 const userServices = require('../services/user');
 const { sendResponse, sendError } = require('../services/responseHandler');
@@ -43,6 +43,18 @@ async function getAllMentorings(req, res, next) {
     }
 };
 
+async function getMentoringById(req, res, next) {
+    try {
+        const mentoring = await find(req.params.id);
+        sendResponse(res, mentoring);
+        res.locals.data = mentoring;
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+};
+
 async function updateMentoring(req, res, next) {
     try {
         const updateDetails = req.body;
@@ -59,5 +71,6 @@ async function updateMentoring(req, res, next) {
 module.exports = {
     addMentoring,
     getAllMentorings,
+    getMentoringById,
     updateMentoring
 }

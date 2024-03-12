@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { addMentoring, getAllMentorings, updateMentoring } = require('../controllers/mentoring');
+const { addMentoring, getAllMentorings, updateMentoring, getMentoringById } = require('../controllers/mentoring');
 const authToken = require('../middlewares/authToken');
-const cache = require('../middlewares/cache');
-const { checkRoleId, checkMentoringOwnership } = require('../middlewares/authorize');
+const { checkMentoringOwnership } = require('../middlewares/authorize');
 const { addValidate } = require('../middlewares/validators/mentoring');
 
 router
-    .get('/', authToken, cache.get, getAllMentorings, cache.set)
-    .post('/', authToken, addValidate, cache.clear, addMentoring)
-    .patch('/:id', authToken, checkMentoringOwnership, cache.clear, updateMentoring);
+    .get('/', authToken, getAllMentorings)
+    .get('/:id', authToken, getMentoringById)
+    .post('/', authToken, addValidate, addMentoring)
+    .patch('/:id', authToken, checkMentoringOwnership, updateMentoring);
 
 module.exports = router;
