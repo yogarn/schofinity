@@ -1,4 +1,4 @@
-const { findAll, find, create, update } = require('../services/scholarship');
+const { findAll, find, create, update, destroy } = require('../services/scholarship');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const scholarshipBucket = process.env.SCHOLARSHIP_BUCKET;
@@ -53,8 +53,21 @@ async function updateScholarship(req, res, next) {
     }
 }
 
+async function deleteScholarship(req, res, next) {
+    try {
+        const scholarshipId = req.params.id;
+
+        await destroy(scholarshipId);
+        sendResponse(res, { scholarshipId });
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
 module.exports = {
     addScholarship,
     getScholarships,
-    updateScholarship
+    updateScholarship,
+    deleteScholarship
 }

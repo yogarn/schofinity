@@ -66,9 +66,16 @@ async function update(id, data) {
     });
 }
 
+async function destroy(id) {
+    return await sequelize.transaction(async (t) => {
+        return await Scholarship.destroy({ where: { id }, transaction: t });
+    });
+}
+
 module.exports = {
     findAll,
     find,
     create,
-    update
+    update,
+    destroy
 }

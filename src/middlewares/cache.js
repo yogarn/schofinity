@@ -13,7 +13,6 @@ function set(req, res, next) {
 }
 
 function get(req, res, next) {
-    console.log(cache.stats)
     const url = getUrlFromRequest(req);
     const content = cache.get(url);
     if (content) {

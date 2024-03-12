@@ -9,6 +9,7 @@ const addValidate = [
     body('typeId').notEmpty(),
     body('categoryId').notEmpty(),
     body('startDate').notEmpty(),
+    body('endDate').notEmpty(),
     body('price').notEmpty(),
     validate
 ];
