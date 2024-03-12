@@ -4,30 +4,35 @@ const generatePayments = require('./midtrans');
 
 const { Mentoring, Mentor, User } = db;
 
-async function findAll() {
+async function findAll(query) {
+
+    const whereClause = {};
+
+    if (query.userId) {
+        whereClause.userId = { [Op.eq]: query.userId };
+    }
+
+    if (query.mentorId) {
+        whereClause.mentorId = { [Op.eq]: query.mentorId };
+    }
+
     return sequelize.transaction(async (t) => {
-        const mentoring = await Mentoring.findAll({
+        return Mentoring.findAll({
             include: [{ model: Mentor }, { model: User }],
+            attributes: { exclude: ['resource'] },
+            where: whereClause,
             transaction: t
         });
-
-        mentoring.forEach(element => {
-            if (element.statusId !== 2) {
-                element.resource = null;
-            }
-        });
-
-        return mentoring;
     });
 };
 
 
 
-async function find(id) {
+async function find(id, userId) {
     return sequelize.transaction(async (t) => {
         const mentoring = await Mentoring.findOne({
             include: [{ model: Mentor }, { model: User }],
-            where: { id },
+            where: { id, userId },
             transaction: t
         });
 

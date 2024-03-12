@@ -33,7 +33,7 @@ async function addMentoring(req, res) {
 
 async function getAllMentorings(req, res, next) {
     try {
-        const mentorings = await findAll();
+        const mentorings = await findAll(req.query);
         sendResponse(res, mentorings);
         res.locals.data = mentorings;
         next();
@@ -45,7 +45,7 @@ async function getAllMentorings(req, res, next) {
 
 async function getMentoringById(req, res, next) {
     try {
-        const mentoring = await find(req.params.id);
+        const mentoring = await find(req.params.id, req.jwt.id);
         sendResponse(res, mentoring);
         res.locals.data = mentoring;
         next();
