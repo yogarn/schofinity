@@ -28,9 +28,7 @@ async function getFavorites(req, res, next) {
 
 async function getFavorite(req, res, next) {
     try {
-        const user = await userServices.find(req.params.username);
-        const favorites = await find(user.id);
-        console.log(user.id)
+        const favorites = await find(req.params.id);
         sendResponse(res, favorites);
         res.locals.data = favorites;
         next();

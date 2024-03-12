@@ -3,16 +3,6 @@ const { validate } = require('./validator');
 const scholarshipServices = require('../../services/scholarship');
 const userServices = require('../../services/user');
 
-const getIdValidate = [
-    param('username').custom(async value => {
-        const user = await userServices.find(value);
-        if (!user) {
-            throw new Error('User not found');
-        }
-    }),
-    validate
-];
-
 const addValidate = [
     body('scholarshipId').custom(async value => {
         const scholarship = await scholarshipServices.find(value);
@@ -25,5 +15,4 @@ const addValidate = [
 
 module.exports = {
     addValidate,
-    getIdValidate
 };
