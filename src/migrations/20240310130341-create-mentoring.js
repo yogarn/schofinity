@@ -16,6 +16,7 @@ module.exports = {
           key: 'id',
           as: 'userId',
         },
+        onDelete: 'CASCADE'
       },
       mentorId: {
         allowNull: false,
@@ -25,6 +26,7 @@ module.exports = {
           key: 'id',
           as: 'mentorId',
         },
+        onDelete: 'CASCADE',
       },
       resource: {
         type: Sequelize.TEXT

@@ -4,7 +4,7 @@ const scheduleServices = require('../services/mentorSchedule');
 const onlineClassServices = require('../services/onlineClass');
 
 const { getRoleByUserId } = require('../services/user');
-const { getMentorByUserId } = require('../services/mentor');
+const { findByUserId } = require('../services/mentor');
 
 function checkRoleId(requiredRoleId) {
     return async function (req, res, next) {
@@ -38,7 +38,7 @@ async function checkScholarshipOwnership(req, res, next) {
 async function checkScheduleOwnership(req, res, next) {
     const scheduleId = req.params.id;
     const schedule = await scheduleServices.find(scheduleId);
-    const mentor = await getMentorByUserId(req.jwt.id);
+    const mentor = await findByUserId(req.jwt.id);
     const { roleId } = await getRoleByUserId(req.jwt.id);
 
     if (!schedule) {
@@ -55,7 +55,7 @@ async function checkScheduleOwnership(req, res, next) {
 async function checkClassOwnership(req, res, next) {
     const classId = req.params.classId;
     const onlineClass = await onlineClassServices.find(classId);
-    const mentor = await getMentorByUserId(req.jwt.id);
+    const mentor = await findByUserId(req.jwt.id);
     const { roleId } = await getRoleByUserId(req.jwt.id);
 
     if (!onlineClass) {

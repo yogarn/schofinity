@@ -1,11 +1,11 @@
-const { getMentorByUserId } = require('../services/mentor');
+const { findByUserId } = require('../services/mentor');
 const { create, findAll, update } = require('../services/mentorSchedule');
 const { sendResponse, sendError } = require('../services/responseHandler');
 
 async function addSchedule(req, res) {
     try {
         const scheduleDetails = req.body;
-        const mentor = await getMentorByUserId(req.jwt.id);
+        const mentor = await findByUserId(req.jwt.id);
 
         if (!mentor) {
             throw new Error("Insufficient privilege");

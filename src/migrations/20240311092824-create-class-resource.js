@@ -16,6 +16,7 @@ module.exports = {
           key: 'id',
           as: 'classId',
         },
+        onDelete: 'CASCADE'
       },
       name: {
         allowNull: false,

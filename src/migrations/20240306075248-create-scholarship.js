@@ -15,7 +15,8 @@ module.exports = {
           model: 'Users',
           key: 'id',
           as: 'userId',
-        }
+        },
+        onDelete: 'CASCADE'
       },
       name: {
         allowNull: false,

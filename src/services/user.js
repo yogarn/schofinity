@@ -76,12 +76,12 @@ async function create(data) {
     });
 };
 
-async function update(username, data) {
+async function update(id, data) {
     if (data.password) {
         data.password = await bcrypt.hash(data.password, 10);
     }
     return await sequelize.transaction(async (t) => {
-        return await User.update(data, { where: { username }, transaction: t });
+        return await User.update(data, { where: { id }, transaction: t });
     });
 }
 

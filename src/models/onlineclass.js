@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
+    mentorId: {
+      allowNull: false,
+      type: DataTypes.UUID
+    },
     name: {
       allowNull: false,
       type: DataTypes.STRING
@@ -39,10 +43,6 @@ module.exports = (sequelize, DataTypes) => {
     categoryId: {
       allowNull: false,
       type: DataTypes.INTEGER
-    },
-    mentorId: {
-      allowNull: false,
-      type: DataTypes.UUID
     },
     startDate: {
       allowNull: false,

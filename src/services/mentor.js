@@ -28,7 +28,7 @@ async function find(id) {
     });
 };
 
-async function getMentorByUserId(userId) {
+async function findByUserId(userId) {
     return sequelize.transaction(async (t) => {
         return Mentor.findOne({
             where: { userId },
@@ -38,9 +38,15 @@ async function getMentorByUserId(userId) {
     });
 }
 
-async function update(userId, data) {
+async function update(id, data) {
     return await sequelize.transaction(async (t) => {
-        return await Mentor.update(data, { where: { userId }, transaction: t });
+        return await Mentor.update(data, { where: { id }, transaction: t });
+    });
+}
+
+async function destroy(id) {
+    return await sequelize.transaction(async (t) => {
+        return await Mentor.destroy({ where: { id }, transaction: t });
     });
 }
 
@@ -48,6 +54,7 @@ module.exports = {
     create,
     findAll,
     find,
-    getMentorByUserId,
-    update
+    findByUserId,
+    update,
+    destroy
 }

@@ -8,6 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID
       },
+      mentorId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: 'Mentors',
+          key: 'id',
+          as: 'mentorId',
+        },
+        onDelete: 'CASCADE',
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING
@@ -39,15 +49,6 @@ module.exports = {
           model: 'Categories',
           key: 'id',
           as: 'categoryId',
-        },
-      },
-      mentorId: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: 'Mentors',
-          key: 'id',
-          as: 'mentorId',
         },
       },
       startDate: {

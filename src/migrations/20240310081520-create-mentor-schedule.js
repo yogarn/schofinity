@@ -16,6 +16,7 @@ module.exports = {
           key: 'id',
           as: 'mentorId',
         },
+        onDelete: 'CASCADE',
       },
       day: {
         allowNull: false,

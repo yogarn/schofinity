@@ -1,4 +1,4 @@
-const { create, findAll, find, update } = require('../services/mentor');
+const { create, findAll, find, update, findByUserId, destroy } = require('../services/mentor');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const userServices = require('../services/user');
 
@@ -41,16 +41,12 @@ async function getMentorById(req, res, next) {
 
 async function acceptMentor(req, res, next) {
     try {
-        const username = req.params.username;
-        const user = await userServices.getUserId(username);
+        const mentorId = req.params.id;
+        const mentor = await find(mentorId);
 
-        if (!user) {
-            throw new Error("Username not found");
-        }
-
-        await update(user.id, { statusId: 2 });
-        await userServices.update(username, { roleId: 2 });
-        sendResponse(res, user);
+        await update(mentor.id, { statusId: 2 });
+        await userServices.update(mentor.userId, { roleId: 2 });
+        sendResponse(res, mentor);
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -61,9 +57,24 @@ async function updateMentor(req, res, next) {
     try {
         const updateDetails = req.body;
         const userId = req.jwt.id;
+        const mentor = await findByUserId(userId);
 
-        await update(userId, updateDetails);
+        await update(mentor.id, updateDetails);
         sendResponse(res, updateDetails);
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
+async function deleteMentor(req, res, next) {
+    try {
+        const mentorId = req.params.id;
+        const mentor = await find(mentorId);
+
+        await destroy(mentorId)
+        await userServices.update(mentor.userId, { roleId: 1 });
+        sendResponse(res, mentor);
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -75,5 +86,6 @@ module.exports = {
     getAllMentors,
     getMentorById,
     acceptMentor,
-    updateMentor
+    updateMentor,
+    deleteMentor
 }

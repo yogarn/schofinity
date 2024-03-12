@@ -1,7 +1,7 @@
 const { findAll, find, create, update, buy } = require('../services/onlineClass');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
-const { getMentorByUserId } = require('../services/mentor');
+const { findByUserId } = require('../services/mentor');
 const userServices = require('../services/user');
 const { v4: uuidv4 } = require('uuid');
 const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
@@ -21,7 +21,7 @@ async function getOnlineClass(req, res, next) {
 async function addOnlineClass(req, res) {
     try {
         const onlineClassDetails = req.body;
-        const mentor = await getMentorByUserId(req.jwt.id);
+        const mentor = await findByUserId(req.jwt.id);
         onlineClassDetails.mentorId = mentor.id;
 
         if (req.file && req.file.mimetype === 'image/jpeg') {

@@ -17,6 +17,7 @@ module.exports = {
           key: 'id',
           as: 'userId',
         },
+        onDelete: 'CASCADE'
       },
       mentoringInterval: {
         allowNull: false,
