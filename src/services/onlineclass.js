@@ -1,13 +1,34 @@
 const db = require('../models/index');
 const sequelize = require('../config/sequelize');
+const { Op } = require('sequelize');
 const generatePayments = require('./midtrans');
 
 const { OnlineClass, ClassPayment, Mentor } = db;
 
-async function findAll() {
+async function findAll(query) {
+
+    const whereClause = {};
+
+    if (query.name) {
+        whereClause.name = { [Op.like]: `%${query.name}%` };
+    }
+
+    if (query.description) {
+        whereClause.description = { [Op.like]: `%${query.description}%` };
+    }
+
+    if (query.typeId) {
+        whereClause.typeId = { [Op.eq]: query.typeId };
+    }
+
+    if (query.categoryId) {
+        whereClause.categoryId = { [Op.eq]: query.categoryId };
+    }
+
     return sequelize.transaction(async (t) => {
         return OnlineClass.findAll({
             include: [{ model: Mentor }],
+            where: whereClause,
             transaction: t
         });
     });
