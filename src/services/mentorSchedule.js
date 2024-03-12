@@ -34,9 +34,16 @@ async function update(id, data) {
     });
 }
 
+async function destroy(id) {
+    return await sequelize.transaction(async (t) => {
+        return await MentorSchedule.destroy({ where: { id }, transaction: t });
+    });
+}
+
 module.exports = {
     create,
     findAll,
     find,
-    update
+    update,
+    destroy
 }

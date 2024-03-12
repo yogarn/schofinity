@@ -1,11 +1,11 @@
-const { findByUserId } = require('../services/mentor');
-const { create, findAll, update } = require('../services/mentorSchedule');
+const mentorServices = require('../services/mentor');
+const { create, findAll, update, destroy } = require('../services/mentorSchedule');
 const { sendResponse, sendError } = require('../services/responseHandler');
 
 async function addSchedule(req, res) {
     try {
         const scheduleDetails = req.body;
-        const mentor = await findByUserId(req.jwt.id);
+        const mentor = await mentorServices.findByUserId(req.jwt.id);
 
         if (!mentor) {
             throw new Error("Insufficient privilege");
@@ -46,8 +46,21 @@ async function updateSchedule(req, res, next) {
     }
 }
 
+async function deleteSchedule(req, res, next) {
+    try {
+        const scheduleId = req.params.id;
+
+        await destroy(scheduleId);
+        sendResponse(res, { scheduleId });
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
 module.exports = {
     addSchedule,
     getAllSchedule,
-    updateSchedule
+    updateSchedule,
+    deleteSchedule
 }
