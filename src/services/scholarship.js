@@ -8,6 +8,10 @@ async function findAll(query) {
 
     const whereClause = {};
 
+    if (query.id) {
+        whereClause.id = { [Op.eq]: query.id };
+    }
+
     if (query.name) {
         whereClause.name = { [Op.like]: `%${query.name}%` };
     }
@@ -51,7 +55,7 @@ async function findAll(query) {
     if (query.categoryId) {
         whereClause.categoryId = { [Op.eq]: query.categoryId };
     }
-    
+
     if (query.statusId) {
         whereClause.statusId = { [Op.eq]: query.statusId };
     }
@@ -59,7 +63,6 @@ async function findAll(query) {
     return sequelize.transaction(async (t) => {
         return Scholarship.findAll({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
-            attributes: { exclude: ['educationId', 'typeId', 'locationId', 'categoryId', 'statusId'] },
             where: whereClause,
             limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
@@ -71,7 +74,6 @@ async function find(id) {
     return sequelize.transaction(async (t) => {
         return Scholarship.findOne({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
-            attributes: { exclude: ['educationId', 'typeId', 'locationId', 'categoryId', 'statusId'] },
             where: { id },
             transaction: t
         });
@@ -90,6 +92,12 @@ async function update(id, data) {
     });
 }
 
+async function accept(id) {
+    return await sequelize.transaction(async (t) => {
+        return await Scholarship.update({ statusId: 2 }, { where: { id }, transaction: t });
+    });
+}
+
 async function destroy(id) {
     return await sequelize.transaction(async (t) => {
         return await Scholarship.destroy({ where: { id }, transaction: t });
@@ -101,5 +109,6 @@ module.exports = {
     find,
     create,
     update,
+    accept,
     destroy
 }

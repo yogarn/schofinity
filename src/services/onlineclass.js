@@ -9,6 +9,10 @@ async function findAll(query) {
 
     const whereClause = {};
 
+    if (query.id) {
+        whereClause.id = { [Op.eq]: query.id };
+    }
+
     if (query.name) {
         whereClause.name = { [Op.like]: `%${query.name}%` };
     }
@@ -48,6 +52,10 @@ async function find(id) {
 async function findAllPayments(query) {
 
     const whereClause = {};
+
+    if (query.id) {
+        whereClause.id = { [Op.eq]: query.id };
+    }
 
     if (query.userId) {
         whereClause.userId = { [Op.eq]: query.userId };

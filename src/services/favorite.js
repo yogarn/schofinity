@@ -8,6 +8,10 @@ async function findAll(query) {
 
     const whereClause = {};
 
+    if (query.id) {
+        whereClause.id = { [Op.eq]: query.id };
+    }
+
     if (query.userId) {
         whereClause.userId = { [Op.eq]: query.userId };
     }
@@ -15,7 +19,6 @@ async function findAll(query) {
     return sequelize.transaction(async (t) => {
         return Favorite.findAll({
             include: [{ model: Scholarship }],
-            attributes: { exclude: ['scholarshipId'] },
             where: whereClause,
             limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
@@ -27,7 +30,6 @@ async function find(id) {
     return sequelize.transaction(async (t) => {
         return Favorite.findOne({
             include: [{ model: Scholarship }],
-            attributes: { exclude: ['scholarshipId'] },
             where: { id },
             transaction: t
         });

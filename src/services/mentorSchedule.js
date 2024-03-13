@@ -14,6 +14,10 @@ async function findAll(query) {
 
     const whereClause = {};
 
+    if (query.id) {
+        whereClause.id = { [Op.eq]: query.id };
+    }
+
     if (query.mentorId) {
         whereClause.mentorId = { [Op.eq]: query.mentorId };
     }
