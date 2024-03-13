@@ -23,7 +23,7 @@ async function resolvePayments(req, res, next) {
           clearEndpoints(['/v1/mentorings']);
         } else if (classType == "class") {
           await classPayment(id, transactionStatus, fraudStatus);
-          clearEndpoints(['/v1/classes', '/v1/classes/payments']);
+          clearEndpoints(['/v1/classes/payments']);
         }
       } catch (e) {
         console.log(e);
