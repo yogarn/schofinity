@@ -3,6 +3,7 @@ const scholarshipServices = require('../services/scholarship');
 const scheduleServices = require('../services/mentorSchedule');
 const onlineClassServices = require('../services/onlineClass');
 const mentoringServices = require('../services/mentoring');
+const favoriteServices = require('../services/favorite');
 
 const { getRoleByUserId } = require('../services/user');
 const { findByUserId } = require('../services/mentor');
@@ -108,11 +109,31 @@ async function checkClassPayment(req, res, next) {
 
 }
 
+async function checkFavoriteOwnership(req, res, next) {
+    const favoriteId = req.params.id;
+    const userId = req.jwt.id;
+    const { roleId } = await getRoleByUserId(userId);
+
+    const favorite = await favoriteServices.find(favoriteId);
+
+    if (!favorite) {
+        sendError(res, "Favorite not found");
+    } else {
+        if (roleId === 3 || (favorite.userId === userId)) {
+            next();
+        } else {
+            sendError(res, "Insufficient privilege");
+        }
+    }
+
+}
+
 module.exports = {
     checkRoleId,
     checkScholarshipOwnership,
     checkScheduleOwnership,
     checkMentoringOwnership,
     checkClassOwnership,
-    checkClassPayment
+    checkClassPayment,
+    checkFavoriteOwnership
 };

@@ -30,8 +30,20 @@ function clear(req, res, next) {
     next();
 }
 
+function clearEndpoints(endpoints) {
+    return function(req, res, next) {
+        const cacheKeys = cache.keys();
+        const resourceKeys = cacheKeys.filter(cacheKey => {
+            return endpoints.some(endpoint => cacheKey.includes(endpoint));
+        });
+        cache.del(resourceKeys);
+        next();
+    }
+}
+
 module.exports = {
     set,
     get,
-    clear
+    clear,
+    clearEndpoints
 }

@@ -4,22 +4,31 @@ const { Op } = require('sequelize');
 
 const { Favorite, Scholarship, User } = db;
 
-async function findAll() {
+async function findAll(query) {
+
+    const whereClause = {};
+
+    if (query.userId) {
+        whereClause.userId = { [Op.eq]: query.userId };
+    }
+
     return sequelize.transaction(async (t) => {
         return Favorite.findAll({
             include: [{ model: Scholarship }],
             attributes: { exclude: ['scholarshipId'] },
+            where: whereClause,
+            limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
         });
     });
 };
 
-async function find(userId) {
+async function find(id) {
     return sequelize.transaction(async (t) => {
         return Favorite.findOne({
             include: [{ model: Scholarship }],
             attributes: { exclude: ['scholarshipId'] },
-            where: { userId },
+            where: { id },
             transaction: t
         });
     });
@@ -28,6 +37,12 @@ async function find(userId) {
 async function create(data) {
     return sequelize.transaction(async (t) => {
         return Favorite.create(data, { transaction: t });
+    });
+};
+
+async function destroy(id) {
+    return sequelize.transaction(async (t) => {
+        return Favorite.destroy({ where: { id }, transaction: t });
     });
 };
 
@@ -63,5 +78,6 @@ module.exports = {
     find,
     findAll,
     create,
+    destroy,
     getUpcomingScholarships,
 }

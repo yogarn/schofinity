@@ -57,6 +57,9 @@ function sendError(res, error, data) {
         case 'Scholarship not found':
             status = 404;
             break;
+        case 'Favorite not found':
+            status = 404;
+            break;
         case 'Schedule not found':
             status = 404;
             break;

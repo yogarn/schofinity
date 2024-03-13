@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { addFavorite, getFavorite, getFavorites } = require('../controllers/favorite');
+const { addFavorite, getAllFavorites, getFavorite, deleteFavorite } = require('../controllers/favorite');
 const authToken = require('../middlewares/authToken');
 const cache = require('../middlewares/cache');
 const { addValidate } = require('../middlewares/validators/favorite');
-const { checkRoleId } = require('../middlewares/authorize');
+const { checkFavoriteOwnership } = require('../middlewares/authorize');
 
 router
-    .get('/', authToken, checkRoleId([3]), cache.get, getFavorites, cache.set)
+    .get('/', authToken, cache.get, getAllFavorites, cache.set)
     .get('/:id', authToken, cache.get, getFavorite, cache.set)
-    .post('/', authToken, addValidate, cache.clear, addFavorite);
+    .post('/', authToken, addValidate, addFavorite, cache.clear)
+    .delete('/:id', authToken, checkFavoriteOwnership, deleteFavorite, cache.clear);
 
 module.exports = router;
