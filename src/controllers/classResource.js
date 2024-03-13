@@ -41,6 +41,7 @@ async function addClassResource(req, res, next) {
 
         await create(classResourceDetails);
         sendResponse(res, classResourceDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -62,6 +63,7 @@ async function updateClassResource(req, res, next) {
 
         await update(classId, id, updateDetails);
         sendResponse(res, updateDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -73,6 +75,7 @@ async function deleteClassResource(req, res, next) {
         const { classId, id } = req.params;
         await destroy(classId, id)
         sendResponse(res, id);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
