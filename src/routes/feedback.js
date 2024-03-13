@@ -9,6 +9,6 @@ const { checkRoleId } = require('../middlewares/authorize');
 router
     .get('/', authToken, checkRoleId([3]), cache.get, getAllFeedback, cache.set)
     .get('/:id', authToken, checkRoleId([3]), cache.get, getFeedback, cache.set)
-    .post('/', authToken, addValidate, cache.clear, addFeedback);
+    .post('/', authToken, addValidate, addFeedback, cache.clear);
 
 module.exports = router;

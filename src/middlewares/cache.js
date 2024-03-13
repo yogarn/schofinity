@@ -1,6 +1,5 @@
-const NodeCache = require('node-cache');
 const { sendResponse } = require('../services/responseHandler');
-const cache = new NodeCache({ stdTTL: 5 * 60 });
+const cache = require('../config/cache');
 
 function getUrlFromRequest(req, res, next) {
     const url = req.protocol + '://' + req.headers.host + req.originalUrl;
@@ -25,25 +24,14 @@ function get(req, res, next) {
 function clear(req, res, next) {
     const cacheKeys = cache.keys();
     let resourceUrl = req.baseUrl;
+    console.log(resourceUrl);
     const resourceKeys = cacheKeys.filter(cacheKeys => cacheKeys.includes(resourceUrl));
     cache.del(resourceKeys);
     next();
 }
 
-function clearEndpoints(endpoints) {
-    return function(req, res, next) {
-        const cacheKeys = cache.keys();
-        const resourceKeys = cacheKeys.filter(cacheKey => {
-            return endpoints.some(endpoint => cacheKey.includes(endpoint));
-        });
-        cache.del(resourceKeys);
-        next();
-    }
-}
-
 module.exports = {
     set,
     get,
-    clear,
-    clearEndpoints
+    clear
 }

@@ -1,12 +1,13 @@
 const { find, findAll, create } = require('../services/feedback');
 const { sendResponse, sendError } = require('../services/responseHandler');
 
-async function addFeedback(req, res) {
+async function addFeedback(req, res, next) {
     try {
         const feedbackDetails = req.body;
         feedbackDetails.userId = req.jwt.id;
         await create(feedbackDetails);
         sendResponse(res, feedbackDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
