@@ -4,7 +4,7 @@ const userServices = require('../services/user');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { v4: uuidv4 } = require('uuid');
 
-async function addMentoring(req, res) {
+async function addMentoring(req, res, next) {
     try {
         const mentoringDetails = req.body;
         const uuid = uuidv4();
@@ -25,6 +25,7 @@ async function addMentoring(req, res) {
         mentoringDetails.transactionToken = transactionToken;
 
         sendResponse(res, mentoringDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -62,6 +63,7 @@ async function updateMentoring(req, res, next) {
 
         await update(id, updateDetails);
         sendResponse(res, updateDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);

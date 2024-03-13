@@ -2,7 +2,7 @@ const mentorServices = require('../services/mentor');
 const { create, findAll, update, destroy } = require('../services/mentorSchedule');
 const { sendResponse, sendError } = require('../services/responseHandler');
 
-async function addSchedule(req, res) {
+async function addSchedule(req, res, next) {
     try {
         const scheduleDetails = req.body;
         const mentor = await mentorServices.findByUserId(req.jwt.id);
@@ -15,6 +15,7 @@ async function addSchedule(req, res) {
 
         await create(scheduleDetails);
         sendResponse(res, scheduleDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -40,6 +41,7 @@ async function updateSchedule(req, res, next) {
 
         await update(scheduleId, updateDetails);
         sendResponse(res, updateDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -52,6 +54,7 @@ async function deleteSchedule(req, res, next) {
 
         await destroy(scheduleId);
         sendResponse(res, { scheduleId });
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);

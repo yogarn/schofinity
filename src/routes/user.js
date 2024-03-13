@@ -10,8 +10,8 @@ const { addValidate, idValidate } = require('../middlewares/validators/user');
 router
     .get('/', authToken, cache.get, getAllUsers, cache.set)
     .get('/:id', authToken, cache.get, getUser, cache.set)
-    .post('/', upload.single('image'), addValidate, cache.clear, addUser)
-    .patch('/', upload.single('image'), authToken, cache.clear, updateUser)
-    .delete('/:id', upload.single('image'), authToken, checkRoleId([3]), idValidate, cache.clear, deleteUser)
+    .post('/', upload.single('image'), addValidate, addUser, cache.clear)
+    .patch('/', upload.single('image'), authToken, updateUser, cache.clear)
+    .delete('/:id', upload.single('image'), authToken, checkRoleId([3]), idValidate, deleteUser, cache.clear)
 
 module.exports = router;

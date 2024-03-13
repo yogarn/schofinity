@@ -8,8 +8,8 @@ const { addValidate } = require('../middlewares/validators/mentorSchedule')
 
 router
     .get('/', authToken, cache.get, getAllSchedule, cache.set)
-    .post('/', authToken, checkRoleId([2]), addValidate, cache.clear, addSchedule)
-    .patch('/:id', authToken, checkScheduleOwnership, cache.clear, updateSchedule)
-    .delete('/:id', authToken, checkScheduleOwnership, cache.clear, deleteSchedule);
+    .post('/', authToken, checkRoleId([2]), addValidate, addSchedule, cache.clear)
+    .patch('/:id', authToken, checkScheduleOwnership, updateSchedule, cache.clear)
+    .delete('/:id', authToken, checkScheduleOwnership, deleteSchedule, cache.clear);
 
 module.exports = router;

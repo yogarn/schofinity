@@ -5,7 +5,7 @@ const { generateOTP } = require('../services/auth');
 const validator = require('validator');
 const userBucket = process.env.USER_BUCKET;
 
-async function addUser(req, res) {
+async function addUser(req, res, next) {
     try {
         const userDetails = req.body;
 
@@ -24,6 +24,7 @@ async function addUser(req, res) {
         await create(userDetails);
         await generateOTP(userDetails.username);
         sendResponse(res, userDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -83,6 +84,7 @@ async function updateUser(req, res, next) {
 
         await update(username, updateDetails);
         sendResponse(res, updateDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -95,6 +97,7 @@ async function deleteUser(req, res, next) {
 
         await destroy(userId);
         sendResponse(res, { userId });
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);

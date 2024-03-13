@@ -15,7 +15,7 @@ async function getScholarships(req, res, next) {
     }
 };
 
-async function addScholarship(req, res) {
+async function addScholarship(req, res, next) {
     try {
         const scholarshipDetails = req.body;
         scholarshipDetails.userId = req.jwt.id;
@@ -26,6 +26,7 @@ async function addScholarship(req, res) {
 
         await create(scholarshipDetails);
         sendResponse(res, scholarshipDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -47,6 +48,7 @@ async function updateScholarship(req, res, next) {
 
         await update(scholarshipId, updateDetails);
         sendResponse(res, updateDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -59,6 +61,7 @@ async function deleteScholarship(req, res, next) {
 
         await destroy(scholarshipId);
         sendResponse(res, { scholarshipId });
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);

@@ -18,7 +18,7 @@ async function getOnlineClass(req, res, next) {
     }
 };
 
-async function addOnlineClass(req, res) {
+async function addOnlineClass(req, res, next) {
     try {
         const onlineClassDetails = req.body;
         const mentor = await findByUserId(req.jwt.id);
@@ -30,6 +30,7 @@ async function addOnlineClass(req, res) {
 
         await create(onlineClassDetails);
         sendResponse(res, onlineClassDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -51,6 +52,7 @@ async function updateOnlineClass(req, res, next) {
 
         await update(onlineClassId, updateDetails);
         sendResponse(res, updateDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);
@@ -63,6 +65,7 @@ async function deleteOnlineClass(req, res, next) {
 
         await destroy(onlineClassId);
         sendResponse(res, { onlineClassId });
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);

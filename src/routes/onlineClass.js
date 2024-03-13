@@ -11,9 +11,9 @@ router
     .get('/', cache.get, getOnlineClass, cache.set)
     .get('/payments', cache.get, getPayments, cache.set)
     .get('/payments/:id', cache.get, getPaymentsById, cache.set)
-    .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, cache.clear, addOnlineClass)
+    .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, addOnlineClass, cache.clear)
     .post('/:classId/buy', authToken, idValidate, cache.clear, buyOnlineClass)
-    .patch('/:classId', upload.single('image'), authToken, checkClassOwnership, cache.clear, updateOnlineClass)
-    .delete('/:classId', upload.single('image'), authToken, checkClassOwnership, cache.clear, deleteOnlineClass);
+    .patch('/:classId', upload.single('image'), authToken, checkClassOwnership, updateOnlineClass, cache.clear)
+    .delete('/:classId', upload.single('image'), authToken, checkClassOwnership, deleteOnlineClass, cache.clear);
 
 module.exports = router;

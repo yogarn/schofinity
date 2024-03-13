@@ -24,7 +24,6 @@ function get(req, res, next) {
 function clear(req, res, next) {
     const cacheKeys = cache.keys();
     let resourceUrl = req.baseUrl;
-    console.log(resourceUrl);
     const resourceKeys = cacheKeys.filter(cacheKeys => cacheKeys.includes(resourceUrl));
     cache.del(resourceKeys);
     next();

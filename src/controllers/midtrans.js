@@ -2,6 +2,7 @@ const midtrans = require("../config/midtrans");
 const { mentoringPayments } = require('../services/mentoring');
 const { classPayment } = require('../services/onlineClass');
 const { sendResponse, sendError } = require('../services/responseHandler');
+const { clearEndpoints } = require('../services/cache');
 
 async function resolvePayments(req, res, next) {
   midtrans.transaction.notification(req.body)
@@ -19,8 +20,10 @@ async function resolvePayments(req, res, next) {
         if (classType == "mentoring") {
           await mentoringPayments(id, transactionStatus, fraudStatus);
           sendResponse(res, orderId);
+          clearEndpoints(['/v1/mentorings']);
         } else if (classType == "class") {
           await classPayment(id, transactionStatus, fraudStatus);
+          clearEndpoints(['/v1/classes', '/v1/classes/payments']);
         }
       } catch (e) {
         console.log(e);
