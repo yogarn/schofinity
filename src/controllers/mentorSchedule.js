@@ -1,6 +1,7 @@
 const mentorServices = require('../services/mentor');
 const { create, findAll, update, destroy } = require('../services/mentorSchedule');
 const { sendResponse, sendError } = require('../services/responseHandler');
+const { clearEndpoints } = require('../services/cache');
 
 async function addSchedule(req, res, next) {
     try {
@@ -15,6 +16,7 @@ async function addSchedule(req, res, next) {
 
         await create(scheduleDetails);
         sendResponse(res, scheduleDetails);
+        clearEndpoints(['/v1/mentors']);
         next();
     } catch (e) {
         console.log(e);
@@ -41,6 +43,7 @@ async function updateSchedule(req, res, next) {
 
         await update(scheduleId, updateDetails);
         sendResponse(res, updateDetails);
+        clearEndpoints(['/v1/mentors']);
         next();
     } catch (e) {
         console.log(e);
@@ -54,6 +57,7 @@ async function deleteSchedule(req, res, next) {
 
         await destroy(scheduleId);
         sendResponse(res, { scheduleId });
+        clearEndpoints(['/v1/mentors']);
         next();
     } catch (e) {
         console.log(e);
