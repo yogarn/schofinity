@@ -4,14 +4,13 @@ const scheduleServices = require('../services/mentorSchedule');
 const onlineClassServices = require('../services/onlineClass');
 const mentoringServices = require('../services/mentoring');
 const favoriteServices = require('../services/favorite');
-
-const { getRoleByUserId } = require('../services/user');
-const { findByUserId } = require('../services/mentor');
+const userServices = require('../services/user');
+const mentorServices = require('../services/mentor');
 
 function checkRoleId(requiredRoleId) {
     return async function (req, res, next) {
         const userId = req.jwt.id;
-        const { roleId } = await getRoleByUserId(userId);
+        const { roleId } = await userServices.findByUserId(userId);
 
         if (requiredRoleId.includes(roleId)) {
             next();
@@ -24,7 +23,7 @@ function checkRoleId(requiredRoleId) {
 async function checkScholarshipOwnership(req, res, next) {
     const scholarshipId = req.params.id;
     const scholarship = await scholarshipServices.find(scholarshipId);
-    const { roleId } = await getRoleByUserId(req.jwt.id);
+    const { roleId } = await userServices.findByUserId(req.jwt.id);
 
     if (!scholarship) {
         sendError(res, "Scholarship not found");
@@ -40,8 +39,8 @@ async function checkScholarshipOwnership(req, res, next) {
 async function checkScheduleOwnership(req, res, next) {
     const scheduleId = req.params.id;
     const schedule = await scheduleServices.find(scheduleId);
-    const mentor = await findByUserId(req.jwt.id);
-    const { roleId } = await getRoleByUserId(req.jwt.id);
+    const mentor = await mentorServices.findByUserId(req.jwt.id);
+    const { roleId } = await userServices.findByUserId(req.jwt.id);
 
     if (!schedule) {
         sendError(res, "Schedule not found");
@@ -58,7 +57,7 @@ async function checkMentoringOwnership(req, res, next) {
     const mentoringId = req.params.id;
     const mentoring = await mentoringServices.find(mentoringId);
     const mentor = await findByUserId(req.jwt.id);
-    const { roleId } = await getRoleByUserId(req.jwt.id);
+    const { roleId } = await userServices.findByUserId(req.jwt.id);
 
     if (!mentoring) {
         sendError(res, "Mentoring not found");
@@ -75,7 +74,7 @@ async function checkClassOwnership(req, res, next) {
     const classId = req.params.classId;
     const onlineClass = await onlineClassServices.find(classId);
     const mentor = await findByUserId(req.jwt.id);
-    const { roleId } = await getRoleByUserId(req.jwt.id);
+    const { roleId } = await userServices.findByUserId(req.jwt.id);
 
     if (!onlineClass) {
         sendError(res, "Class not found");
@@ -91,7 +90,7 @@ async function checkClassOwnership(req, res, next) {
 async function checkClassPayment(req, res, next) {
     const classId = req.params.classId;
     const userId = req.jwt.id;
-    const { roleId } = await getRoleByUserId(userId);
+    const { roleId } = await userServices.findByUserId(userId);
 
     const mentor = await findByUserId(userId);
     const onlineClass = await onlineClassServices.find(classId);
@@ -112,7 +111,7 @@ async function checkClassPayment(req, res, next) {
 async function checkFavoriteOwnership(req, res, next) {
     const favoriteId = req.params.id;
     const userId = req.jwt.id;
-    const { roleId } = await getRoleByUserId(userId);
+    const { roleId } = await userServices.findByUserId(userId);
 
     const favorite = await favoriteServices.find(favoriteId);
 

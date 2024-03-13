@@ -62,16 +62,6 @@ async function findByUserId(id) {
     });
 }
 
-async function getRoleByUserId(id) {
-    return sequelize.transaction(async (t) => {
-        return User.findOne({
-            where: { id },
-            attributes: ['roleId'],
-            transaction: t
-        });
-    });
-}
-
 async function getUsername(id) {
     return sequelize.transaction(async (t) => {
         return User.findOne({
@@ -121,7 +111,6 @@ module.exports = {
     find,
     findAll,
     findByUserId,
-    getRoleByUserId,
     getUsername,
     getUserId,
     create,
