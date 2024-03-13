@@ -10,6 +10,7 @@ const schedulesRoute = require('./mentorSchedule');
 const mentoringsRoute = require('./mentoring');
 const onlineClassesRoute = require('./onlineClass');
 const classResourcesRoute = require('./classResource');
+const feedbacksRoute = require('./feedback');
 const midtransRoute = require('./midtrans');
 
 router.use('/auths', authsRoute);
@@ -21,6 +22,7 @@ router.use('/schedules', schedulesRoute);
 router.use('/mentorings', mentoringsRoute);
 router.use('/classes', onlineClassesRoute);
 router.use('/classes/:classId/resources', classResourcesRoute);
+router.use('/feedbacks', feedbacksRoute);
 router.use('/midtrans', midtransRoute);
 
 module.exports = router;
