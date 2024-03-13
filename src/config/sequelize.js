@@ -5,13 +5,13 @@ const sequelize = new Sequelize(
     process.env.DB_USER,
     process.env.DB_PASS,
     {
-        host: 'localhost',
-        dialect: 'mariadb',
+        host: process.env.DB_HOST,
+        dialect: process.env.DB_DRIVER,
         logging: false,
         dialectOptions: {
             useUTC: false
         },
-        timezone: 'Asia/Jakarta',
+        timezone: process.env.DB_TIMEZONE,
         pool: {
             max: 5,
             min: 0,

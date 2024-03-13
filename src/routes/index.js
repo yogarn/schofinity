@@ -13,6 +13,16 @@ const classResourcesRoute = require('./classResource');
 const feedbacksRoute = require('./feedback');
 const midtransRoute = require('./midtrans');
 
+router.get('/health-check', (req, res) => {
+    const data = {
+        uptime: process.uptime(),
+        message: 'Ok',
+        date: new Date()
+    }
+
+    res.status(200).send(data);
+});
+
 router.use('/auths', authsRoute);
 router.use('/users', usersRoute);
 router.use('/scholarships', scholarshipsRoute);
