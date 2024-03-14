@@ -3,10 +3,13 @@ const sequelize = require('../config/sequelize');
 
 const { ClassResource } = db;
 
-async function findAll(classId) {
+async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return ClassResource.findAll({
-            where: { classId },
+            where: whereClause,
+            limit: limit,
+            offset: offset,
+            order: order,
             transaction: t
         });
     });

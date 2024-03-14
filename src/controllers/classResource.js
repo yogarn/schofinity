@@ -6,7 +6,10 @@ const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
 async function getClassResource(req, res, next) {
     try {
         const classId = req.params.classId;
-        const classResource = await findAll(classId);
+        let { whereClause, order, limit, offset } = req;
+        whereClause.classId = classId;
+        
+        const classResource = await findAll(whereClause, order, limit, offset);
         sendResponse(res, classResource);
         res.locals.data = classResource;
         next();
@@ -31,8 +34,9 @@ async function getClassResourceById(req, res, next) {
 
 async function addClassResource(req, res, next) {
     try {
-        const classResourceDetails = req.body;
         const classId = req.params.classId
+        const { name, description, image, resource } = req.body;
+        const classResourceDetails = { name, description, image, resource };
         classResourceDetails.classId = classId;
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
@@ -51,7 +55,8 @@ async function addClassResource(req, res, next) {
 async function updateClassResource(req, res, next) {
     try {
         const { classId, id } = req.params;
-        const updateDetails = req.body;
+        const { name, description, image, resource } = req.body;
+        const updateDetails = { name, description, image, resource };
         const classResource = await find(classId, id);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {

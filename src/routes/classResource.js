@@ -6,9 +6,11 @@ const cache = require('../middlewares/cache');
 const upload = require('../config/multer');
 const { checkRoleId, checkClassOwnership, checkClassPayment } = require('../middlewares/authorize');
 const { getValidate, addValidate, updateValidate, getIdValidate, deleteValidate } = require('../middlewares/validators/classResource');
+const { ClassResource } = require('../models/index');
+const filter = require('../middlewares/filter');
 
 router
-    .get('/', authToken, checkClassPayment, getValidate, cache.get, getClassResource, cache.set)
+    .get('/', authToken, checkClassPayment, getValidate, cache.get, filter(ClassResource), getClassResource, cache.set)
     .get('/:id', authToken, checkClassPayment, getIdValidate, cache.get, getClassResourceById, cache.set)
     .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, addClassResource, cache.clear)
     .patch('/:id', upload.single('image'), authToken, checkClassOwnership, updateValidate, updateClassResource, cache.clear)
