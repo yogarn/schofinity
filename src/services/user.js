@@ -8,32 +8,51 @@ const { User, Role } = db;
 async function findAll(query) {
 
     const whereClause = {};
+    const order = [];
 
-    if (query.id) {
-        whereClause.id = { [Op.eq]: query.id };
+    const validFields = Object.keys(User.rawAttributes);
+    const limit = query.limit ? parseInt(query.limit) : undefined;
+    const page = query.page ? parseInt(query.page) : 1;
+    const offset = limit ? (page - 1) * limit : undefined;
+
+    console.log(query)
+
+    for (const key in query) {
+        const value = query[key];
+
+        if (value == '' || value === null || value === undefined) continue;
+        if (key === 'limit' || key === 'page' || key === 'sort') continue;
+        if (validFields.includes(key)) {
+            if (value.includes(',')) {
+                const values = value.split(',');
+                whereClause[key] = { [Op.or]: values.map(item => ({ [Op.like]: `%${item}%` })) };
+            } else {
+                whereClause[key] = { [Op.like]: `%${value}%` };
+            }
+        }
     }
 
-    if (query.name) {
-        whereClause.name = { [Op.like]: `%${query.name}%` };
-    }
-
-    if (query.username) {
-        whereClause.username = { [Op.like]: `%${query.username}%` };
-    }
-
-    if (query.email) {
-        whereClause.email = { [Op.like]: `%${query.email}%` };
-    }
-
-    if (query.statusId) {
-        whereClause.statusId = { [Op.eq]: query.statusId };
+    if (query.sort) {
+        const arraySort = query.sort.split(',');
+        arraySort.forEach(field => {
+            let orderDirection = 'ASC';
+            if (field.startsWith('-')) {
+                field = field.replace('-', '');
+                orderDirection = 'DESC';
+            }
+            if (validFields.includes(field)) {
+                order.push([field, orderDirection]);
+            }
+        });
     }
 
     return sequelize.transaction(async (t) => {
         return User.findAll({
             attributes: { exclude: ['password', 'otp'] },
             where: whereClause,
-            limit: query.limit ? parseInt(query.limit) : undefined,
+            limit: limit <= 0 ? 1 : limit,
+            offset: offset <= 0 ? 1 : offset,
+            order: order.length ? order : undefined,            
             transaction: t
         });
     });

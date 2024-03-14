@@ -21,7 +21,7 @@ async function findAll(query) {
         if (validFields.includes(key)) {
             if (value.includes(',')) {
                 const values = value.split(',');
-                whereClause[key] = { [Op.in]: values };
+                whereClause[key] = { [Op.or]: values.map(item => ({ [Op.like]: `%${item}%` })) };
             } else {
                 whereClause[key] = { [Op.like]: `%${value}%` };
             }
