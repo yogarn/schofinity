@@ -1,0 +1,672 @@
+openapi: 3.0.0
+info:
+  title: Schofinity API
+  description: |
+    To use this API you need to obtain a JWT Token by logging in and entering it on the authorization button below. You can register as a new user with your own credentials.
+
+  version: 1.0.0
+servers:
+  - url: https://schofinity-c284f28bf9dd.herokuapp.com/
+    description: Main sever
+tags:
+  - name: Authentications
+    description: Operations related to users authentication
+  - name: Users
+    description: Operations related to users managements
+  - name: Scholarships
+    description: Operations related to scholarships managements
+  - name: Favorites
+    description: Operations related to favorites managements
+  - name: Mentors
+    description: Operations related to mentors managements
+  - name: Mentor Schedule
+    description: Operations related to mentor schedules
+  - name: Mentorings
+    description: Operations related to mentorings
+  - name: Classes
+    description: Operations related to online classes
+  - name: Class Resources
+    description: Operations related to class resources
+  - name: Feedbacks
+    description: Operations related to feedbacks
+security:
+  - bearerAuth: []
+
+paths:
+  # authentication section
+  /auths:
+    post:
+      security: []
+      tags:
+        - Authentications
+      summary: Generate a JWT token
+      description: Authenticate and grant access based on user credentials. Return user login status along with its detail and token as response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: yogarn
+                password:
+                  type: string
+                  example: Root_123
+      responses:
+        "200":
+          description: A JSON object of user login status and JWT token. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMDYxYzY0YzQtZWZmNC00MDA3LThhYmItMDE0OTliYTNjZDU5IiwidXNlcm5hbWUiOiJ5b2dhcm4iLCJwYXNzd29yZCI6IiQyYiQxMCRHdjc0V0JqL2s1Q0dnSzBmRVBCM3ZlWFYyUHBDWkJkLjdUaUVjaWFMLmFFWTFLN2h5TnVnNiIsIm5hbWUiOiJZb2dhIFJhZGl0eWEgTmFsYSIsImNvbnRhY3QiOiIrNjI4NTE1OTU1MTg1OSIsImVtYWlsIjoieW9nYXJhZGl0eWFuQGdtYWlsLmNvbSIsImltYWdlIjpudWxsLCJyb2xlSWQiOjEsInN0YXR1c0lkIjoyLCJvdHAiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMDMtMTRUMDM6MzI6MDEuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMTRUMDM6MzI6MzYuMDAwWiJ9LCJpYXQiOjE3MTAzODczODMsImV4cCI6MTcxMDM5MDk4M30.PLFCqxQKM0cgCkgYiQFSQlzHKgx473gjBRZJ3Mxfvas
+        "401":
+          description: Incorrect credentials (Unauthorized Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Incorrect password
+        "404":
+          description: Credentials not found (Not Found Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Username not found
+  /auths/activate:
+    post:
+      security: []
+      tags:
+        - Authentications
+      summary: Activate user account
+      description: Authenticate user OTP and activate account based on user credentials. Return account activation status.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - otp
+              properties:
+                username:
+                  type: string
+                  example: yogarn
+                otp:
+                  type: string
+                  example: 123456
+      responses:
+        "200":
+          description: A JSON object of account activation status. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+        "401":
+          description: Incorrect OTP (Unauthorized Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Incorrect OTP
+        "404":
+          description: Credentials not found (Not Found Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Username not found
+  /auths/generate-otp:
+    post:
+      security: []
+      tags:
+        - Authentications
+      summary: Send OTP code to user by email
+      description: Send OTP code for resetting password and account activation based on user credentials. Return OTP send status.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  example: yogarn
+      responses:
+        "200":
+          description: A JSON object of OTP send status. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+        "404":
+          description: Credentials not found (Not Found Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Username not found
+  /auths/reset-password:
+    post:
+      security: []
+      tags:
+        - Authentications
+      summary: Authenticate OTP and resetting password
+      description: Authenticate OTP and resetting password based on user credentials. Return reset password status.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - otp
+              properties:
+                username:
+                  type: string
+                  example: yogarn
+                password:
+                  type: string
+                  example: Root_123
+                otp:
+                  type: string
+                  example: 123456
+      responses:
+        "200":
+          description: A JSON object of OTP send status. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+        "401":
+          description: Incorrect OTP (Not Found Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Incorrect OTP
+        "404":
+          description: Credentials not found (Not Found Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Username not found
+
+  # users section
+  /users:
+    post:
+      security: []
+      tags:
+        - Users
+      summary: Register a new user to the system
+      description: Record user credentials and return it's username. Only the username and password key-value pair are required. If user leave other key empty, their values ​​will be stored as null, which user can edit later.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/user/properties/name"
+                username:
+                  $ref: "#/components/schemas/user/properties/username"
+                password:
+                  $ref: "#/components/schemas/user/properties/password"
+                contact:
+                  $ref: "#/components/schemas/user/properties/contact"
+                email:
+                  $ref: "#/components/schemas/user/properties/email"
+                image:
+                  $ref: "#/components/schemas/user/properties/image"
+            example:
+              name: Yoga Raditya
+              username: yogarn
+              password: Root_123
+              contact: 6285123456789
+              email: schofinity@gmail.com
+              image: profile_picture.jpeg
+      responses:
+        "200":
+          description: A JSON object of user registration status and its username. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                      type: string
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        $ref: "#/components/schemas/user/properties/name"
+                      username:
+                        $ref: "#/components/schemas/user/properties/username"
+                      password:
+                        $ref: "#/components/schemas/user/properties/password"
+                      contact:
+                        $ref: "#/components/schemas/user/properties/contact"
+                      email:
+                        $ref: "#/components/schemas/user/properties/email"
+                      image:
+                        $ref: "#/components/schemas/user/properties/image"
+              example:
+                message: success
+                data:
+                  name: Yoga Raditya
+                  username: yogarn
+                  password: Root_123
+                  contact: 6285123456789
+                  email: schofinity@gmail.com
+                  image: profile_picture.jpeg
+        "409":
+          description: Username already used by another user (Conflict Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Validation error
+    get:
+      summary: View users profile
+      description: Returns a list of users along with its details. User can use it without parameter to view all users profile.
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          description: The id of the user.
+          required: false
+          example: 1
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: The name of the user.
+          required: false
+          example: Yoga Raditya
+        - in: query
+          name: username
+          schema:
+            type: string
+          description: The username of the user.
+          required: false
+          example: yogarn
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: The email of the user.
+          required: false
+          example: schofinity@gmail.com
+        - in: query
+          name: statusId
+          schema:
+            type: string
+          description: The status's id of the user.
+          required: false
+          example: 2
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: The limit of user information that will be shown.
+          required: false
+          example: 10
+      responses:
+        "200":
+          description: A JSON array containing list of users. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                        username:
+                          type: string
+                        contact:
+                          type: string
+                        email:
+                          type: string
+                          format: email
+                        image:
+                          type: string
+                        roleId:
+                          type: integer
+                        statusId:
+                          type: integer
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+              examples:
+                Empty Params:
+                  value:
+                    message: success
+                    data:
+                      - id: 061c64c4-eff4-4007-8abb-01499ba3cd59
+                        username: yogarn
+                        name: Yoga Raditya
+                        contact: 6285123456789
+                        email: schofinity@gmail.com
+                        image: yogarn-profile.jpeg
+                        roleId: 2
+                        statusId: 2
+                        createdAt: 2024-03-14T03:32:01.000Z
+                        updatedAt: 2024-03-14T05:24:58.000Z
+                      - id: 13071c6e-0d91-4372-bd05-84fcecd1fe75
+                        username: johndoe
+                        name: John Doe
+                        contact: 6285123456789
+                        email: johndoe@gmail.com
+                        image: johndoe-profile.jpeg
+                        roleId: 1
+                        statusId: 2
+                        createdAt: 2024-02-14T03:32:01.000Z
+                        updatedAt: 2024-02-14T05:24:58.000Z
+                      - id: 45842f85-2517-4f0a-b160-810452274033
+                        username: alanturing
+                        name: Alan Turing
+                        contact: 6285123456789
+                        email: turing@gmail.com
+                        image: alanturing-profile.jpeg
+                        roleId: 2
+                        statusId: 2
+                        createdAt: 2024-01-14T03:32:01.000Z
+                        updatedAt: 2024-01-14T05:24:58.000Z
+                Using id, username, or email:
+                  value:
+                    message: success
+                    data:
+                      - id: 061c64c4-eff4-4007-8abb-01499ba3cd59
+                        username: yogarn
+                        name: Yoga Raditya
+                        contact: 6285123456789
+                        email: schofinity@gmail.com
+                        image: yogarn-profile.jpeg
+                        roleId: 2
+                        statusId: 2
+                        createdAt: 2024-03-14T03:32:01.000Z
+                        updatedAt: 2024-03-14T05:24:58.000Z
+                Using name or statusId:
+                  value:
+                    message: success
+                    data:
+                      - id: 061c64c4-eff4-4007-8abb-01499ba3cd59
+                        username: yogarn
+                        name: Yoga Raditya
+                        contact: 6285123456789
+                        email: schofinity@gmail.com
+                        image: yogarn-profile.jpeg
+                        roleId: 2
+                        statusId: 2
+                        createdAt: 2024-03-14T03:32:01.000Z
+                        updatedAt: 2024-03-14T05:24:58.000Z
+                      - id: 45842f85-2517-4f0a-b160-810452274033
+                        username: alanturing
+                        name: Alan Turing
+                        contact: 6285123456789
+                        email: turing@gmail.com
+                        image: alanturing-profile.jpeg
+                        roleId: 2
+                        statusId: 2
+                        createdAt: 2024-01-14T03:32:01.000Z
+                        updatedAt: 2024-01-14T05:24:58.000Z
+    patch:
+      tags:
+        - Users
+      summary: Update user profile.
+      description: Update user profile with new details and return the update status. User don't need to send all the key-value pair when accessing this request. All key-value are editable, except id, and status (only available for admin).
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/user/properties/name"
+                username:
+                  $ref: "#/components/schemas/user/properties/username"
+                password:
+                  $ref: "#/components/schemas/user/properties/password"
+                contact:
+                  $ref: "#/components/schemas/user/properties/contact"
+                email:
+                  $ref: "#/components/schemas/user/properties/email"
+                image:
+                  $ref: "#/components/schemas/user/properties/image"
+            example:
+              name: Yoga Raditya
+              username: yogarn
+              password: Root_123
+              contact: 6285123456789
+              email: schofinity@gmail.com
+              image: profile_picture.jpeg
+      responses:
+        "200":
+          description: A JSON object of user registration status and its username. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                      type: string
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        $ref: "#/components/schemas/user/properties/name"
+                      username:
+                        $ref: "#/components/schemas/user/properties/username"
+                      password:
+                        $ref: "#/components/schemas/user/properties/password"
+                      contact:
+                        $ref: "#/components/schemas/user/properties/contact"
+                      email:
+                        $ref: "#/components/schemas/user/properties/email"
+                      image:
+                        $ref: "#/components/schemas/user/properties/image"
+              example:
+                message: success
+                data:
+                  name: Yoga Raditya
+                  username: yogarn
+                  password: Root_123
+                  contact: 6285123456789
+                  email: schofinity@gmail.com
+                  image: profile_picture.jpeg
+  /users/{id}:
+    get:
+      summary: View users profile by id
+      description: Returns a users along with its details.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: A JSON object containing user details. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 061c64c4-eff4-4007-8abb-01499ba3cd59
+                      username:
+                        type: string
+                        example: yogarn
+                      name:
+                        type: string
+                        example: Yoga Raditya
+                      contact:
+                        type: string
+                        example: 6285123456789
+                      email:
+                        type: string
+                        example: schofinity@gmail.com
+                      image:
+                        type: string
+                        example: profile_picture.jpeg
+                      roleId:
+                        type: string
+                        example: 2
+                      statusId:
+                        type: string
+                        example: 2
+                      createdAt:
+                        type: string
+                        example: 2024-03-14T03:32:01.000Z
+                      updatedAt:
+                        type: string
+                        example: 2024-03-14T05:24:58.000Z
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the user.
+        name:
+          type: string
+          description: The user's name.
+        username:
+          type: string
+          description: The user's username.
+        password:
+          type: string
+          description: The user's password.
+        contact:
+          type: string
+          description: The user's contact.
+        email:
+          type: string
+          description: The user's email.
+        image:
+          type: string
+          format: binary
+          description: The user's profile image.
+        roleId:
+          type: string
+          description: The user's role's id.
+        statusId:
+          type: string
+          description: The user's status's id. Referring to account activation status.
+        otp:
+          type: string
+          description: The user's otp.
+        createdAt:
+          type: string
+          format: date-time
+          description: The user's creation date.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The user's latest update date.

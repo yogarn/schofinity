@@ -5,8 +5,8 @@ const { authUser, activateUser, resetUserPassword, sendOTP } = require('../contr
 const { authValidate, activateValidate, generateOTPValidate, resetPasswordValidate } = require('../middlewares/validators/auth');
 
 router
-    .get('/', authValidate, authUser)
-    .get('/generate-otp', generateOTPValidate, sendOTP)
+    .post('/', authValidate, authUser)
+    .post('/generate-otp', generateOTPValidate, sendOTP)
     .post('/activate', activateValidate, activateUser)
     .post('/reset-password', resetPasswordValidate, resetUserPassword);
 

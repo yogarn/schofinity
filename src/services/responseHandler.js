@@ -7,9 +7,6 @@ function sendError(res, error, data) {
     let status = ''
     switch (error) {
         // validation
-        case 'Validation error':
-            status = 400;
-            break;
         case 'ExpressValidationError':
             status = 400;
             error = data;
@@ -22,6 +19,9 @@ function sendError(res, error, data) {
             break;
         case 'Invalid email':
             status = 400;
+            break;
+        case 'Validation error':
+            status = 409;
             break;
         // authentication
         case 'Incorrect password':
