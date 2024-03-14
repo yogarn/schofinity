@@ -1,4 +1,4 @@
-const { findAll, find, create, update, destroy, accept } = require('../services/scholarship');
+const { findAll, find, create, update, destroy } = require('../services/scholarship');
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const scholarshipBucket = process.env.SCHOLARSHIP_BUCKET;
@@ -17,15 +17,16 @@ async function getScholarships(req, res, next) {
 
 async function addScholarship(req, res, next) {
     try {
-        const scholarshipDetails = req.body;
-        scholarshipDetails.userId = req.jwt.id;
+        let { name, description, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId } = req.body;
+        const userId = req.jwt.id;
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            scholarshipDetails.image = await uploadImage(req.file.buffer, scholarshipBucket, `${Date.now()}-${req.file.originalname}`);
+            image = await uploadImage(req.file.buffer, scholarshipBucket, `${Date.now()}-${req.file.originalname}`);
         }
 
-        await create(scholarshipDetails);
-        sendResponse(res, scholarshipDetails);
+        const scholarshipData = { userId, name, description, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId };
+        await create(scholarshipData);
+        sendResponse(res, scholarshipData);
         next();
     } catch (e) {
         console.log(e);
@@ -36,18 +37,19 @@ async function addScholarship(req, res, next) {
 async function updateScholarship(req, res, next) {
     try {
         const scholarshipId = req.params.id;
-        const updateDetails = req.body;
+        let { name, description, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId } = req.body;
         const scholarship = await find(scholarshipId);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            updateDetails.image = await uploadImage(req.file.buffer, scholarshipBucket, `${Date.now()}-${req.file.originalname}`);
+            image = await uploadImage(req.file.buffer, scholarshipBucket, `${Date.now()}-${req.file.originalname}`);
             if (scholarship.image) {
                 await deleteImage(scholarshipBucket, scholarship.image);
             }
         }
 
-        await update(scholarshipId, updateDetails);
-        sendResponse(res, updateDetails);
+        const scholarshipData = { name, description, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId };
+        await update(scholarshipId, scholarshipData);
+        sendResponse(res, scholarshipData);
         next();
     } catch (e) {
         console.log(e);
@@ -58,7 +60,7 @@ async function updateScholarship(req, res, next) {
 async function acceptScholarship(req, res, next) {
     try {
         const scholarshipId = req.params.id;
-        await accept(scholarshipId);
+        await update(scholarshipId, { statusId: 2 });
         sendResponse(res, { scholarshipId });
         next();
     } catch (e) {
