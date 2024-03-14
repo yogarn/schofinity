@@ -32,7 +32,7 @@ async function findAll(query) {
     return sequelize.transaction(async (t) => {
         return User.findAll({
             include: [{ model: Role }],
-            attributes: { exclude: ['roleId', 'password', 'otp'] },
+            attributes: { exclude: ['password', 'otp'] },
             where: whereClause,
             limit: query.limit ? parseInt(query.limit) : undefined,
             transaction: t
@@ -44,7 +44,7 @@ async function find(username) {
     return sequelize.transaction(async (t) => {
         return User.findOne({
             include: [{ model: Role }],
-            attributes: { exclude: ['roleId', 'password', 'otp'] },
+            attributes: { exclude: ['password', 'otp'] },
             where: { username },
             transaction: t
         });
@@ -55,7 +55,7 @@ async function findByUserId(id) {
     return sequelize.transaction(async (t) => {
         return User.findOne({
             include: [{ model: Role }],
-            attributes: { exclude: ['roleId', 'password', 'otp'] },
+            attributes: { exclude: ['password', 'otp'] },
             where: { id },
             transaction: t
         });
