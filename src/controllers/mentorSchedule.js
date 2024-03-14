@@ -26,7 +26,8 @@ async function addSchedule(req, res, next) {
 
 async function getAllSchedule(req, res, next) {
     try {
-        const schedules = await findAll(req.query);
+        const { whereClause, order, limit, offset } = req;
+        const schedules = await findAll(whereClause, order, limit, offset);
         sendResponse(res, schedules);
         res.locals.data = schedules;
         next();

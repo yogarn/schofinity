@@ -45,7 +45,8 @@ async function getUser(req, res, next) {
 
 async function getAllUsers(req, res, next) {
     try {
-        const users = await findAll(req.query);
+        const { whereClause, order, limit, offset } = req;
+        const users = await findAll(whereClause, order, limit, offset);
         sendResponse(res, users);
         res.locals.data = users;
         next();

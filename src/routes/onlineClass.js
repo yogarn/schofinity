@@ -6,10 +6,12 @@ const cache = require('../middlewares/cache');
 const upload = require('../config/multer');
 const { checkRoleId, checkClassOwnership } = require('../middlewares/authorize');
 const { addValidate, idValidate } = require('../middlewares/validators/onlineClass');
+const { OnlineClass, ClassPayment } = require('../models/index');
+const filter = require('../middlewares/filter');
 
 router
-    .get('/', cache.get, getOnlineClass, cache.set)
-    .get('/payments', cache.get, getPayments, cache.set)
+    .get('/', cache.get, filter(OnlineClass), getOnlineClass, cache.set)
+    .get('/payments', cache.get, filter(ClassPayment), getPayments, cache.set)
     .get('/payments/:id', cache.get, getPaymentsById, cache.set)
     .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, addOnlineClass, cache.clear)
     .post('/:classId/buy', authToken, idValidate, cache.clear, buyOnlineClass)

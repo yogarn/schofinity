@@ -10,35 +10,14 @@ async function create(data) {
     });
 };
 
-async function findAll(query) {
-
-    const whereClause = {};
-
-    if (query.id) {
-        whereClause.id = { [Op.eq]: query.id };
-    }
-
-    if (query.mentorId) {
-        whereClause.mentorId = { [Op.eq]: query.mentorId };
-    }
-
-    if (query.day) {
-        whereClause.day = { [Op.eq]: query.day };
-    }
-
-    if (query.startTime) {
-        whereClause.startTime = { [Op.like]: `%${query.startTime}%` };
-    }
-
-    if (query.endTime) {
-        whereClause.endTime = { [Op.like]: `%${query.endTime}%` };
-    }
-
+async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return MentorSchedule.findAll({
             include: [{ model: Mentor, include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }] }],
             where: whereClause,
-            limit: query.limit ? parseInt(query.limit) : undefined,
+            limit: limit,
+            offset: offset,
+            order: order,
             transaction: t
         });
     });

@@ -8,7 +8,8 @@ const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
 
 async function getOnlineClass(req, res, next) {
     try {
-        const onlineClass = await findAll(req.query);
+        const { whereClause, order, limit, offset } = req;
+        const onlineClass = await findAll(whereClause, order, limit, offset);
         sendResponse(res, onlineClass);
         res.locals.data = onlineClass;
         next();
@@ -102,7 +103,8 @@ async function buyOnlineClass(req, res, next) {
 
 async function getPayments(req, res, next) {
     try {
-        const payments = await findAllPayments(req.query);
+        const { whereClause, order, limit, offset } = req;
+        const payments = await findAllPayments(whereClause, order, limit, offset);
         sendResponse(res, payments);
         res.locals.data = payments;
         next();

@@ -9,8 +9,8 @@ async function findAll(query) {
     const order = [];
 
     const validFields = Object.keys(Scholarship.rawAttributes);
-    const limit = query.limit ? parseInt(query.limit) : undefined;
-    const page = query.page ? parseInt(query.page) : 1;
+    const limit = query.limit ? Math.max(1, parseInt(query.limit)) : undefined;
+    const page = query.page ? Math.max(1, parseInt(query.page)) : 1;
     const offset = limit ? (page - 1) * limit : undefined;
 
     for (const key in query) {
@@ -50,9 +50,9 @@ async function findAll(query) {
         return Scholarship.findAll({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
             where: whereClause,
-            limit: limit <= 0 ? 1 : limit,
-            offset: offset <= 0 ? 1 : offset,
-            order: order.length ? order : undefined,
+            limit: limit,
+            offset: offset,
+            order: order,
             transaction: t
         });
     });

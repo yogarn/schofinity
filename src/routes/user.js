@@ -6,9 +6,11 @@ const cache = require('../middlewares/cache');
 const upload = require('../config/multer');
 const { checkRoleId } = require('../middlewares/authorize');
 const { addValidate, idValidate } = require('../middlewares/validators/user');
+const { User } = require('../models/index');
+const filter = require('../middlewares/filter');
 
 router
-    .get('/', authToken, cache.get, getAllUsers, cache.set)
+    .get('/', authToken, cache.get, filter(User), getAllUsers, cache.set)
     .get('/:id', authToken, cache.get, getUser, cache.set)
     .post('/', upload.single('image'), addValidate, addUser, cache.clear)
     .patch('/', upload.single('image'), authToken, updateUser, cache.clear)
