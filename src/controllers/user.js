@@ -7,7 +7,7 @@ const userBucket = process.env.USER_BUCKET;
 
 async function addUser(req, res, next) {
     try {
-        const { username, name, password, contact, description, birthDate, gender, address, email, image } = req.body;
+        let { username, name, password, contact, description, birthDate, gender, address, email, image } = req.body;
         if (password && !validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
             throw new Error("Invalid password");
         } else if (contact && !validator.isMobilePhone(contact, ['id-ID'])) {
@@ -59,7 +59,7 @@ async function updateUser(req, res, next) {
     try {
         const userId = req.jwt.id;
 
-        const { username, name, password, contact, description, birthDate, gender, address, email, image } = req.body;
+        let { username, name, password, contact, description, birthDate, gender, address, email, image } = req.body;
         if (password && !validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
             throw new Error("Invalid password");
         } else if (contact && !validator.isMobilePhone(contact, ['id-ID'])) {
