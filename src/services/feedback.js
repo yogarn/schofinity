@@ -4,31 +4,14 @@ const { Op } = require('sequelize');
 
 const { Feedback, User } = db;
 
-async function findAll(query) {
-
-    const whereClause = {};
-
-    if (query.id) {
-        whereClause.id = { [Op.eq]: query.id };
-    }
-
-    if (query.userId) {
-        whereClause.userId = { [Op.eq]: query.userId };
-    }
-
-    if (query.title) {
-        whereClause.title = { [Op.like]: `%${query.title}%` };
-    }
-
-    if (query.body) {
-        whereClause.body = { [Op.like]: `%${query.body}%` };
-    }
-
+async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return Feedback.findAll({
             include: [{ model: User }],
             where: whereClause,
-            limit: query.limit ? parseInt(query.limit) : undefined,
+            limit: limit,
+            offset: offset,
+            order: order,
             transaction: t
         });
     });

@@ -3,7 +3,8 @@ const { sendResponse, sendError } = require('../services/responseHandler');
 
 async function addFeedback(req, res, next) {
     try {
-        const feedbackDetails = req.body;
+        const { title, body } = req.body;
+        const feedbackDetails = { title, body };
         feedbackDetails.userId = req.jwt.id;
         await create(feedbackDetails);
         sendResponse(res, feedbackDetails);
@@ -16,7 +17,8 @@ async function addFeedback(req, res, next) {
 
 async function getAllFeedback(req, res, next) {
     try {
-        const feedbacks = await findAll(req.query);
+        const { whereClause, order, limit, offset } = req;
+        const feedbacks = await findAll(whereClause, order, limit, offset);
         sendResponse(res, feedbacks);
         res.locals.data = feedbacks;
         next();
