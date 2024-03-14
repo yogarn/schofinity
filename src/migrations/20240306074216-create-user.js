@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.DATE
       },
       gender: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM('male', 'female', 'else')
       },
       address: {
         type: Sequelize.STRING
