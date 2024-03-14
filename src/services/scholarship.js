@@ -5,66 +5,54 @@ const sequelize = require('../config/sequelize')
 const { Scholarship, EducationLevel, FundingType, Location, Category, Status } = db;
 
 async function findAll(query) {
-
     const whereClause = {};
+    const order = [];
 
-    if (query.id) {
-        whereClause.id = { [Op.eq]: query.id };
+    const validFields = Object.keys(Scholarship.rawAttributes);
+    const limit = query.limit ? parseInt(query.limit) : undefined;
+    const page = query.page ? parseInt(query.page) : 1;
+    const offset = limit ? (page - 1) * limit : undefined;
+
+    for (const key in query) {
+        const value = query[key];
+
+        if (value == '' || value === null || value === undefined) continue;
+        if (key === 'limit' || key === 'page' || key === 'sort') continue;
+        if (validFields.includes(key)) {
+            if (value.includes(',')) {
+                const values = value.split(',');
+                whereClause[key] = { [Op.in]: values };
+            } else {
+                whereClause[key] = { [Op.like]: `%${value}%` };
+            }
+        } else if (key === 'semester') {
+            const semester = parseInt(value);
+            whereClause.maxSemester = { [Op.gte]: semester };
+            whereClause.minSemester = { [Op.lte]: semester };
+        }
     }
 
-    if (query.name) {
-        whereClause.name = { [Op.like]: `%${query.name}%` };
-    }
-
-    if (query.description) {
-        whereClause.description = { [Op.like]: `%${query.description}%` };
-    }
-
-    if (query.benefit) {
-        whereClause.benefit = { [Op.like]: `%${query.benefit}%` };
-    }
-
-    if (query.requirement) {
-        whereClause.requirement = { [Op.like]: `%${query.requirement}%` };
-    }
-
-    if (query.startDate) {
-        whereClause.startDate = { [Op.like]: `%${query.startDate}%` };
-    }
-
-    if (query.endDate) {
-        whereClause.endDate = { [Op.like]: `%${query.endDate}%` };
-    }
-
-    if (query.maxSemester) {
-        whereClause.maxSemester = { [Op.gte]: parseInt(query.maxSemester) };
-    }
-
-    if (query.educationId) {
-        whereClause.educationId = { [Op.eq]: query.educationId };
-    }
-
-    if (query.typeId) {
-        whereClause.typeId = { [Op.eq]: query.typeId };
-    }
-
-    if (query.locationId) {
-        whereClause.locationId = { [Op.eq]: query.locationId };
-    }
-
-    if (query.categoryId) {
-        whereClause.categoryId = { [Op.eq]: query.categoryId };
-    }
-
-    if (query.statusId) {
-        whereClause.statusId = { [Op.eq]: query.statusId };
+    if (query.sort) {
+        const arraySort = query.sort.split(',');
+        arraySort.forEach(field => {
+            let orderDirection = 'ASC';
+            if (field.startsWith('-')) {
+                field = field.replace('-', '');
+                orderDirection = 'DESC';
+            }
+            if (validFields.includes(field)) {
+                order.push([field, orderDirection]);
+            }
+        });
     }
 
     return sequelize.transaction(async (t) => {
         return Scholarship.findAll({
             include: [{ model: EducationLevel }, { model: FundingType }, { model: Location }, { model: Category }, { model: Status }],
             where: whereClause,
-            limit: query.limit ? parseInt(query.limit) : undefined,
+            limit: limit <= 0 ? 1 : limit,
+            offset: offset <= 0 ? 1 : offset,
+            order: order.length ? order : undefined,
             transaction: t
         });
     });

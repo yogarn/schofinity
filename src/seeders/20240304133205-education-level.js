@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         id: 4,
-        levelName: 's4',
+        levelName: 's3',
         createdAt: new Date(),
         updatedAt: new Date()
       }
