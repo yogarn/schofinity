@@ -19,6 +19,10 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      programs: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       mentoringInterval: {
         allowNull: false,
         type: Sequelize.INTEGER

@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       type: DataTypes.UUID,
     },
+    programs: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
     mentoringInterval: {
       allowNull: false,
       type: DataTypes.INTEGER
