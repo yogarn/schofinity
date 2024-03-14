@@ -58,7 +58,7 @@ async function getAllUsers(req, res, next) {
 
 async function updateUser(req, res, next) {
     try {
-        const { username } = await getUsername(req.jwt.id);
+        const userId = req.jwt.id;
 
         const updateDetails = req.body;
         if (updateDetails.password && !validator.isStrongPassword(updateDetails.password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
@@ -69,20 +69,16 @@ async function updateUser(req, res, next) {
             throw new Error("Invalid email");
         }
 
-        const user = await find(username);
-
-        if (!user) {
-            throw new Error("Username not found");
-        }
+        const user = await findByUserId(userId);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            updateDetails.image = await uploadImage(req.file.buffer, userBucket, `${username}-${req.file.originalname}`);
+            updateDetails.image = await uploadImage(req.file.buffer, userBucket, `${user.username}-${req.file.originalname}`);
             if (user.image) {
                 await deleteImage(userBucket, user.image);
             }
         }
 
-        await update(username, updateDetails);
+        await update(userId, updateDetails);
         sendResponse(res, updateDetails);
         next();
     } catch (e) {
