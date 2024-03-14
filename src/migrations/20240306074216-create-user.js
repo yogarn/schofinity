@@ -25,6 +25,18 @@ module.exports = {
       contact: {
         type: Sequelize.STRING
       },
+      description: {
+        type: Sequelize.STRING
+      },
+      birthDate: {
+        type: Sequelize.DATE
+      },
+      gender: {
+        type: Sequelize.STRING
+      },
+      address: {
+        type: Sequelize.STRING
+      },
       email: {
         allowNull: false,
         unique: true,

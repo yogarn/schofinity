@@ -41,6 +41,18 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       type: DataTypes.STRING
     },
+    description: {
+      type: DataTypes.STRING
+    },
+    birthDate: {
+      type: DataTypes.DATE
+    },
+    gender: {
+      type: DataTypes.STRING
+    },
+    address: {
+      type: DataTypes.STRING
+    },
     image: {
       type: DataTypes.TEXT
     },
