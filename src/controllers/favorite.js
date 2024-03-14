@@ -1,10 +1,10 @@
 const { find, findAll, create, destroy } = require('../services/favorite');
 const { sendResponse, sendError } = require('../services/responseHandler');
-const userServices = require('../services/user');
 
 async function addFavorite(req, res, next) {
     try {
-        let favDetails = req.body;
+        const { scholarshipId } = req.body;
+        let favDetails = { scholarshipId };
         favDetails.userId = req.jwt.id;
         await create(favDetails);
         sendResponse(res, favDetails);
@@ -17,7 +17,8 @@ async function addFavorite(req, res, next) {
 
 async function getAllFavorites(req, res, next) {
     try {
-        const favorites = await findAll(req.query);
+        const { whereClause, order, limit, offset } = req;
+        const favorites = await findAll(whereClause, order, limit, offset);
         sendResponse(res, favorites);
         res.locals.data = favorites;
         next();

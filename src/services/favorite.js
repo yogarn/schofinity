@@ -4,23 +4,14 @@ const { Op } = require('sequelize');
 
 const { Favorite, Scholarship, User } = db;
 
-async function findAll(query) {
-
-    const whereClause = {};
-
-    if (query.id) {
-        whereClause.id = { [Op.eq]: query.id };
-    }
-
-    if (query.userId) {
-        whereClause.userId = { [Op.eq]: query.userId };
-    }
-
+async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return Favorite.findAll({
             include: [{ model: Scholarship }],
             where: whereClause,
-            limit: query.limit ? parseInt(query.limit) : undefined,
+            limit: limit,
+            offset: offset,
+            order: order,
             transaction: t
         });
     });

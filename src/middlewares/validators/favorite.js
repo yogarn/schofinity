@@ -7,7 +7,7 @@ const addValidate = [
     body('scholarshipId').custom(async value => {
         const scholarship = await scholarshipServices.find(value);
         if (!scholarship) {
-            throw new Error('Class not found');
+            throw new Error('Scholarship not found');
         }
     }),
     validate
