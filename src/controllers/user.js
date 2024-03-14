@@ -7,23 +7,22 @@ const userBucket = process.env.USER_BUCKET;
 
 async function addUser(req, res, next) {
     try {
-        const userDetails = req.body;
-
-        if (!validator.isStrongPassword(userDetails.password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
+        const { username, name, password, contact, description, birthDate, gender, address, email, image } = req.body;
+        if (password && !validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
             throw new Error("Invalid password");
-        } else if (!validator.isMobilePhone(userDetails.contact, ['id-ID'])) {
+        } else if (contact && !validator.isMobilePhone(contact, ['id-ID'])) {
             throw new Error("Invalid contact");
-        } else if (!validator.isEmail(userDetails.email)) {
+        } else if (email && !validator.isEmail(email)) {
             throw new Error("Invalid email");
         }
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            userDetails.image = await uploadImage(req.file.buffer, userBucket, `${userDetails.username}-${req.file.originalname}`);
+            image = await uploadImage(req.file.buffer, userBucket, `${username}-${req.file.originalname}`);
         }
 
-        await create(userDetails);
-        await generateOTP(userDetails.username);
-        sendResponse(res, userDetails);
+        await create({ username, name, password, contact, description, birthDate, gender, address, email, image });
+        await generateOTP(username);
+        sendResponse(res, { username, name, password, contact, description, birthDate, gender, address, email, image });
         next();
     } catch (e) {
         console.log(e);
@@ -60,26 +59,26 @@ async function updateUser(req, res, next) {
     try {
         const userId = req.jwt.id;
 
-        const updateDetails = req.body;
-        if (updateDetails.password && !validator.isStrongPassword(updateDetails.password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
+        const { username, name, password, contact, description, birthDate, gender, address, email, image } = req.body;
+        if (password && !validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
             throw new Error("Invalid password");
-        } else if (updateDetails.contact && !validator.isMobilePhone(updateDetails.contact, ['id-ID'])) {
+        } else if (contact && !validator.isMobilePhone(contact, ['id-ID'])) {
             throw new Error("Invalid contact");
-        } else if (updateDetails.email && !validator.isEmail(updateDetails.email)) {
+        } else if (email && !validator.isEmail(email)) {
             throw new Error("Invalid email");
         }
 
         const user = await findByUserId(userId);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
-            updateDetails.image = await uploadImage(req.file.buffer, userBucket, `${user.username}-${req.file.originalname}`);
+            image = await uploadImage(req.file.buffer, userBucket, `${user.username}-${req.file.originalname}`);
             if (user.image) {
                 await deleteImage(userBucket, user.image);
             }
         }
 
-        await update(userId, updateDetails);
-        sendResponse(res, updateDetails);
+        await update(userId, { username, name, password, contact, description, birthDate, gender, address, email, image });
+        sendResponse(res, { username, name, password, contact, description, birthDate, gender, address, email, image });
         next();
     } catch (e) {
         console.log(e);

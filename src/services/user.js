@@ -12,7 +12,7 @@ async function findAll(query) {
     if (query.id) {
         whereClause.id = { [Op.eq]: query.id };
     }
-    
+
     if (query.name) {
         whereClause.name = { [Op.like]: `%${query.name}%` };
     }
@@ -81,11 +81,8 @@ async function getUserId(username) {
 
 async function create(data) {
     return sequelize.transaction(async (t) => {
-        const { username, name, password, contact, email, image, roleId } = data;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        return User.create({
-            username, password: hashedPassword, name, contact, email, image, roleId
-        }, { transaction: t });
+        data.password = await bcrypt.hash(data.password, 10);
+        return User.create(data, { transaction: t });
     });
 };
 
