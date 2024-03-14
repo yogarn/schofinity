@@ -10,31 +10,14 @@ async function create(data) {
     });
 };
 
-async function findAll(query) {
-
-    const whereClause = {};
-
-    if (query.id) {
-        whereClause.id = { [Op.eq]: query.id };
-    }
-
-    if (query.salaryRate) {
-        whereClause.salaryRate = { [Op.eq]: query.salaryRate };
-    }
-
-    if (query.mentoringInterval) {
-        whereClause.mentoringInterval = { [Op.eq]: query.mentoringInterval };
-    }
-
-    if (query.statusId) {
-        whereClause.statusId = { [Op.eq]: query.statusId };
-    }
-
+async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return Mentor.findAll({
             include: [{ model: User, attributes: { exclude: ['roleId', 'password'] } }, { model: MentorSchedule }],
             where: whereClause,
-            limit: query.limit ? parseInt(query.limit) : undefined,
+            limit: limit,
+            offset: offset,
+            order: order,
             transaction: t
         });
     });

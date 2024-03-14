@@ -5,9 +5,11 @@ const authToken = require('../middlewares/authToken');
 const cache = require('../middlewares/cache');
 const { checkRoleId } = require('../middlewares/authorize');
 const { idValidate, addValidate } = require('../middlewares/validators/mentor');
+const { Mentor } = require('../models/index');
+const filter = require('../middlewares/filter');
 
 router
-    .get('/', authToken, cache.get, getAllMentors, cache.set)
+    .get('/', authToken, cache.get, filter(Mentor), getAllMentors, cache.set)
     .get('/:id', authToken, cache.get, getMentorById, cache.set)
     .post('/:id/accept', authToken, checkRoleId([3]), idValidate, acceptMentor, cache.clear)
     .post('/', authToken, addValidate, addMentor, cache.clear)

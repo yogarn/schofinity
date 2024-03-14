@@ -5,7 +5,8 @@ const userServices = require('../services/user');
 
 async function addMentor(req, res, next) {
     try {
-        const mentorDetails = req.body;
+        const { programs, mentoringInterval, breakTime, salaryRate } = req.body;
+        const mentorDetails = { programs, mentoringInterval, breakTime, salaryRate };
         mentorDetails.userId = req.jwt.id;
         await create(mentorDetails);
         sendResponse(res, mentorDetails);
@@ -18,7 +19,8 @@ async function addMentor(req, res, next) {
 
 async function getAllMentors(req, res, next) {
     try {
-        const mentors = await findAll(req.query);
+        const { whereClause, order, limit, offset } = req;
+        const mentors = await findAll(whereClause, order, limit, offset);
         sendResponse(res, mentors);
         res.locals.data = mentors;
         next();
@@ -58,7 +60,9 @@ async function acceptMentor(req, res, next) {
 
 async function updateMentor(req, res, next) {
     try {
-        const updateDetails = req.body;
+        const { programs, mentoringInterval, breakTime, salaryRate } = req.body;
+        const updateDetails = { programs, mentoringInterval, breakTime, salaryRate };
+
         const userId = req.jwt.id;
         const mentor = await findByUserId(userId);
 

@@ -13,6 +13,7 @@ const idValidate = [
 ];
 
 const addValidate = [
+    body('programs').notEmpty(),
     body('mentoringInterval').notEmpty(),
     body('breakTime').notEmpty(),
     body('salaryRate').notEmpty(),

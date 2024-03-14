@@ -10,6 +10,7 @@ const addValidate = [
     body('startDate').notEmpty(),
     body('endDate').notEmpty(),
     body('educationId').notEmpty(),
+    body('minSemester').notEmpty(),
     body('maxSemester').notEmpty(),
     body('typeId').notEmpty(),
     body('locationId').notEmpty(),
