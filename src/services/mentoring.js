@@ -4,40 +4,32 @@ const generatePayments = require('./midtrans');
 
 const { Mentoring, Mentor, User } = db;
 
-async function findAll(query) {
-
-    const whereClause = {};
-
-    if (query.id) {
-        whereClause.id = { [Op.eq]: query.id };
-    }
-
-    if (query.userId) {
-        whereClause.userId = { [Op.eq]: query.userId };
-    }
-
-    if (query.mentorId) {
-        whereClause.mentorId = { [Op.eq]: query.mentorId };
-    }
-
+async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
-        return Mentoring.findAll({
+        const mentorings = await Mentoring.findAll({
             include: [{ model: Mentor }, { model: User }],
-            attributes: { exclude: ['resource'] },
             where: whereClause,
-            limit: query.limit ? parseInt(query.limit) : undefined,
+            limit: limit,
+            offset: offset,
+            order: order,
             transaction: t
         });
+
+        for (const mentoring of mentorings) {
+            if (mentoring.statusId !== 2) {
+                mentoring.resource = null;
+            }
+        }
+
+        return mentorings;
     });
 };
 
-
-
-async function find(id, userId) {
+async function find(id) {
     return sequelize.transaction(async (t) => {
         const mentoring = await Mentoring.findOne({
             include: [{ model: Mentor }, { model: User }],
-            where: { id, userId },
+            where: { id },
             transaction: t
         });
 
@@ -49,10 +41,10 @@ async function find(id, userId) {
     });
 };
 
-async function create(data) {
+async function create(data, user, mentor) {
     return sequelize.transaction(async (t) => {
         const mentoring = await Mentoring.create(data, { transaction: t });
-        const transactionToken = await generatePayments(data.orderId, data.mentor.salaryRate, data.user.name, data.user.email, data.user.contact);
+        const transactionToken = await generatePayments(data.orderId, mentor.salaryRate, user.name, user.email, user.contact);
 
         if (!transactionToken) {
             throw new Error("Failed to generate payment")
