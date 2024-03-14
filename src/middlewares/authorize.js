@@ -56,7 +56,7 @@ async function checkScheduleOwnership(req, res, next) {
 async function checkMentoringOwnership(req, res, next) {
     const mentoringId = req.params.id;
     const mentoring = await mentoringServices.find(mentoringId);
-    const mentor = await findByUserId(req.jwt.id);
+    const mentor = await mentorServices.findByUserId(req.jwt.id);
     const { roleId } = await userServices.findByUserId(req.jwt.id);
 
     if (!mentoring) {
@@ -73,7 +73,7 @@ async function checkMentoringOwnership(req, res, next) {
 async function checkClassOwnership(req, res, next) {
     const classId = req.params.classId;
     const onlineClass = await onlineClassServices.find(classId);
-    const mentor = await findByUserId(req.jwt.id);
+    const mentor = await mentorServices.findByUserId(req.jwt.id);
     const { roleId } = await userServices.findByUserId(req.jwt.id);
 
     if (!onlineClass) {
@@ -92,7 +92,7 @@ async function checkClassPayment(req, res, next) {
     const userId = req.jwt.id;
     const { roleId } = await userServices.findByUserId(userId);
 
-    const mentor = await findByUserId(userId);
+    const mentor = await mentorServices.findByUserId(userId);
     const onlineClass = await onlineClassServices.find(classId);
     const payment = await onlineClassServices.checkPayment(userId, classId);
 
