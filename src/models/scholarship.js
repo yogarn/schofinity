@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
+    minSemester: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
     maxSemester: {
       allowNull: false,
       type: DataTypes.INTEGER

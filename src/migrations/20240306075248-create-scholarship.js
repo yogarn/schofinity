@@ -55,6 +55,10 @@ module.exports = {
           as: 'educationId',
         }
       },
+      minSemester: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       maxSemester: {
         allowNull: false,
         type: Sequelize.INTEGER
