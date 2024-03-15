@@ -12,6 +12,11 @@ const onlineClassesRoute = require('./onlineClass');
 const classResourcesRoute = require('./classResource');
 const feedbacksRoute = require('./feedback');
 const midtransRoute = require('./midtrans');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+
+const swaggerDocument = YAML.load('./api-docs.yaml');
+router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 router.get('/health-check', (req, res) => {
     const data = {

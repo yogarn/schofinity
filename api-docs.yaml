@@ -6,8 +6,10 @@ info:
 
   version: 1.0.0
 servers:
-  - url: https://schofinity-c284f28bf9dd.herokuapp.com/
+  - url: https://schofinity-c284f28bf9dd.herokuapp.com/v1/
     description: Main sever
+  - url: http://localhost:3000/v1/
+    description: Development sever
 tags:
   - name: Authentications
     description: Operations related to users authentication
@@ -278,6 +280,11 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - name
+                - username
+                - password
+                - email
               properties:
                 name:
                   $ref: "#/components/schemas/user/properties/name"
@@ -289,15 +296,16 @@ paths:
                   $ref: "#/components/schemas/user/properties/contact"
                 email:
                   $ref: "#/components/schemas/user/properties/email"
+                description:
+                  $ref: "#/components/schemas/user/properties/description"
+                birthDate:
+                  $ref: "#/components/schemas/user/properties/birthDate"
+                gender:
+                  $ref: "#/components/schemas/user/properties/gender"
+                address:
+                  $ref: "#/components/schemas/user/properties/address"
                 image:
                   $ref: "#/components/schemas/user/properties/image"
-            example:
-              name: Yoga Raditya
-              username: yogarn
-              password: Root_123
-              contact: 6285123456789
-              email: schofinity@gmail.com
-              image: profile_picture.jpeg
       responses:
         "200":
           description: A JSON object of user registration status and its username. (Successful Response)
@@ -307,7 +315,7 @@ paths:
                 type: object
                 properties:
                   message:
-                      type: string
+                    type: string
                   data:
                     type: object
                     properties:
@@ -420,6 +428,14 @@ paths:
                         email:
                           type: string
                           format: email
+                        description:
+                          type: string
+                        birthDate:
+                          type: string
+                        gender:
+                          type: string
+                        address:
+                          type: string
                         image:
                           type: string
                         roleId:
@@ -442,6 +458,10 @@ paths:
                         name: Yoga Raditya
                         contact: 6285123456789
                         email: schofinity@gmail.com
+                        description: Undergraduate Computer Science Students
+                        birthDate: 2024-01-01
+                        gender: male
+                        address: 10th Downing Street
                         image: yogarn-profile.jpeg
                         roleId: 2
                         statusId: 2
@@ -452,6 +472,10 @@ paths:
                         name: John Doe
                         contact: 6285123456789
                         email: johndoe@gmail.com
+                        description: Example of Computer Science Students
+                        birthDate: 2024-01-01
+                        gender: else
+                        address: 10th Downing Street
                         image: johndoe-profile.jpeg
                         roleId: 1
                         statusId: 2
@@ -462,6 +486,10 @@ paths:
                         name: Alan Turing
                         contact: 6285123456789
                         email: turing@gmail.com
+                        description: Pioneer of Computer Science
+                        birthDate: 2024-01-01
+                        gender: male
+                        address: London W9 1ER, City of Westminster
                         image: alanturing-profile.jpeg
                         roleId: 2
                         statusId: 2
@@ -476,6 +504,10 @@ paths:
                         name: Yoga Raditya
                         contact: 6285123456789
                         email: schofinity@gmail.com
+                        description: Undergraduate Computer Science Students
+                        birthDate: 2024-01-01
+                        gender: male
+                        address: 10th Downing Street
                         image: yogarn-profile.jpeg
                         roleId: 2
                         statusId: 2
@@ -490,6 +522,10 @@ paths:
                         name: Yoga Raditya
                         contact: 6285123456789
                         email: schofinity@gmail.com
+                        description: Undergraduate Computer Science Students
+                        birthDate: 2024-01-01
+                        gender: male
+                        address: 10th Downing Street
                         image: yogarn-profile.jpeg
                         roleId: 2
                         statusId: 2
@@ -500,6 +536,10 @@ paths:
                         name: Alan Turing
                         contact: 6285123456789
                         email: turing@gmail.com
+                        description: Pioneer of Computer Science
+                        birthDate: 2024-01-01
+                        gender: male
+                        address: London W9 1ER, City of Westminster
                         image: alanturing-profile.jpeg
                         roleId: 2
                         statusId: 2
@@ -513,7 +553,7 @@ paths:
       requestBody:
         required: false
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -527,15 +567,16 @@ paths:
                   $ref: "#/components/schemas/user/properties/contact"
                 email:
                   $ref: "#/components/schemas/user/properties/email"
+                description:
+                  $ref: "#/components/schemas/user/properties/description"
+                birthDate:
+                  $ref: "#/components/schemas/user/properties/birthDate"
+                gender:
+                  $ref: "#/components/schemas/user/properties/gender"
+                address:
+                  $ref: "#/components/schemas/user/properties/address"
                 image:
                   $ref: "#/components/schemas/user/properties/image"
-            example:
-              name: Yoga Raditya
-              username: yogarn
-              password: Root_123
-              contact: 6285123456789
-              email: schofinity@gmail.com
-              image: profile_picture.jpeg
       responses:
         "200":
           description: A JSON object of user registration status and its username. (Successful Response)
@@ -545,7 +586,7 @@ paths:
                 type: object
                 properties:
                   message:
-                      type: string
+                    type: string
                   data:
                     type: object
                     properties:
@@ -559,6 +600,14 @@ paths:
                         $ref: "#/components/schemas/user/properties/contact"
                       email:
                         $ref: "#/components/schemas/user/properties/email"
+                      description:
+                        $ref: "#/components/schemas/user/properties/description"
+                      birthDate:
+                        $ref: "#/components/schemas/user/properties/birthDate"
+                      gender:
+                        $ref: "#/components/schemas/user/properties/gender"
+                      address:
+                        $ref: "#/components/schemas/user/properties/address"
                       image:
                         $ref: "#/components/schemas/user/properties/image"
               example:
@@ -569,11 +618,20 @@ paths:
                   password: Root_123
                   contact: 6285123456789
                   email: schofinity@gmail.com
+                  description: Undergraduate Computer Science Students
+                  birthDate: 2024-01-01
                   image: profile_picture.jpeg
   /users/{id}:
     get:
       summary: View users profile by id
       description: Returns a users along with its details.
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of the user to get
       tags:
         - Users
       responses:
@@ -590,36 +648,166 @@ paths:
                   data:
                     type: object
                     properties:
+                      name:
+                        $ref: "#/components/schemas/user/properties/name"
+                      username:
+                        $ref: "#/components/schemas/user/properties/username"
+                      password:
+                        $ref: "#/components/schemas/user/properties/password"
+                      contact:
+                        $ref: "#/components/schemas/user/properties/contact"
+                      email:
+                        $ref: "#/components/schemas/user/properties/email"
+                      description:
+                        $ref: "#/components/schemas/user/properties/description"
+                      birthDate:
+                        $ref: "#/components/schemas/user/properties/birthDate"
+                      gender:
+                        $ref: "#/components/schemas/user/properties/gender"
+                      address:
+                        $ref: "#/components/schemas/user/properties/address"
+                      image:
+                        $ref: "#/components/schemas/user/properties/image"
+              example:
+                message: success
+                data:
+                  id: 061c64c4-eff4-4007-8abb-01499ba3cd59
+                  username: yogarn
+                  name: Yoga Raditya
+                  contact: 6285123456789
+                  email: schofinity@gmail.com
+                  description: Undergraduate Computer Science Students
+                  birthDate: 2024-01-01
+                  gender: male
+                  address: 10th Downing Street
+                  image: yogarn-profile.jpeg
+                  roleId: 2
+                  statusId: 2
+                  createdAt: 2024-03-14T03:32:01.000Z
+                  updatedAt: 2024-03-14T05:24:58.000Z
+
+  # scholarships section
+  /scholarships:
+    post:
+      tags:
+        - Scholarships
+      summary: Add a new scholarship
+      description: Record scholarship and return it's details.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - benefit
+                - requirement
+                - link
+                - startDate
+                - endDate
+                - educationId
+                - minSemester
+                - maxSemester
+                - typeId
+                - locationId
+                - categoryId
+              properties:
+                name:
+                  $ref: "#/components/schemas/scholarship/properties/name"
+                description:
+                  $ref: "#/components/schemas/scholarship/properties/description"
+                company:
+                  $ref: "#/components/schemas/scholarship/properties/company"
+                image:
+                  $ref: "#/components/schemas/scholarship/properties/image"
+                benefit:
+                  $ref: "#/components/schemas/scholarship/properties/benefit"
+                requirement:
+                  $ref: "#/components/schemas/scholarship/properties/requirement"
+                link:
+                  $ref: "#/components/schemas/scholarship/properties/link"
+                startDate:
+                  $ref: "#/components/schemas/scholarship/properties/startDate"
+                endDate:
+                  $ref: "#/components/schemas/scholarship/properties/endDate"
+                educationId:
+                  $ref: "#/components/schemas/scholarship/properties/educationId"
+                minSemester:
+                  $ref: "#/components/schemas/scholarship/properties/minSemester"
+                maxSemester:
+                  $ref: "#/components/schemas/scholarship/properties/maxSemester"
+                typeId:
+                  $ref: "#/components/schemas/scholarship/properties/typeId"
+                locationId:
+                  $ref: "#/components/schemas/scholarship/properties/locationId"
+                categoryId:
+                  $ref: "#/components/schemas/scholarship/properties/categoryId"
+      responses:
+        "200":
+          description: A JSON object containing user details. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
                       id:
                         type: string
-                        example: 061c64c4-eff4-4007-8abb-01499ba3cd59
-                      username:
+                        example: acb16514-a17d-4dc3-a3c0-2276061382ee
+                      userId:
                         type: string
-                        example: yogarn
+                        example: f36ec776-552a-4b7d-b7ed-177adef2fcee
                       name:
                         type: string
-                        example: Yoga Raditya
-                      contact:
+                        example: Beasiswa Reguler LPDP
+                      description:
                         type: string
-                        example: 6285123456789
-                      email:
+                        example: Beasiswa Reguler LPDP merupakan program beasiswa yang didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP) Kementerian Keuangan Republik Indoneisa untuk jenjang magister dan doktor.
+                      company:
                         type: string
-                        example: schofinity@gmail.com
+                        example: Kementerian Keuangan Republik Indonesia
                       image:
                         type: string
-                        example: profile_picture.jpeg
-                      roleId:
+                        example: lpdp.jpeg
+                      benefit:
+                        type: string
+                        example: Biaya Pendidikan, Biaya Hidup, Tunjangan Buku, Tunjangan Penelitian
+                      requirement:
+                        type: string
+                        example: WNI, Lulus S1/D4, IPK Minimal 3.00, Skor TOEFL Minimal 500, Surat Rekomendasi, Sehat Jasmani dan Rohani 
+                      link:
+                        type: string
+                        example: lpdp.kemenkeu.go.id
+                      startDate:
+                        type: string
+                        example: 2024-04-01
+                      endDate:
+                        type: string
+                        example: 2024-05-01
+                      educationId:
                         type: string
                         example: 2
-                      statusId:
+                      minSemester:
                         type: string
                         example: 2
-                      createdAt:
+                      maxSemester:
+                        type: string
+                        example: 2
+                      typeId:
+                        type: string
+                        example: 2
+                      locationId:
+                        type: string
+                        example: 2
+                      categoryId:
                         type: string
                         example: 2024-03-14T03:32:01.000Z
-                      updatedAt:
-                        type: string
-                        example: 2024-03-14T05:24:58.000Z
 
 components:
   securitySchemes:
@@ -649,6 +837,19 @@ components:
         email:
           type: string
           description: The user's email.
+        description:
+          type: string
+          description: The user's description.
+        birthDate:
+          type: string
+          format: date-time
+          description: The user's birth date.
+        gender:
+          type: string
+          description: The user's gender.
+        address:
+          type: string
+          description: The user's address.
         image:
           type: string
           format: binary
@@ -670,3 +871,72 @@ components:
           type: string
           format: date-time
           description: The user's latest update date.
+
+    scholarship:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the scholarship.
+        userId:
+          type: string
+          description: The unique identifier of the user who upload the scholarship.
+        name:
+          type: string
+          description: The scholarship's name.
+        description:
+          type: string
+          description: The scholarship's description.
+        company:
+          type: string
+          description: The scholarship's company.
+        image:
+          type: string
+          format: binary
+          description: The scholarship's image.
+        benefit:
+          type: string
+          description: The scholarship's benefit.
+        requirement:
+          type: string
+          description: The scholarship's requirement.
+        link:
+          type: string
+          description: The scholarship's external link.
+        startDate:
+          type: string
+          format: date-time
+          description: The Scholarship's start date.
+        endDate:
+          type: string
+          format: date-time
+          description: The Scholarship's end date.
+        educationId:
+          type: string
+          description: The scholarship's education's id.
+        minSemester:
+          type: string
+          description: The scholarship's minimal semester.
+        maxSemester:
+          type: string
+          description: The scholarship's maximum semester.
+        typeId:
+          type: string
+          description: The scholarship's type's id.
+        locationId:
+          type: string
+          description: The scholarship's location's id.
+        categoryId:
+          type: string
+          description: The scholarship's category's id.
+        statusId:
+          type: string
+          description: The scholarship's status's id.
+        createdAt:
+          type: string
+          format: date-time
+          description: The scholarship's creation date.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The scholarship's latest update date.
