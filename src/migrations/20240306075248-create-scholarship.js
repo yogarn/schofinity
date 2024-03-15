@@ -28,7 +28,7 @@ module.exports = {
       },
       company: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       image: {
         type: Sequelize.TEXT
