@@ -23,15 +23,22 @@ module.exports = {
         type: Sequelize.STRING
       },
       description: {
+        allowNull: false,
         type: Sequelize.TEXT
+      },
+      company: {
+        allowNull: false,
+        type: DataTypes.STRING
       },
       image: {
         type: Sequelize.TEXT
       },
       benefit: {
+        allowNull: false,
         type: Sequelize.TEXT
       },
       requirement: {
+        allowNull: false,
         type: Sequelize.TEXT
       },
       link: {

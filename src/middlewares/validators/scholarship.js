@@ -5,6 +5,7 @@ const scholarshipServices = require('../../services/scholarship');
 const addValidate = [
     body('name').notEmpty(),
     body('description').notEmpty(),
+    body('company').notEmpty(),
     body('benefit').notEmpty(),
     body('requirement').notEmpty(),
     body('startDate').notEmpty(),

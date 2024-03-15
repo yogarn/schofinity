@@ -28,15 +28,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     description: {
+      allowNull: false,
       type: DataTypes.TEXT
+    },
+    company: {
+      allowNull: false,
+      type: DataTypes.STRING
     },
     image: {
       type: DataTypes.TEXT
     },
     benefit: {
+      allowNull: false,
       type: DataTypes.TEXT,
     },
     requirement: {
+      allowNull: false,
       type: DataTypes.TEXT
     },
     link: {
