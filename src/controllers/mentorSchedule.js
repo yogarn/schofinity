@@ -5,7 +5,8 @@ const { clearEndpoints } = require('../services/cache');
 
 async function addSchedule(req, res, next) {
     try {
-        const scheduleDetails = req.body;
+        const { day, startTime, endTime } = req.body;
+        const scheduleDetails = { day, startTime, endTime };
         const mentor = await mentorServices.findByUserId(req.jwt.id);
 
         if (!mentor) {
@@ -40,7 +41,8 @@ async function getAllSchedule(req, res, next) {
 async function updateSchedule(req, res, next) {
     try {
         const scheduleId = req.params.id;
-        const updateDetails = req.body;
+        const { day, startTime, endTime } = req.body;
+        const updateDetails = { day, startTime, endTime };
 
         await update(scheduleId, updateDetails);
         sendResponse(res, updateDetails);
