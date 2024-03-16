@@ -15,6 +15,12 @@ module.exports = {
         subjectName: 'wawancara',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        id: 3,
+        subjectName: 'essay',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]);
   },
