@@ -6,25 +6,31 @@ module.exports = {
     return queryInterface.bulkInsert('EducationLevels', [
       {
         id: 1,
-        levelName: 'd3',
+        educationName: 'd3',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: 2,
-        levelName: 's1/d4',
+        educationName: 's1/d4',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: 3,
-        levelName: 's2',
+        educationName: 's2',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: 4,
-        levelName: 's3',
+        educationName: 's3',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: 5,
+        educationName: 'aktif',
         createdAt: new Date(),
         updatedAt: new Date()
       }

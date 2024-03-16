@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      levelName: {
+      educationName: {
         allowNull: false,
         unique: true,
         type: Sequelize.STRING

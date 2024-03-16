@@ -17,14 +17,14 @@ async function getScholarships(req, res, next) {
 
 async function addScholarship(req, res, next) {
     try {
-        let { name, description, company, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId } = req.body;
+        let { name, description, company, image, benefit, requirement, link, startDate, endDate, typeId, locations, categories, educations } = req.body;
         const userId = req.jwt.id;
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
             image = await uploadImage(req.file.buffer, scholarshipBucket, `${Date.now()}-${req.file.originalname}`);
         }
 
-        const scholarshipData = { userId, name, description, company, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId };
+        const scholarshipData = { userId, name, description, company, image, benefit, requirement, link, startDate, endDate, typeId, locations, categories, educations };
         await create(scholarshipData);
         sendResponse(res, scholarshipData);
         next();
@@ -37,7 +37,7 @@ async function addScholarship(req, res, next) {
 async function updateScholarship(req, res, next) {
     try {
         const scholarshipId = req.params.id;
-        let { name, description, company, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId } = req.body;
+        let { name, description, company, image, benefit, requirement, link, startDate, endDate, typeId, locations, categories, educations } = req.body;
         const scholarship = await find(scholarshipId);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
@@ -47,7 +47,7 @@ async function updateScholarship(req, res, next) {
             }
         }
 
-        const scholarshipData = { name, description, company, image, benefit, requirement, link, startDate, endDate, educationId, minSemester, maxSemester, typeId, locationId, categoryId };
+        const scholarshipData = { name, description, company, image, benefit, requirement, link, startDate, endDate, typeId, locations, categories, educations };
         await update(scholarshipId, scholarshipData);
         sendResponse(res, scholarshipData);
         next();

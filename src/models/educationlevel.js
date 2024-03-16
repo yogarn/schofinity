@@ -3,11 +3,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class EducationLevel extends Model {
     static associate(models) {
-      EducationLevel.hasMany(models.Scholarship, { foreignKey: 'educationId', allowNull: false });
+      EducationLevel.belongsToMany(models.Scholarship, { through: 'ScholarshipEducationLevels', as: 'educations' });
     }
   }
   EducationLevel.init({
-    levelName: {
+    educationName: {
       allowNull: false,
       unique: true,
       type: DataTypes.STRING

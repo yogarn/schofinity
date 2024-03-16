@@ -53,23 +53,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      educationId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'EducationLevels',
-          key: 'id',
-          as: 'educationId',
-        }
-      },
-      minSemester: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      maxSemester: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
       typeId: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -77,24 +60,6 @@ module.exports = {
           model: 'FundingTypes',
           key: 'id',
           as: 'typeId',
-        }
-      },
-      locationId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Locations',
-          key: 'id',
-          as: 'locationId',
-        }
-      },
-      categoryId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Categories',
-          key: 'id',
-          as: 'categoryId',
         }
       },
       statusId: {
