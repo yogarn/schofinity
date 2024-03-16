@@ -3,6 +3,7 @@ const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { generateOTP } = require('../services/auth');
 const validator = require('validator');
+const { clearEndpoints } = require('../services/cache');
 const userBucket = process.env.USER_BUCKET;
 
 async function addUser(req, res, next) {
@@ -87,12 +88,25 @@ async function updateUser(req, res, next) {
     }
 }
 
+async function setAdmin(req, res, next) {
+    try {
+        const userId = req.params.id;
+        await update(userId, { roleId: 3 });
+        sendResponse(res, { userId, roleId: 3 });
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+}
+
 async function deleteUser(req, res, next) {
     try {
         const userId = req.params.id;
 
         await destroy(userId);
         sendResponse(res, { userId });
+        clearEndpoints(['/v1/mentors', '/v1/favorites', '/v1/scholarships', '/v1/mentorings', '/v1/classes', '/v1/feedbacks']);
         next();
     } catch (e) {
         console.log(e);
@@ -105,5 +119,6 @@ module.exports = {
     getUser,
     getAllUsers,
     updateUser,
+    setAdmin,
     deleteUser
 }
