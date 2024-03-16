@@ -7,6 +7,7 @@ const { OnlineClass, ClassSubject, Subject, ClassPayment, Mentor, User } = db;
 
 async function findAll(query) {
     const whereClause = {};
+    let subjectsWhere = [];
     const order = [];
 
     const validFields = Object.keys(OnlineClass.rawAttributes);
@@ -47,8 +48,7 @@ async function findAll(query) {
     }
 
     if (query.subjects) {
-        const subjectIds = query.subjects.split(',');
-        whereClause['$subjects.id$'] = { [Op.in]: subjectIds };
+        subjectsWhere = query.subjects.split(',').map(id => parseInt(id));
     }
 
     return sequelize.transaction(async (t) => {
@@ -61,16 +61,13 @@ async function findAll(query) {
                     through: {
                         attributes: [],
                     },
-                    where: whereClause['$subjects.id$'] ? { id: whereClause['$subjects.id$'] } : null,
-                    required: true
+                    where: subjectsWhere.length > 0 ? { id: { [Op.in]: subjectsWhere } } : undefined,
                 },
             ],
             where: whereClause,
             limit: limit,
             offset: offset,
             order: order,
-            duplicating: false,
-            subQuery: false,
             transaction: t
         });
     });

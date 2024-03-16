@@ -7,6 +7,11 @@ const { Scholarship, FundingType, ScholarshipCategory, ScholarshipLocation, Scho
 async function findAll(query) {
     const whereClause = {};
     const semesterWhere = {};
+
+    let categoriesWhere = [];
+    let locationsWhere = [];
+    let educationsWhere = [];
+
     const order = [];
 
     const validFields = Object.keys(Scholarship.rawAttributes);
@@ -45,18 +50,15 @@ async function findAll(query) {
     }
 
     if (query.categories) {
-        const categoryIds = query.categories.split(',');
-        whereClause['$categories.id$'] = { [Op.in]: categoryIds };
+        categoriesWhere = query.categories.split(',').map(id => parseInt(id));
     }
 
     if (query.locations) {
-        const locationIds = query.locations.split(',');
-        whereClause['$locations.id$'] = { [Op.in]: locationIds };
+        locationsWhere = query.locations.split(',').map(id => parseInt(id));
     }
 
     if (query.educations) {
-        const educationIds = query.educations.split(',');
-        whereClause['$educations.id$'] = { [Op.in]: educationIds };
+        educationsWhere = query.educations.split(',').map(id => parseInt(id));
         if (query.semester) {
             const semester = parseInt(query.semester);
             semesterWhere.minSemester = { [Op.lte]: semester };
@@ -75,19 +77,19 @@ async function findAll(query) {
                         attributes: ['minSemester', 'maxSemester'],
                         where: semesterWhere
                     },
-                    where: whereClause['$educations.id$'] ? { id: whereClause['$educations.id$'] } : null
+                    where: educationsWhere.length > 0 ? { id: { [Op.in]: educationsWhere } } : undefined
                 },
                 {
                     model: Location,
                     as: 'locations',
                     through: { attributes: [] },
-                    where: whereClause['$categories.id$'] ? { id: whereClause['$categories.id$'] } : null
+                    where: locationsWhere.length > 0 ? { id: { [Op.in]: locationsWhere } } : undefined
                 },
                 {
                     model: Category,
                     as: 'categories',
                     through: { attributes: [] },
-                    where: whereClause['$categories.id$'] ? { id: whereClause['$categories.id$'] } : null
+                    where: categoriesWhere.length > 0 ? { id: { [Op.in]: categoriesWhere } } : undefined
                 },
                 { model: Status }
             ],
@@ -95,8 +97,6 @@ async function findAll(query) {
             limit: limit,
             offset: offset,
             order: order,
-            duplicating: false,
-            subQuery: false,
             transaction: t
         });
     });
