@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class ClassResource extends Model {
     static associate(models) {
       ClassResource.belongsTo(models.OnlineClass, { foreignKey: 'classId', allowNull: false });
+      ClassResource.hasMany(models.ResourceComment, { foreignKey: 'resourceId', allowNull: false });
     }
   }
   ClassResource.init({
