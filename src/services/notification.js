@@ -3,7 +3,9 @@ const sendEmail = require('./nodemailer');
 
 async function sendNotification() {
     const scholarships = await getUpcomingScholarships();
-    scholarships.forEach(element => {
+    const delayBetweenEmails = 5 * 1000;
+
+    scholarships.forEach((element, index) => {
         const scholarship = element.Scholarship;
         const user = element.User;
 
@@ -28,8 +30,9 @@ async function sendNotification() {
             <p>Thank you,<br />The Schofinity Team</p>
         `;
 
-        sendEmail(user.email, subject, html);
-
+        setTimeout(() => {
+            sendEmail(user.email, subject, html);
+        }, index * delayBetweenEmails);
     });
 }
 
