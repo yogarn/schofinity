@@ -3,9 +3,21 @@ const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const scholarshipBucket = process.env.SCHOLARSHIP_BUCKET;
 
-async function getScholarships(req, res, next) {
+async function getAllScholarships(req, res, next) {
     try {
         const scholarships = await findAll(req.query);
+        sendResponse(res, scholarships);
+        res.locals.data = scholarships;
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+};
+
+async function getScholarship(req, res, next) {
+    try {
+        const scholarships = await find(req.params.id);
         sendResponse(res, scholarships);
         res.locals.data = scholarships;
         next();
@@ -84,7 +96,8 @@ async function deleteScholarship(req, res, next) {
 
 module.exports = {
     addScholarship,
-    getScholarships,
+    getAllScholarships,
+    getScholarship,
     updateScholarship,
     acceptScholarship,
     deleteScholarship

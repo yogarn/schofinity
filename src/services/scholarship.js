@@ -65,11 +65,31 @@ async function findAll(query) {
 
     return sequelize.transaction(async (t) => {
         return Scholarship.findAll({
-            include: [{ model: FundingType },
-            { model: EducationLevel, as: 'educations', through: { attributes: ['minSemester', 'maxSemester'], where: semesterWhere }, where: whereClause['$educations.id$'] ? { id: whereClause['$educations.id$'] } : null },
-            { model: Location, as: 'locations', through: { attributes: [] }, where: whereClause['$categories.id$'] ? { id: whereClause['$categories.id$'] } : null },
-            { model: Category, as: 'categories', through: { attributes: [] }, where: whereClause['$categories.id$'] ? { id: whereClause['$categories.id$'] } : null },
-            { model: Status }],
+            include: [
+                { model: FundingType },
+                {
+                    model: EducationLevel,
+                    as: 'educations',
+                    through: {
+                        attributes: ['minSemester', 'maxSemester'],
+                        where: semesterWhere
+                    },
+                    where: whereClause['$educations.id$'] ? { id: whereClause['$educations.id$'] } : null
+                },
+                {
+                    model: Location,
+                    as: 'locations',
+                    through: { attributes: [] },
+                    where: whereClause['$categories.id$'] ? { id: whereClause['$categories.id$'] } : null
+                },
+                {
+                    model: Category,
+                    as: 'categories',
+                    through: { attributes: [] },
+                    where: whereClause['$categories.id$'] ? { id: whereClause['$categories.id$'] } : null
+                },
+                { model: Status }
+            ],
             where: whereClause,
             limit: limit,
             offset: offset,
@@ -82,7 +102,28 @@ async function findAll(query) {
 async function find(id) {
     return sequelize.transaction(async (t) => {
         return Scholarship.findOne({
-            include: [{ model: EducationLevel, as: 'educations' }, { model: FundingType }, { model: Location, as: 'locations' }, { model: Category, as: 'categories' }, { model: Status }],
+            include:
+                [
+                    {
+                        model: EducationLevel,
+                        as: 'educations',
+                        through: {
+                            attributes: ['minSemester', 'maxSemester'],
+                        },
+                    },
+                    { model: FundingType },
+                    {
+                        model: Location,
+                        as: 'locations',
+                        through: { attributes: [] }
+                    },
+                    {
+                        model: Category,
+                        as: 'categories',
+                        through: { attributes: [] }
+                    },
+                    { model: Status }
+                ],
             where: { id },
             transaction: t
         });
