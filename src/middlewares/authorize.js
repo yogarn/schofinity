@@ -6,6 +6,7 @@ const mentoringServices = require('../services/mentoring');
 const favoriteServices = require('../services/favorite');
 const userServices = require('../services/user');
 const mentorServices = require('../services/mentor');
+const commentServices = require('../services/resourceComment');
 
 function checkRoleId(requiredRoleId) {
     return async function (req, res, next) {
@@ -87,6 +88,22 @@ async function checkClassOwnership(req, res, next) {
     }
 }
 
+async function checkCommentOwnership(req, res, next) {
+    const { resourceId, id } = req.params;
+    const comment = await commentServices.find(resourceId, id);
+    const { roleId } = await userServices.findByUserId(req.jwt.id);
+
+    if (!comment) {
+        sendError(res, "Comment not found");
+    } else {
+        if (roleId === 3 || (req.jwt.id === comment.userId)) {
+            next();
+        } else {
+            sendError(res, "Insufficient privilege");
+        }
+    }
+}
+
 async function checkClassPayment(req, res, next) {
     const classId = req.params.classId;
     const userId = req.jwt.id;
@@ -133,6 +150,7 @@ module.exports = {
     checkScheduleOwnership,
     checkMentoringOwnership,
     checkClassOwnership,
+    checkCommentOwnership,
     checkClassPayment,
     checkFavoriteOwnership
 };

@@ -10,8 +10,10 @@ const schedulesRoute = require('./mentorSchedule');
 const mentoringsRoute = require('./mentoring');
 const onlineClassesRoute = require('./onlineClass');
 const classResourcesRoute = require('./classResource');
+const resourceCommentsRoute = require('./resourceComment');
 const feedbacksRoute = require('./feedback');
 const midtransRoute = require('./midtrans');
+
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 
@@ -37,6 +39,7 @@ router.use('/schedules', schedulesRoute);
 router.use('/mentorings', mentoringsRoute);
 router.use('/classes', onlineClassesRoute);
 router.use('/classes/:classId/resources', classResourcesRoute);
+router.use('/classes/:classId/resources/:resourceId/comments', resourceCommentsRoute);
 router.use('/feedbacks', feedbacksRoute);
 router.use('/midtrans', midtransRoute);
 

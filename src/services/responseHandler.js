@@ -39,6 +39,7 @@ function sendError(res, error, data) {
         case 'Invalid jwt token':
             status = 403;
             break;
+        // not found
         case 'Username not found':
             status = 404;
             break;
@@ -64,6 +65,9 @@ function sendError(res, error, data) {
             status = 404;
             break;
         case 'Class not found':
+            status = 404;
+            break;
+        case 'Comment not found':
             status = 404;
             break;
         case 'Failed to generate payment':
