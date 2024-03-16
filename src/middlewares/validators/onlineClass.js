@@ -7,12 +7,24 @@ const addValidate = [
     body('description').notEmpty(),
     body('community').notEmpty(),
     body('typeId').notEmpty(),
-    body('categoryId').notEmpty(),
+    body('subjects')
+        .isArray({ min: 1 }).withMessage('subjects must be an array with at least one element')
+        .custom((subjects) => subjects.every(subject => subject.subjectId))
+        .withMessage('Each category object must have a subjectId'),
     body('startDate').notEmpty(),
     body('endDate').notEmpty(),
     body('price').notEmpty(),
     validate
 ];
+
+const editValidate = [
+    body('subjects')
+        .optional()
+        .isArray({ min: 1 }).withMessage('subjects must be an array with at least one element')
+        .custom((subjects) => subjects.every(subject => subject.subjectId))
+        .withMessage('Each category object must have a subjectId'),
+    validate
+]
 
 const idValidate = [
     param('classId').custom(async value => {
@@ -26,5 +38,6 @@ const idValidate = [
 
 module.exports = {
     addValidate,
+    editValidate,
     idValidate
 };

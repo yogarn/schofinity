@@ -6,10 +6,22 @@ const userServices = require('../services/user');
 const { v4: uuidv4 } = require('uuid');
 const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
 
+async function getAllOnlineClass(req, res, next) {
+    try {
+        const onlineClass = await findAll(req.query);
+        sendResponse(res, onlineClass);
+        res.locals.data = onlineClass;
+        next();
+    } catch (e) {
+        console.log(e);
+        sendError(res, e.message);
+    }
+};
+
 async function getOnlineClass(req, res, next) {
     try {
-        const { whereClause, order, limit, offset } = req;
-        const onlineClass = await findAll(whereClause, order, limit, offset);
+        const classId = req.params.classId;
+        const onlineClass = await find(classId);
         sendResponse(res, onlineClass);
         res.locals.data = onlineClass;
         next();
@@ -21,8 +33,8 @@ async function getOnlineClass(req, res, next) {
 
 async function addOnlineClass(req, res, next) {
     try {
-        const { name, description, image, community, typeId, categoryId, startDate, endDate, price } = req.body;
-        const onlineClassDetails = { name, description, image, community, typeId, categoryId, startDate, endDate, price };
+        const { name, description, image, community, typeId, subjects, startDate, endDate, price } = req.body;
+        const onlineClassDetails = { name, description, image, community, typeId, subjects, startDate, endDate, price };
         const mentor = await findByUserId(req.jwt.id);
         onlineClassDetails.mentorId = mentor.id;
 
@@ -42,8 +54,8 @@ async function addOnlineClass(req, res, next) {
 async function updateOnlineClass(req, res, next) {
     try {
         const onlineClassId = req.params.classId;
-        const { name, description, image, community, typeId, categoryId, startDate, endDate, price } = req.body;
-        const updateDetails = { name, description, image, community, typeId, categoryId, startDate, endDate, price };
+        const { name, description, image, community, typeId, subjects, startDate, endDate, price } = req.body;
+        const updateDetails = { name, description, image, community, typeId, subjects, startDate, endDate, price };
         const onlineClass = await find(onlineClassId);
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
@@ -129,6 +141,7 @@ async function getPaymentsById(req, res, next) {
 };
 
 module.exports = {
+    getAllOnlineClass,
     getOnlineClass,
     addOnlineClass,
     updateOnlineClass,

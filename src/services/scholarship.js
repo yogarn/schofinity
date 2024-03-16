@@ -15,7 +15,8 @@ async function findAll(query) {
     const offset = limit ? (page - 1) * limit : undefined;
 
     for (const key in query) {
-        const value = query[key];
+        let value = query[key];
+        value = value.trim();
 
         if (value == '' || value === null || value === undefined) continue;
         if (key === 'limit' || key === 'page' || key === 'sort') continue;
@@ -94,6 +95,8 @@ async function findAll(query) {
             limit: limit,
             offset: offset,
             order: order,
+            duplicating: false,
+            subQuery: false,
             transaction: t
         });
     });

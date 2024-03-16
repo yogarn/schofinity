@@ -3,16 +3,74 @@ const sequelize = require('../config/sequelize');
 const { Op } = require('sequelize');
 const generatePayments = require('./midtrans');
 
-const { OnlineClass, ClassPayment, Mentor, User } = db;
+const { OnlineClass, ClassSubject, Subject, ClassPayment, Mentor, User } = db;
 
-async function findAll(whereClause, order, limit, offset) {
+async function findAll(query) {
+    const whereClause = {};
+    const order = [];
+
+    const validFields = Object.keys(OnlineClass.rawAttributes);
+    const limit = query.limit ? Math.max(1, parseInt(query.limit)) : undefined;
+    const page = query.page ? Math.max(1, parseInt(query.page)) : 1;
+    const offset = limit ? (page - 1) * limit : undefined;
+
+    for (const key in query) {
+        let value = query[key];
+        value = value.trim();
+
+        if (value == '' || value === null || value === undefined) continue;
+        if (key === 'limit' || key === 'page' || key === 'sort') continue;
+        if (validFields.includes(key)) {
+            if (value.includes(',')) {
+                const values = value.split(',');
+                whereClause[key] = { [Op.or]: values.map(item => ({ [Op.like]: `%${item}%` })) };
+            } else if (key == 'price') {
+                whereClause[key] = { [Op.eq]: value };
+            } else {
+                whereClause[key] = { [Op.like]: `%${value}%` };
+            }
+        }
+    }
+
+    if (query.sort) {
+        const arraySort = query.sort.split(',');
+        arraySort.forEach(field => {
+            let orderDirection = 'ASC';
+            if (field.startsWith('-')) {
+                field = field.replace('-', '');
+                orderDirection = 'DESC';
+            }
+            if (validFields.includes(field)) {
+                order.push([field, orderDirection]);
+            }
+        });
+    }
+
+    if (query.subjects) {
+        const subjectIds = query.subjects.split(',');
+        whereClause['$subjects.id$'] = { [Op.in]: subjectIds };
+    }
+
     return sequelize.transaction(async (t) => {
         return OnlineClass.findAll({
-            include: [{ model: Mentor }],
+            include: [
+                { model: Mentor },
+                {
+                    model: Subject,
+                    as: 'subjects',
+                    through: {
+                        attributes: [],
+                    },
+                    where: whereClause['$subjects.id$'] ? { id: whereClause['$subjects.id$'] } : null,
+                    required: true
+                },
+            ],
             where: whereClause,
             limit: limit,
             offset: offset,
             order: order,
+            duplicating: false,
+            subQuery: false,
             transaction: t
         });
     });
@@ -21,7 +79,16 @@ async function findAll(whereClause, order, limit, offset) {
 async function find(id) {
     return sequelize.transaction(async (t) => {
         return OnlineClass.findOne({
-            include: [{ model: Mentor }],
+            include: [
+                { model: Mentor },
+                {
+                    model: Subject,
+                    as: 'subjects',
+                    through: {
+                        attributes: [],
+                    }
+                },
+            ],
             where: { id },
             transaction: t
         });
@@ -53,13 +120,49 @@ async function findPayment(id) {
 
 async function create(data) {
     return sequelize.transaction(async (t) => {
-        return OnlineClass.create(data, { transaction: t });
+        const onlineClass = await OnlineClass.create(data, { transaction: t });
+
+        for (const item of data.subjects) {
+            const classSubjectsData = {
+                onlineClassId: onlineClass.id,
+                subjectId: item.subjectId
+            };
+
+            await ClassSubject.create(classSubjectsData, {
+                transaction: t
+            });
+        }
+
+        return onlineClass;
     });
 };
 
 async function update(id, data) {
     return await sequelize.transaction(async (t) => {
-        return await OnlineClass.update(data, { where: { id }, transaction: t });
+        const onlineClass = await OnlineClass.update(data, { where: { id }, transaction: t });
+
+        if (data.subjects && data.subjects.length > 0) {
+            const existingSubjects = await ClassSubject.findAll({ where: { onlineClassId: id }, transaction: t });
+
+            const existingSubjectIds = existingSubjects.map(item => item.subjectId);
+            const requestedSubjectIds = data.subjects.map(item => item.subjectId);
+
+            for (const subjectId of existingSubjectIds) {
+                await ClassSubject.destroy({
+                    where: {
+                        onlineClassId: id,
+                        subjectId
+                    },
+                    transaction: t
+                });
+            }
+
+            for (const subjectId of requestedSubjectIds) {
+                await ClassSubject.create({ onlineClassId: id, subjectId }, { transaction: t });
+            }
+        }
+
+        return onlineClass;
     });
 };
 
