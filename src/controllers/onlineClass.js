@@ -61,7 +61,7 @@ async function updateOnlineClass(req, res, next) {
         if (req.file && req.file.mimetype === 'image/jpeg') {
             updateDetails.image = await uploadImage(req.file.buffer, onlineClassBucket, `${Date.now()}-${req.file.originalname}`);
             if (onlineClass.image) {
-                await deleteImage(onlineClassBucket, scholarship.image);
+                await deleteImage(onlineClassBucket, onlineClass.image);
             }
         }
 
@@ -77,6 +77,11 @@ async function updateOnlineClass(req, res, next) {
 async function deleteOnlineClass(req, res, next) {
     try {
         const onlineClassId = req.params.classId;
+        const onlineClass = await find(onlineClassId);
+
+        if (onlineClass.image) {
+            await deleteImage(onlineClassBucket, onlineClass.image);
+        }
 
         await destroy(onlineClassId);
         sendResponse(res, { onlineClassId });

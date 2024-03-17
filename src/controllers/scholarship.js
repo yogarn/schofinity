@@ -84,6 +84,11 @@ async function acceptScholarship(req, res, next) {
 async function deleteScholarship(req, res, next) {
     try {
         const scholarshipId = req.params.id;
+        const scholarship = await find(scholarshipId);
+
+        if (scholarship.image) {
+            await deleteImage(scholarshipBucket, scholarship.image);
+        }
 
         await destroy(scholarshipId);
         sendResponse(res, { scholarshipId });

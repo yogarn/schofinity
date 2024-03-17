@@ -8,7 +8,7 @@ async function getClassResource(req, res, next) {
         const classId = req.params.classId;
         let { whereClause, order, limit, offset } = req;
         whereClause.classId = classId;
-        
+
         const classResource = await findAll(whereClause, order, limit, offset);
         sendResponse(res, classResource);
         res.locals.data = classResource;
@@ -78,6 +78,12 @@ async function updateClassResource(req, res, next) {
 async function deleteClassResource(req, res, next) {
     try {
         const { classId, id } = req.params;
+        const classResource = await find(classId, id);
+
+        if (classResource.image) {
+            await deleteImage(onlineClassBucket, classResource.image);
+        }
+
         await destroy(classId, id)
         sendResponse(res, id);
         next();

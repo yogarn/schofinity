@@ -103,6 +103,11 @@ async function setAdmin(req, res, next) {
 async function deleteUser(req, res, next) {
     try {
         const userId = req.params.id;
+        const user = await findByUserId(userId);
+
+        if (user.image) {
+            await deleteImage(userBucket, user.image);
+        }
 
         await destroy(userId);
         sendResponse(res, { userId });
