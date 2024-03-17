@@ -10,8 +10,6 @@ const addValidate = [
     body('requirement').notEmpty(),
     body('startDate').notEmpty(),
     body('endDate').notEmpty(),
-    body('minSemester').notEmpty(),
-    body('maxSemester').notEmpty(),
     body('categories')
         .isArray({ min: 1 }).withMessage('categories must be an array with at least one element')
         .custom((categories) => categories.every(category => category.categoryId))

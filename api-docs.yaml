@@ -1331,26 +1331,21 @@ paths:
     patch:
       tags:
         - Scholarships
-      summary: Add a new scholarship
-      description: Record scholarship and return it's details.
+        - Admins
+      summary: Update a scholarship
+      description: Update a scholarship and return it's details.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of the scholarship to patch
       requestBody:
         content:
           multipart/form-data:
             schema:
               type: object
-              required:
-                - name
-                - description
-                - benefit
-                - requirement
-                - link
-                - startDate
-                - endDate
-                - company
-                - educations
-                - typeId
-                - locations
-                - categories
               properties:
                 name:
                   $ref: "#/components/schemas/scholarship/properties/name"
@@ -1391,12 +1386,6 @@ paths:
                   data:
                     type: object
                     properties:
-                      id:
-                        $ref: "#/components/schemas/scholarship/properties/id"
-                      statusId:
-                        $ref: "#/components/schemas/scholarship/properties/statusId"
-                      userId:
-                        $ref: "#/components/schemas/scholarship/properties/userId"
                       name:
                         $ref: "#/components/schemas/scholarship/properties/name"
                       description:
@@ -1417,14 +1406,13 @@ paths:
                         $ref: "#/components/schemas/scholarship/properties/endDate"
                       typeId:
                         $ref: "#/components/schemas/scholarship/properties/typeId"
-                      createdAt:
-                        $ref: "#/components/schemas/scholarship/properties/createdAt"
-                      updatedAt:
-                        $ref: "#/components/schemas/scholarship/properties/updatedAt"
+                      educations:
+                        $ref: "#/components/schemas/scholarship/properties/educations"
+                      locations:
+                        $ref: "#/components/schemas/scholarship/properties/educations"
+                      categories:
+                        $ref: "#/components/schemas/scholarship/properties/categories"
               example:
-                id: 4d90fff9-52fd-47a4-89cd-dc0fb57b926c
-                statusId: 1,
-                userId: af6f1a53-fd33-40b9-be41-72ba9d373195
                 name: Beasiswa Reguler LPDP
                 description: Beasiswa Reguler LPDP merupakan program beasiswa yang didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP) Kementerian Keuangan Republik Indoneisa untuk jenjang magister dan doktor.
                 company: Kementerian Keuangan Republik Indonesia
@@ -1435,8 +1423,66 @@ paths:
                 startDate: 2024-12-01T00:00:00.000Z
                 endDate: 2024-12-10T00:00:00.000Z
                 typeId: 1
-                updatedAt: 2024-03-16T23:58:23.568Z
-                createdAt: 2024-03-16T23:58:23.568
+                educations:
+                  - educationLevelId: 2
+                    minSemester: 1
+                    maxSemester: 8
+                  - educationLevelId: 3
+                    minSemester: 1
+                    maxSemester: 4
+                locations:
+                  - locationId: 1
+                  - locationId: 2
+                categories:
+                  - categoryId: 1
+                  - categoryId: 2
+                  - categoryId: 3
+    delete:
+      summary: Delete scholarship by id
+      description: Returns scholarship deletion status.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of the scholarship to delete
+      tags:
+        - Scholarships
+        - Admins
+      responses:
+        "200":
+          description: A JSON object containing scholarship details. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      scholarshipId:
+                        $ref: "#/components/schemas/scholarship/properties/id"
+              example:
+                message: success
+                data:
+                  scholarshipId: 3c71e4a6-a4e9-462f-b1ea-cc98fc37ec46
+        "401":
+          description: Insufficient privilege (Unauthorized Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Insufficient privilege
 
   /scholarhips/{id}/accept:
     post:
