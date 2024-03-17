@@ -3,12 +3,16 @@ const { Op } = require('sequelize');
 const sequelize = require('../config/sequelize')
 const bcrypt = require('bcrypt');
 
-const { User, Role } = db;
+const { User, Role, Status } = db;
 
 async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return User.findAll({
             attributes: { exclude: ['password', 'otp'] },
+            include: [
+                { model: Status, as: 'userStatus' },
+                { model: Role, as: 'userRole' }
+            ],
             where: whereClause,
             limit: limit,
             offset: offset,

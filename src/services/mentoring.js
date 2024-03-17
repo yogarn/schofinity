@@ -2,12 +2,12 @@ const db = require('../models/index');
 const sequelize = require('../config/sequelize');
 const generatePayments = require('./midtrans');
 
-const { Mentoring, Mentor, User } = db;
+const { Mentoring, Mentor, User, Status } = db;
 
 async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         const mentorings = await Mentoring.findAll({
-            include: [{ model: Mentor }, { model: User }],
+            include: [{ model: Mentor }, { model: User }, { model: Status, as: 'mentoringStatus' }],
             where: whereClause,
             limit: limit,
             offset: offset,
@@ -28,7 +28,7 @@ async function findAll(whereClause, order, limit, offset) {
 async function find(id) {
     return sequelize.transaction(async (t) => {
         const mentoring = await Mentoring.findOne({
-            include: [{ model: Mentor }, { model: User }],
+            include: [{ model: Mentor }, { model: User }, { model: Status, as: 'mentoringStatus' }],
             where: { id },
             transaction: t
         });
@@ -52,7 +52,7 @@ async function create(data, user, mentor) {
 
         await mentoring.update({ transactionToken }, { transaction: t });
 
-        return transactionToken;
+        return { mentoring, transactionToken };
     });
 };
 

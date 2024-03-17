@@ -2,7 +2,7 @@ const db = require('../models/index');
 const { Op } = require('sequelize');
 const sequelize = require('../config/sequelize')
 
-const { User, Mentor, MentorSchedule } = db;
+const { User, Mentor, MentorSchedule, Status } = db;
 
 async function create(data) {
     return sequelize.transaction(async (t) => {
@@ -13,7 +13,11 @@ async function create(data) {
 async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return Mentor.findAll({
-            include: [{ model: User, attributes: { exclude: ['roleId', 'password'] } }, { model: MentorSchedule }],
+            include: [
+                { model: User, attributes: { exclude: ['roleId', 'password'] } },
+                { model: MentorSchedule },
+                { model: Status, as: 'mentorStatus' }
+            ],
             where: whereClause,
             limit: limit,
             offset: offset,
@@ -26,7 +30,11 @@ async function findAll(whereClause, order, limit, offset) {
 async function find(id) {
     return sequelize.transaction(async (t) => {
         return Mentor.findOne({
-            include: [{ model: User, attributes: { exclude: ['roleId', 'password'] } }, { model: MentorSchedule }],
+            include: [
+                { model: User, attributes: { exclude: ['roleId', 'password'] } },
+                { model: MentorSchedule },
+                { model: Status, as: 'mentorStatus' }
+            ],
             where: { id },
             transaction: t
         });

@@ -26,7 +26,15 @@ async function findAll(query) {
         if (value == '' || value === null || value === undefined) continue;
         if (key === 'limit' || key === 'page' || key === 'sort') continue;
         if (validFields.includes(key)) {
-            if (value.includes(',')) {
+            if (key === 'startDate') {
+                whereClause[key] = { [Op.gte]: new Date(value) };
+            } else if (key === 'endDate') {
+                whereClause[key] = { [Op.lte]: new Date(value) };
+            } else if (key === 'createdAt') {
+                whereClause['createdAt'] = { [Op.gte]: new Date(value) };
+            } else if (key === 'updatedAt') {
+                whereClause['updatedAt'] = { [Op.gte]: new Date(value) };
+            } else if (value.includes(',')) {
                 const values = value.split(',');
                 whereClause[key] = { [Op.or]: values.map(item => ({ [Op.like]: `%${item}%` })) };
             } else {
@@ -69,7 +77,7 @@ async function findAll(query) {
     return sequelize.transaction(async (t) => {
         return Scholarship.findAll({
             include: [
-                { model: FundingType },
+                { model: FundingType, as: 'fundingType' },
                 {
                     model: EducationLevel,
                     as: 'educations',
@@ -91,7 +99,7 @@ async function findAll(query) {
                     through: { attributes: [] },
                     where: categoriesWhere.length > 0 ? { id: { [Op.in]: categoriesWhere } } : undefined
                 },
-                { model: Status }
+                { model: Status, as: 'scholarshipStatus' }
             ],
             where: whereClause,
             limit: limit,
@@ -114,7 +122,7 @@ async function find(id) {
                             attributes: ['minSemester', 'maxSemester'],
                         },
                     },
-                    { model: FundingType },
+                    { model: FundingType, as: 'fundingType' },
                     {
                         model: Location,
                         as: 'locations',
@@ -125,7 +133,7 @@ async function find(id) {
                         as: 'categories',
                         through: { attributes: [] }
                     },
-                    { model: Status }
+                    { model: Status, as: 'scholarshipStatus' }
                 ],
             where: { id },
             transaction: t

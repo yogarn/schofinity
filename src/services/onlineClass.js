@@ -3,7 +3,7 @@ const sequelize = require('../config/sequelize');
 const { Op } = require('sequelize');
 const generatePayments = require('./midtrans');
 
-const { OnlineClass, ClassSubject, Subject, ClassPayment, Mentor, User } = db;
+const { OnlineClass, ClassSubject, ClassType, Subject, ClassPayment, Mentor, User } = db;
 
 async function findAll(query) {
     const whereClause = {};
@@ -22,7 +22,15 @@ async function findAll(query) {
         if (value == '' || value === null || value === undefined) continue;
         if (key === 'limit' || key === 'page' || key === 'sort') continue;
         if (validFields.includes(key)) {
-            if (value.includes(',')) {
+            if (key === 'startDate') {
+                whereClause[key] = { [Op.gte]: new Date(value) };
+            } else if (key === 'endDate') {
+                whereClause[key] = { [Op.lte]: new Date(value) };
+            } else if (key === 'createdAt') {
+                whereClause['createdAt'] = { [Op.gte]: new Date(value) };
+            } else if (key === 'updatedAt') {
+                whereClause['updatedAt'] = { [Op.gte]: new Date(value) };
+            } else if (value.includes(',')) {
                 const values = value.split(',');
                 whereClause[key] = { [Op.or]: values.map(item => ({ [Op.like]: `%${item}%` })) };
             } else if (key == 'price') {
@@ -63,6 +71,7 @@ async function findAll(query) {
                     },
                     where: subjectsWhere.length > 0 ? { id: { [Op.in]: subjectsWhere } } : undefined,
                 },
+                { model: ClassType, as: 'classType' }
             ],
             where: whereClause,
             limit: limit,
@@ -85,6 +94,7 @@ async function find(id) {
                         attributes: [],
                     }
                 },
+                { model: ClassType, as: 'classType' }
             ],
             where: { id },
             transaction: t
