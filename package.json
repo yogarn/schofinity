@@ -35,10 +35,8 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.11",
     "sequelize": "^6.37.1",
-    "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.1",
-    "validator": "^13.11.0",
-    "yamljs": "^0.3.0"
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"
