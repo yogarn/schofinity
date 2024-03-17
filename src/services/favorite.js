@@ -55,7 +55,7 @@ async function getUpcomingScholarships() {
                 {
                     model: Scholarship,
                     where: {
-                        startDate: {
+                        endDate: {
                             [Op.between]: [nextThreeDaysStart, nextThreeDaysEnd],
                         },
                     },

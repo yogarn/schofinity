@@ -12,9 +12,10 @@ async function sendNotification() {
         const subject = `${scholarship.name} Registration Notification`;
         let html = `
             <p>Hello ${user.name},</p>
-            <p>We would like to inform you that the registration for the ${scholarship.name} will begin soon.</p>
+            <p>We would like to inform you that the registration for the ${scholarship.name} will close soon.</p>
             <p>Please take note of the following date to start the registration:</p>
-            <h2 style="font-size: 20px; font-weight: bold;">${scholarship.startDate}</h2>
+            <h3 style="font-size: 20px; font-weight: bold;">${scholarship.endDate}</h3>
+            <p>We encourage you to complete your registration before the deadline.</p>
         `;
 
         if (scholarship.image) {
