@@ -10,6 +10,7 @@ const addValidate = [
     body('requirement').notEmpty(),
     body('startDate').notEmpty(),
     body('endDate').notEmpty(),
+    body('image').customSanitizer(value => value ? value : undefined),
     body('categories')
         .isArray({ min: 1 }).withMessage('categories must be an array with at least one element')
         .custom((categories) => categories.every(category => category.categoryId))
@@ -28,6 +29,16 @@ const addValidate = [
 ];
 
 const editValidate = [
+    body('name').customSanitizer(value => value ? value : undefined),
+    body('description').customSanitizer(value => value ? value : undefined),
+    body('company').customSanitizer(value => value ? value : undefined),
+    body('image').customSanitizer(value => value ? value : undefined),
+    body('benefit').customSanitizer(value => value ? value : undefined),
+    body('requirement').customSanitizer(value => value ? value : undefined),
+    body('link').customSanitizer(value => value ? value : undefined),
+    body('startDate').customSanitizer(value => value ? value : undefined),
+    body('endDate').customSanitizer(value => value ? value : undefined),
+    body('typeId').customSanitizer(value => value ? value : undefined),
     body('categories')
         .optional()
         .isArray({ min: 1 }).withMessage('categories must be an array with at least one element')

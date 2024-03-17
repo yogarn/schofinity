@@ -32,6 +32,7 @@ const getIdValidate = [
 const addValidate = [
     body('name').notEmpty(),
     body('description').notEmpty(),
+    body('image').customSanitizer(value => value ? value : undefined),
     body('resource').notEmpty(),
     param('classId').custom(async value => {
         const onlineClass = await onlineClassServices.find(value);
@@ -55,6 +56,10 @@ const updateValidate = [
             throw new Error('Resource not found');
         }
     }),
+    body('name').customSanitizer(value => value ? value : undefined),
+    body('description').customSanitizer(value => value ? value : undefined),
+    body('image').customSanitizer(value => value ? value : undefined),
+    body('resource').customSanitizer(value => value ? value : undefined),
     validate
 ];
 

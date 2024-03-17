@@ -14,6 +14,15 @@ const addValidate = [
     validate
 ];
 
+const patchValidate = [
+    body('resource').customSanitizer(value => value ? value : undefined),
+    body('startDate').customSanitizer(value => value ? value : undefined),
+    body('endDate').customSanitizer(value => value ? value : undefined),
+    body('rating').customSanitizer(value => value ? value : undefined),
+    body('feedback').customSanitizer(value => value ? value : undefined),
+]
+
 module.exports = {
-    addValidate
+    addValidate,
+    patchValidate
 };

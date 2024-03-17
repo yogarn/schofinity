@@ -5,6 +5,7 @@ const onlineClassServices = require('../../services/onlineClass');
 const addValidate = [
     body('name').notEmpty(),
     body('description').notEmpty(),
+    body('image').customSanitizer(value => value ? value : undefined),
     body('community').notEmpty(),
     body('typeId').notEmpty(),
     body('subjects')
@@ -18,6 +19,14 @@ const addValidate = [
 ];
 
 const editValidate = [
+    body('name').customSanitizer(value => value ? value : undefined),
+    body('description').customSanitizer(value => value ? value : undefined),
+    body('image').customSanitizer(value => value ? value : undefined),
+    body('community').customSanitizer(value => value ? value : undefined),
+    body('startDate').customSanitizer(value => value ? value : undefined),
+    body('endDate').customSanitizer(value => value ? value : undefined),
+    body('price').customSanitizer(value => value ? value : undefined),
+    body('typeId').customSanitizer(value => value ? value : undefined),
     body('subjects')
         .optional()
         .isArray({ min: 1 }).withMessage('subjects must be an array with at least one element')

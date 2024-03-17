@@ -37,6 +37,29 @@ const addValidate = [
     validate
 ];
 
+const patchValidate = [
+    param('classId').custom(async value => {
+        const onlineClass = await onlineClassServices.find(value);
+        if (!onlineClass) {
+            throw new Error('Class not found');
+        }
+    }),
+    param('resourceId').custom(async (value, { req }) => {
+        const classResource = await classResourceServices.find(req.params.classId, value);
+        if (!classResource) {
+            throw new Error('Resource not found');
+        }
+    }),
+    param('id').custom(async (value, { req }) => {
+        const resourceComment = await resourceCommentServices.find(req.params.resourceId, value);
+        if (!resourceComment) {
+            throw new Error('Comment not found');
+        }
+    }),
+    body('comment').customSanitizer(value => value ? value : undefined),
+    validate
+]
+
 const idValidate = [
     param('classId').custom(async value => {
         const onlineClass = await onlineClassServices.find(value);
@@ -62,5 +85,6 @@ const idValidate = [
 module.exports = {
     getValidate,
     idValidate,
+    patchValidate,
     addValidate
 };

@@ -9,6 +9,13 @@ const addValidate = [
     validate
 ];
 
+const patchValidate = [
+    body('day').customSanitizer(value => value ? value : undefined),
+    body('startTime').customSanitizer(value => value ? value : undefined),
+    body('endTime').customSanitizer(value => value ? value : undefined),
+]
+
 module.exports = {
-    addValidate
+    addValidate,
+    patchValidate
 };

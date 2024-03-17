@@ -4,7 +4,7 @@ const { addMentor, getAllMentors, getMentorById, acceptMentor, updateMentor, del
 const authToken = require('../middlewares/authToken');
 const cache = require('../middlewares/cache');
 const { checkRoleId } = require('../middlewares/authorize');
-const { idValidate, addValidate } = require('../middlewares/validators/mentor');
+const { idValidate, addValidate, patchValidate } = require('../middlewares/validators/mentor');
 const { Mentor } = require('../models/index');
 const filter = require('../middlewares/filter');
 
@@ -13,7 +13,7 @@ router
     .get('/:id', authToken, cache.get, getMentorById, cache.set)
     .post('/:id/accept', authToken, checkRoleId([3]), idValidate, acceptMentor, cache.clear)
     .post('/', authToken, addValidate, addMentor, cache.clear)
-    .patch('/', authToken, checkRoleId([2]), updateMentor, cache.clear)
+    .patch('/', authToken, checkRoleId([2]), patchValidate, updateMentor, cache.clear)
     .delete('/:id', authToken, checkRoleId([3]), idValidate, deleteMentor, cache.clear);
 
 module.exports = router;
