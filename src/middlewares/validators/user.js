@@ -36,8 +36,8 @@ const patchValidate = [
 
 const idValidate = [
     param('id').custom(async value => {
-        const onlineClass = await userServices.findByUserId(value);
-        if (!onlineClass) {
+        const user = await userServices.findByUserId(value);
+        if (!user) {
             throw new Error('User not found');
         }
     }),

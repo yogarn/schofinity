@@ -12,7 +12,7 @@ const filter = require('../middlewares/filter');
 router
     .get('/', authToken, cache.get, filter(User), getAllUsers, cache.set)
     .get('/:id', authToken, cache.get, getUser, cache.set)
-    .post('/:id/admin', authToken, checkRoleId([3]), setAdmin, cache.clear)
+    .post('/:id/admin', authToken, checkRoleId([3]), idValidate, setAdmin, cache.clear)
     .post('/', upload.single('image'), addValidate, addUser, cache.clear)
     .patch('/', upload.single('image'), authToken, patchValidate, updateUser, cache.clear)
     .delete('/:id', authToken, checkRoleId([3]), idValidate, deleteUser, cache.clear)

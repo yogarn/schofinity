@@ -24,7 +24,7 @@ async function auth(data) {
     }
 
     const userId = user.id;
-    const token = jwt.sign({ userId }, 'secret_key', { expiresIn: '1h' });
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
     return token;
 }
 

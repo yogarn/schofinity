@@ -8,7 +8,7 @@ function authenticateToken(req, res, next) {
         return sendError(res, 'No token provided');
     }
 
-    jwt.verify(token, 'secret_key', (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
         if (err) {
             return sendError(res, 'Invalid jwt token');
         } else {
