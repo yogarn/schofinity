@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Mentoring.belongsTo(models.User, { foreignKey: 'userId', allowNull: false });
       Mentoring.belongsTo(models.Mentor, { foreignKey: 'mentorId', allowNull: false });
-      Mentoring.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
+      Mentoring.belongsTo(models.Status, { foreignKey: 'statusId', as: 'mentoringStatus', allowNull: false });
     }
   }
   Mentoring.init({

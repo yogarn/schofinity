@@ -3,8 +3,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Scholarship extends Model {
     static associate(models) {
-      Scholarship.belongsTo(models.FundingType, { foreignKey: 'typeId', allowNull: false });
-      Scholarship.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
+      Scholarship.belongsTo(models.FundingType, { foreignKey: 'typeId', as: 'fundingType', allowNull: false });
+      Scholarship.belongsTo(models.Status, { foreignKey: 'statusId', as: 'scholarshipStatus', allowNull: false });
       Scholarship.hasMany(models.Favorite, { foreignKey: 'scholarshipId', allowNull: false });
       Scholarship.belongsTo(models.User, { foreignKey: 'userId', allowNull: false });
       Scholarship.belongsToMany(models.Category, { through: 'ScholarshipCategories', as: 'categories' });

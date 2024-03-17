@@ -3,7 +3,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class ClassType extends Model {
     static associate(models) { 
-      ClassType.hasMany(models.OnlineClass, { foreignKey: 'typeId', allowNull: false });
+      ClassType.hasMany(models.OnlineClass, { foreignKey: 'typeId', as: 'classType', allowNull: false });
     }
   }
   ClassType.init({

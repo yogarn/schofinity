@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       ClassPayment.belongsTo(models.User, { foreignKey: 'userId', allowNull: false });
       ClassPayment.belongsTo(models.OnlineClass, { foreignKey: 'classId', allowNull: false });
-      ClassPayment.belongsTo(models.Status, { foreignKey: 'statusId', allowNull: false });
+      ClassPayment.belongsTo(models.Status, { foreignKey: 'statusId', as: 'paymentStatus', allowNull: false });
     }
   }
   ClassPayment.init({

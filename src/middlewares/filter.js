@@ -19,7 +19,11 @@ const filter = (model) => {
             if (value == '' || value === null || value === undefined) continue;
             if (key === 'limit' || key === 'page' || key === 'sort') continue;
             if (validFields.includes(key)) {
-                if (value.includes(',')) {
+                if (key === 'createdAt') {
+                    whereClause['createdAt'] = { [Op.gte]: new Date(value) };
+                } else if (key === 'updatedAt') {
+                    whereClause['updatedAt'] = { [Op.gte]: new Date(value) };
+                } else if (value.includes(',')) {
                     const values = value.split(',');
                     whereClause[key] = { [Op.or]: values.map(item => ({ [Op.like]: `%${item}%` })) };
                 } else {
