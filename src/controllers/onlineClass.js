@@ -42,8 +42,8 @@ async function addOnlineClass(req, res, next) {
             onlineClassDetails.image = await uploadImage(req.file.buffer, onlineClassBucket, `${Date.now()}-${req.file.originalname}`);
         }
 
-        await create(onlineClassDetails);
-        sendResponse(res, onlineClassDetails);
+        const onlineClass = await create(onlineClassDetails);
+        sendResponse(res, onlineClass);
         next();
     } catch (e) {
         console.log(e);

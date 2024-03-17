@@ -37,8 +37,8 @@ async function addScholarship(req, res, next) {
         }
 
         const scholarshipData = { userId, name, description, company, image, benefit, requirement, link, startDate, endDate, typeId, locations, categories, educations };
-        await create(scholarshipData);
-        sendResponse(res, scholarshipData);
+        const scholarship = await create(scholarshipData);
+        sendResponse(res, scholarship);
         next();
     } catch (e) {
         console.log(e);

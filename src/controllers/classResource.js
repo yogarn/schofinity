@@ -43,8 +43,8 @@ async function addClassResource(req, res, next) {
             classResourceDetails.image = await uploadImage(req.file.buffer, onlineClassBucket, `${Date.now()}-${req.file.originalname}`);
         }
 
-        await create(classResourceDetails);
-        sendResponse(res, classResourceDetails);
+        const classResource = await create(classResourceDetails);
+        sendResponse(res, classResource);
         next();
     } catch (e) {
         console.log(e);

@@ -15,8 +15,8 @@ async function addSchedule(req, res, next) {
 
         scheduleDetails.mentorId = mentor.id;
 
-        await create(scheduleDetails);
-        sendResponse(res, scheduleDetails);
+        const schedule = await create(scheduleDetails);
+        sendResponse(res, schedule);
         clearEndpoints(['/v1/mentors']);
         next();
     } catch (e) {

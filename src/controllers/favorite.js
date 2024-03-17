@@ -6,8 +6,8 @@ async function addFavorite(req, res, next) {
         const { scholarshipId } = req.body;
         let favDetails = { scholarshipId };
         favDetails.userId = req.jwt.id;
-        await create(favDetails);
-        sendResponse(res, favDetails);
+        const favorite = await create(favDetails);
+        sendResponse(res, favorite);
         next();
     } catch (e) {
         console.log(e);

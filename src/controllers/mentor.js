@@ -8,8 +8,8 @@ async function addMentor(req, res, next) {
         const { programs, mentoringInterval, breakTime, salaryRate } = req.body;
         const mentorDetails = { programs, mentoringInterval, breakTime, salaryRate };
         mentorDetails.userId = req.jwt.id;
-        await create(mentorDetails);
-        sendResponse(res, mentorDetails);
+        const mentor = await create(mentorDetails);
+        sendResponse(res, mentor);
         next();
     } catch (e) {
         console.log(e);

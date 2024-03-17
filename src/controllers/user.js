@@ -21,9 +21,9 @@ async function addUser(req, res, next) {
             image = await uploadImage(req.file.buffer, userBucket, `${username}-${req.file.originalname}`);
         }
 
-        await create({ username, name, password, contact, description, birthDate, gender, address, email, image });
+        const user = await create({ username, name, password, contact, description, birthDate, gender, address, email, image });
         await generateOTP(username);
-        sendResponse(res, { username, name, password, contact, description, birthDate, gender, address, email, image });
+        sendResponse(res, user);
         next();
     } catch (e) {
         console.log(e);
