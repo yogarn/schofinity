@@ -31,6 +31,8 @@ tags:
     description: Operations related to class resources
   - name: Feedbacks
     description: Operations related to feedbacks
+  - name: Admins
+    description: Operations related to administrator
 security:
   - bearerAuth: []
 
@@ -241,7 +243,7 @@ paths:
                     type: string
                     example: success
         "401":
-          description: Incorrect OTP (Not Found Response)
+          description: Incorrect OTP (Unauthorized Response)
           content:
             application/json:
               schema:
@@ -319,6 +321,12 @@ paths:
                   data:
                     type: object
                     properties:
+                      id:
+                        $ref: "#/components/schemas/user/properties/id"
+                      roleId:
+                        $ref: "#/components/schemas/user/properties/roleId"
+                      statusId:
+                        $ref: "#/components/schemas/user/properties/statusId"
                       name:
                         $ref: "#/components/schemas/user/properties/name"
                       username:
@@ -331,15 +339,24 @@ paths:
                         $ref: "#/components/schemas/user/properties/email"
                       image:
                         $ref: "#/components/schemas/user/properties/image"
+                      createdAt:
+                        $ref: "#/components/schemas/user/properties/createdAt"
+                      updatedAt:
+                        $ref: "#/components/schemas/user/properties/updatedAt"
               example:
                 message: success
                 data:
-                  name: Yoga Raditya
+                  id: 3c71e4a6-a4e9-462f-b1ea-cc98fc37ec46
+                  roleId: 1
+                  statusId: 1
                   username: yogarn
-                  password: Root_123
+                  name: Yoga Raditya
+                  password: $2b$10$TV1VuPMVxS0tE3zKlUslNOa6nBCAmULsvDjBM0ZD8PjxUXOPzTg1O
                   contact: 6285123456789
                   email: schofinity@gmail.com
                   image: profile_picture.jpeg
+                  updatedAt: 2024-03-17T00:06:21.363Z
+                  createdAt: 2024-03-17T00:06:21.363Z
         "409":
           description: Username already used by another user (Conflict Response)
           content:
@@ -401,6 +418,20 @@ paths:
           description: The limit of user information that will be shown.
           required: false
           example: 10
+        - in: query
+          name: page
+          schema:
+            type: string
+          description: The page of user information that will be shown.
+          required: false
+          example: 1
+        - in: query
+          name: sort
+          schema:
+            type: string
+          description: The name of attributes that will be sorted.
+          required: false
+          example: name
       responses:
         "200":
           description: A JSON array containing list of users. (Successful Response)
@@ -448,6 +479,10 @@ paths:
                         updatedAt:
                           type: string
                           format: date-time
+                        userStatus:
+                          type: object
+                        userRole:
+                          type: object
               examples:
                 Empty Params:
                   value:
@@ -467,6 +502,16 @@ paths:
                         statusId: 2
                         createdAt: 2024-03-14T03:32:01.000Z
                         updatedAt: 2024-03-14T05:24:58.000Z
+                        userStatus:
+                          id: 2,
+                          statusName: success
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
+                        userRole:
+                          id: 2,
+                          roleName: mentor
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
                       - id: 13071c6e-0d91-4372-bd05-84fcecd1fe75
                         username: johndoe
                         name: John Doe
@@ -481,6 +526,16 @@ paths:
                         statusId: 2
                         createdAt: 2024-02-14T03:32:01.000Z
                         updatedAt: 2024-02-14T05:24:58.000Z
+                        userStatus:
+                          id: 2,
+                          statusName: success
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
+                        userRole:
+                          id: 1,
+                          roleName: user
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
                       - id: 45842f85-2517-4f0a-b160-810452274033
                         username: alanturing
                         name: Alan Turing
@@ -495,6 +550,16 @@ paths:
                         statusId: 2
                         createdAt: 2024-01-14T03:32:01.000Z
                         updatedAt: 2024-01-14T05:24:58.000Z
+                        userStatus:
+                          id: 2,
+                          statusName: success
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
+                        userRole:
+                          id: 2,
+                          roleName: mentor
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
                 Using id, username, or email:
                   value:
                     message: success
@@ -513,6 +578,16 @@ paths:
                         statusId: 2
                         createdAt: 2024-03-14T03:32:01.000Z
                         updatedAt: 2024-03-14T05:24:58.000Z
+                        userStatus:
+                          id: 2,
+                          statusName: success
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
+                        userRole:
+                          id: 2,
+                          roleName: mentor
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
                 Using name or statusId:
                   value:
                     message: success
@@ -531,6 +606,16 @@ paths:
                         statusId: 2
                         createdAt: 2024-03-14T03:32:01.000Z
                         updatedAt: 2024-03-14T05:24:58.000Z
+                        userStatus:
+                          id: 2,
+                          statusName: success
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
+                        userRole:
+                          id: 2,
+                          roleName: mentor
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
                       - id: 45842f85-2517-4f0a-b160-810452274033
                         username: alanturing
                         name: Alan Turing
@@ -545,6 +630,16 @@ paths:
                         statusId: 2
                         createdAt: 2024-01-14T03:32:01.000Z
                         updatedAt: 2024-01-14T05:24:58.000Z
+                        userStatus:
+                          id: 2,
+                          statusName: success
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
+                        userRole:
+                          id: 2,
+                          roleName: mentor
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
     patch:
       tags:
         - Users
@@ -627,7 +722,7 @@ paths:
       description: Returns a users along with its details.
       parameters:
         - in: path
-          name: userId
+          name: id
           schema:
             type: string
           required: true
@@ -648,26 +743,42 @@ paths:
                   data:
                     type: object
                     properties:
+                      id:
+                        type: string
+                        format: uuid
                       name:
-                        $ref: "#/components/schemas/user/properties/name"
+                        type: string
                       username:
-                        $ref: "#/components/schemas/user/properties/username"
-                      password:
-                        $ref: "#/components/schemas/user/properties/password"
+                        type: string
                       contact:
-                        $ref: "#/components/schemas/user/properties/contact"
+                        type: string
                       email:
-                        $ref: "#/components/schemas/user/properties/email"
+                        type: string
+                        format: email
                       description:
-                        $ref: "#/components/schemas/user/properties/description"
+                        type: string
                       birthDate:
-                        $ref: "#/components/schemas/user/properties/birthDate"
+                        type: string
                       gender:
-                        $ref: "#/components/schemas/user/properties/gender"
+                        type: string
                       address:
-                        $ref: "#/components/schemas/user/properties/address"
+                        type: string
                       image:
-                        $ref: "#/components/schemas/user/properties/image"
+                        type: string
+                      roleId:
+                        type: integer
+                      statusId:
+                        type: integer
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
+                      userStatus:
+                        type: object
+                      userRole:
+                        type: object
               example:
                 message: success
                 data:
@@ -685,6 +796,112 @@ paths:
                   statusId: 2
                   createdAt: 2024-03-14T03:32:01.000Z
                   updatedAt: 2024-03-14T05:24:58.000Z
+                  userStatus:
+                          id: 2,
+                          statusName: success
+                          createdAt: 2024-03-16T07:29:17.000Z
+                          updatedAt: 2024-03-16T07:29:17.000Z
+                  userRole:
+                    id: 2,
+                    roleName: mentor
+                    createdAt: 2024-03-16T07:29:17.000Z
+                    updatedAt: 2024-03-16T07:29:17.000Z
+    delete:
+      summary: Delete user by id
+      description: Returns user deletion status.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of the user to delete
+      tags:
+        - Users
+        - Admins
+      responses:
+        "200":
+          description: A JSON object containing user details. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        $ref: "#/components/schemas/user/properties/id"
+              example:
+                message: success
+                data:
+                  userId: 3c71e4a6-a4e9-462f-b1ea-cc98fc37ec46
+        "401":
+          description: Insufficient privilege (Unauthorized Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Insufficient privilege
+  /users/{id}/admin:
+    post:
+      summary: Promote user to admin by user's id
+      description: Returns a promotion status along with its details.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of the user to promote
+      tags:
+        - Users
+        - Admins
+      responses:
+        "200":
+          description: A JSON object containing user details. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        $ref: "#/components/schemas/user/properties/id"
+                      roleId:
+                        $ref: "#/components/schemas/user/properties/roleId"
+              example:
+                message: success
+                data:
+                  userId: 3c71e4a6-a4e9-462f-b1ea-cc98fc37ec46
+                  roleId: 3
+        "401":
+          description: Insufficient privilege (Unauthorized Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Insufficient privilege
 
   # scholarships section
   /scholarships:
@@ -706,12 +923,11 @@ paths:
                 - link
                 - startDate
                 - endDate
-                - educationId
-                - minSemester
-                - maxSemester
+                - company
+                - educations
                 - typeId
-                - locationId
-                - categoryId
+                - locations
+                - categories
               properties:
                 name:
                   $ref: "#/components/schemas/scholarship/properties/name"
@@ -731,21 +947,514 @@ paths:
                   $ref: "#/components/schemas/scholarship/properties/startDate"
                 endDate:
                   $ref: "#/components/schemas/scholarship/properties/endDate"
-                educationId:
-                  $ref: "#/components/schemas/scholarship/properties/educationId"
-                minSemester:
-                  $ref: "#/components/schemas/scholarship/properties/minSemester"
-                maxSemester:
-                  $ref: "#/components/schemas/scholarship/properties/maxSemester"
+                educations:
+                  $ref: "#/components/schemas/scholarship/properties/educations"
                 typeId:
                   $ref: "#/components/schemas/scholarship/properties/typeId"
-                locationId:
-                  $ref: "#/components/schemas/scholarship/properties/locationId"
-                categoryId:
-                  $ref: "#/components/schemas/scholarship/properties/categoryId"
+                locations:
+                  $ref: "#/components/schemas/scholarship/properties/locations"
+                categories:
+                  $ref: "#/components/schemas/scholarship/properties/categories"
       responses:
         "200":
           description: A JSON object containing user details. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: "#/components/schemas/scholarship/properties/id"
+                      statusId:
+                        $ref: "#/components/schemas/scholarship/properties/statusId"
+                      userId:
+                        $ref: "#/components/schemas/scholarship/properties/userId"
+                      name:
+                        $ref: "#/components/schemas/scholarship/properties/name"
+                      description:
+                        $ref: "#/components/schemas/scholarship/properties/description"
+                      company:
+                        $ref: "#/components/schemas/scholarship/properties/company"
+                      image:
+                        $ref: "#/components/schemas/scholarship/properties/image"
+                      benefit:
+                        $ref: "#/components/schemas/scholarship/properties/benefit"
+                      requirement:
+                        $ref: "#/components/schemas/scholarship/properties/requirement"
+                      link:
+                        $ref: "#/components/schemas/scholarship/properties/link"
+                      startDate:
+                        $ref: "#/components/schemas/scholarship/properties/startDate"
+                      endDate:
+                        $ref: "#/components/schemas/scholarship/properties/endDate"
+                      typeId:
+                        $ref: "#/components/schemas/scholarship/properties/typeId"
+                      createdAt:
+                        $ref: "#/components/schemas/scholarship/properties/createdAt"
+                      updatedAt:
+                        $ref: "#/components/schemas/scholarship/properties/updatedAt"
+              example:
+                id: 4d90fff9-52fd-47a4-89cd-dc0fb57b926c
+                statusId: 1,
+                userId: af6f1a53-fd33-40b9-be41-72ba9d373195
+                name: Beasiswa Reguler LPDP
+                description: Beasiswa Reguler LPDP merupakan program beasiswa yang didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP) Kementerian Keuangan Republik Indoneisa untuk jenjang magister dan doktor.
+                company: Kementerian Keuangan Republik Indonesia
+                image: lpdp.jpeg
+                benefit: Biaya Pendidikan, Biaya Hidup, Tunjangan Buku, Tunjangan Penelitian
+                requirement: WNI, Lulus S1/D4, IPK Minimal 3.00, Skor TOEFL Minimal 500, Surat Rekomendasi, Sehat Jasmani dan Rohani
+                link: lpdp.kemenkeu.go.id
+                startDate: 2024-12-01T00:00:00.000Z
+                endDate: 2024-12-10T00:00:00.000Z
+                typeId: 1
+                updatedAt: 2024-03-16T23:58:23.568Z
+                createdAt: 2024-03-16T23:58:23.568
+    get:
+      security: []
+      summary: View scholarships
+      description: Returns a list of scholarships along with its details.
+      tags:
+        - Scholarships
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          description: The id of the scholarship.
+          required: false
+          example: dc88cf07-7e58-45e1-9ce1-cd85434ea3df
+        - in: query
+          name: userId
+          schema:
+            type: string
+          description: The id of the user who uploaded the scholarships.
+          required: false
+          example: af6f1a53-fd33-40b9-be41-72ba9d373195
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: The name/title of the scholarship.
+          required: false
+          example: Beasiswa Unggulan
+        - in: query
+          name: description
+          schema:
+            type: string
+          description: The description of the scholarship.
+          required: false
+          example: beasiswa unggulan
+        - in: query
+          name: company
+          schema:
+            type: string
+          description: The company of the scholarship.
+          required: false
+          example: Kementerian Keuangan
+        - in: query
+          name: benefit
+          schema:
+            type: string
+          description: The scholarship's benefit.
+          required: false
+          example: Biaya Hidup
+        - in: query
+          name: requirement
+          schema:
+            type: string
+          description: The scholarship's requirement.
+          required: false
+          example: toefl
+        - in: query
+          name: benefit
+          schema:
+            type: string
+          description: The scholarship's benefit.
+          required: false
+          example: Biaya Hidup
+        - in: query
+          name: link
+          schema:
+            type: string
+          description: The scholarship's external link.
+          required: false
+          example: lpdp.kemenkeu.go.id
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          description: The scholarship's start date.
+          required: false
+          example: 2024-03-19T00:00:00.000Z
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          description: The scholarship's end date.
+          required: false
+          example: 2024-03-19T00:00:00.000Z
+        - in: query
+          name: typeId
+          schema:
+            type: string
+          description: The scholarship's funding type's id.
+          required: false
+          example: 1
+        - in: query
+          name: educations
+          schema:
+            type: string
+          description: The scholarship's education's id requirement.
+          required: false
+          example: 1,2,3
+        - in: query
+          name: locations
+          schema:
+            type: string
+          description: The scholarship's location's id requirement.
+          required: false
+          example: 1,2
+        - in: query
+          name: categories
+          schema:
+            type: string
+          description: The scholarship's category's id requirement.
+          required: false
+          example: 1,2,3,4
+        - in: query
+          name: statusId
+          schema:
+            type: string
+          description: The scholarship's status's id.
+          required: false
+          example: 2
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: The limit of scholarship information that will be shown.
+          required: false
+          example: 10
+        - in: query
+          name: page
+          schema:
+            type: string
+          description: The page of scholarship information that will be shown.
+          required: false
+          example: 1
+        - in: query
+          name: sort
+          schema:
+            type: string
+          description: The name of attributes that will be sorted.
+          required: false
+          example: name
+      responses:
+        "200":
+          description: A JSON object of user registration status and its username. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          $ref: "#/components/schemas/scholarship/properties/name"
+                        description:
+                          $ref: "#/components/schemas/scholarship/properties/description"
+                        company:
+                          $ref: "#/components/schemas/scholarship/properties/company"
+                        image:
+                          $ref: "#/components/schemas/scholarship/properties/image"
+                        benefit:
+                          $ref: "#/components/schemas/scholarship/properties/benefit"
+                        requirement:
+                          $ref: "#/components/schemas/scholarship/properties/requirement"
+                        link:
+                          $ref: "#/components/schemas/scholarship/properties/link"
+                        startDate:
+                          $ref: "#/components/schemas/scholarship/properties/startDate"
+                        endDate:
+                          $ref: "#/components/schemas/scholarship/properties/endDate"
+                        educations:
+                          $ref: "#/components/schemas/scholarship/properties/educations"
+                        typeId:
+                          $ref: "#/components/schemas/scholarship/properties/typeId"
+                        locations:
+                          $ref: "#/components/schemas/scholarship/properties/locations"
+                        categories:
+                          $ref: "#/components/schemas/scholarship/properties/categories"
+              example:
+                message: success
+                data:
+                  - id: acb16514-a17d-4dc3-a3c0-2276061382ee
+                    userId: f36ec776-552a-4b7d-b7ed-177adef2fcee
+                    name: Beasiswa Reguler LPDP
+                    description: Beasiswa Reguler LPDP merupakan program beasiswa yang didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP) Kementerian Keuangan Republik Indoneisa untuk jenjang magister dan doktor.
+                    company: Kementerian Keuangan Republik Indonesia
+                    image: lpdp.jpeg
+                    benefit: Biaya Pendidikan, Biaya Hidup, Tunjangan Buku, Tunjangan Penelitian
+                    requirement: WNI, Lulus S1/D4, IPK Minimal 3.00, Skor TOEFL Minimal 500, Surat Rekomendasi, Sehat Jasmani dan Rohani.
+                    link: lpdp.kemenkeu.go.id
+                    startDate: 2024-03-19T00:00:00.000Z
+                    endDate: 2024-05-19T00:00:00.000Z
+                    typeId: 2
+                    statusId: 1
+                    updatedAt: 2024-03-19T00:00:00.000Z
+                    createdAt: 2024-05-19T00:00:00.000Z
+                    fundingTypes:
+                      id: 1
+                      typeName": pemerintah
+                      createdAt: 2024-03-16T07:29:17.000Z
+                      updatedAt: 2024-03-16T07:29:17.000Z
+                    locations:
+                      - locationId: 1
+                    categories:
+                      - categoryId: 4
+                    educations:
+                      - educationLevelId: 2
+                        minSemester: 1
+                        maxSemester: 8
+                      - educationLevelId: 3
+                        minSemester: 1
+                        maxSemester: 4
+                    scholarshipStatus:
+                      id: 1
+                      statusName: pending
+                      createdAt: 2024-03-16T07:29:17.000Z
+                      updatedAt: 2024-03-16T07:29:17.000Z
+  /scholarships/{id}:
+    get:
+      security: []
+      summary: View scholarship by id
+      description: Returns a scholarship along with its details.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of the scholarship to get
+      tags:
+        - Scholarships
+      responses:
+        "200":
+          description: A JSON object of user registration status and its username. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        $ref: "#/components/schemas/scholarship/properties/name"
+                      description:
+                        $ref: "#/components/schemas/scholarship/properties/description"
+                      company:
+                        $ref: "#/components/schemas/scholarship/properties/company"
+                      image:
+                        $ref: "#/components/schemas/scholarship/properties/image"
+                      benefit:
+                        $ref: "#/components/schemas/scholarship/properties/benefit"
+                      requirement:
+                        $ref: "#/components/schemas/scholarship/properties/requirement"
+                      link:
+                        $ref: "#/components/schemas/scholarship/properties/link"
+                      startDate:
+                        $ref: "#/components/schemas/scholarship/properties/startDate"
+                      endDate:
+                        $ref: "#/components/schemas/scholarship/properties/endDate"
+                      educations:
+                        $ref: "#/components/schemas/scholarship/properties/educations"
+                      typeId:
+                        $ref: "#/components/schemas/scholarship/properties/typeId"
+                      locations:
+                        $ref: "#/components/schemas/scholarship/properties/locations"
+                      categories:
+                        $ref: "#/components/schemas/scholarship/properties/categories"
+              example:
+                message: success
+                data:
+                  id: acb16514-a17d-4dc3-a3c0-2276061382ee
+                  userId: f36ec776-552a-4b7d-b7ed-177adef2fcee
+                  name: Beasiswa Reguler LPDP
+                  description: Beasiswa Reguler LPDP merupakan program beasiswa yang didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP) Kementerian Keuangan Republik Indoneisa untuk jenjang magister dan doktor.
+                  company: Kementerian Keuangan Republik Indonesia
+                  image: lpdp.jpeg
+                  benefit: Biaya Pendidikan, Biaya Hidup, Tunjangan Buku, Tunjangan Penelitian
+                  requirement: WNI, Lulus S1/D4, IPK Minimal 3.00, Skor TOEFL Minimal 500, Surat Rekomendasi, Sehat Jasmani dan Rohani.
+                  link: lpdp.kemenkeu.go.id
+                  startDate: 2024-03-19T00:00:00.000Z
+                  endDate: 2024-05-19T00:00:00.000Z
+                  typeId: 2
+                  statusId: 1
+                  updatedAt: 2024-03-19T00:00:00.000Z
+                  createdAt: 2024-05-19T00:00:00.000Z
+                  fundingTypes:
+                    id: 1
+                    typeName": pemerintah
+                    createdAt: 2024-03-16T07:29:17.000Z
+                    updatedAt: 2024-03-16T07:29:17.000Z
+                  locations:
+                    - locationId: 1
+                  categories:
+                    - categoryId: 4
+                  educations:
+                    - educationLevelId: 2
+                      minSemester: 1
+                      maxSemester: 8
+                    - educationLevelId: 3
+                      minSemester: 1
+                      maxSemester: 4
+                  scholarshipStatus:
+                    id: 1
+                    statusName: pending
+                    createdAt: 2024-03-16T07:29:17.000Z
+                    updatedAt: 2024-03-16T07:29:17.000Z
+    patch:
+      tags:
+        - Scholarships
+      summary: Add a new scholarship
+      description: Record scholarship and return it's details.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - benefit
+                - requirement
+                - link
+                - startDate
+                - endDate
+                - company
+                - educations
+                - typeId
+                - locations
+                - categories
+              properties:
+                name:
+                  $ref: "#/components/schemas/scholarship/properties/name"
+                description:
+                  $ref: "#/components/schemas/scholarship/properties/description"
+                company:
+                  $ref: "#/components/schemas/scholarship/properties/company"
+                image:
+                  $ref: "#/components/schemas/scholarship/properties/image"
+                benefit:
+                  $ref: "#/components/schemas/scholarship/properties/benefit"
+                requirement:
+                  $ref: "#/components/schemas/scholarship/properties/requirement"
+                link:
+                  $ref: "#/components/schemas/scholarship/properties/link"
+                startDate:
+                  $ref: "#/components/schemas/scholarship/properties/startDate"
+                endDate:
+                  $ref: "#/components/schemas/scholarship/properties/endDate"
+                educations:
+                  $ref: "#/components/schemas/scholarship/properties/educations"
+                typeId:
+                  $ref: "#/components/schemas/scholarship/properties/typeId"
+                locations:
+                  $ref: "#/components/schemas/scholarship/properties/locations"
+                categories:
+                  $ref: "#/components/schemas/scholarship/properties/categories"
+      responses:
+        "200":
+          description: A JSON object containing user details. (Successful Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        $ref: "#/components/schemas/scholarship/properties/id"
+                      statusId:
+                        $ref: "#/components/schemas/scholarship/properties/statusId"
+                      userId:
+                        $ref: "#/components/schemas/scholarship/properties/userId"
+                      name:
+                        $ref: "#/components/schemas/scholarship/properties/name"
+                      description:
+                        $ref: "#/components/schemas/scholarship/properties/description"
+                      company:
+                        $ref: "#/components/schemas/scholarship/properties/company"
+                      image:
+                        $ref: "#/components/schemas/scholarship/properties/image"
+                      benefit:
+                        $ref: "#/components/schemas/scholarship/properties/benefit"
+                      requirement:
+                        $ref: "#/components/schemas/scholarship/properties/requirement"
+                      link:
+                        $ref: "#/components/schemas/scholarship/properties/link"
+                      startDate:
+                        $ref: "#/components/schemas/scholarship/properties/startDate"
+                      endDate:
+                        $ref: "#/components/schemas/scholarship/properties/endDate"
+                      typeId:
+                        $ref: "#/components/schemas/scholarship/properties/typeId"
+                      createdAt:
+                        $ref: "#/components/schemas/scholarship/properties/createdAt"
+                      updatedAt:
+                        $ref: "#/components/schemas/scholarship/properties/updatedAt"
+              example:
+                id: 4d90fff9-52fd-47a4-89cd-dc0fb57b926c
+                statusId: 1,
+                userId: af6f1a53-fd33-40b9-be41-72ba9d373195
+                name: Beasiswa Reguler LPDP
+                description: Beasiswa Reguler LPDP merupakan program beasiswa yang didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP) Kementerian Keuangan Republik Indoneisa untuk jenjang magister dan doktor.
+                company: Kementerian Keuangan Republik Indonesia
+                image: lpdp.jpeg
+                benefit: Biaya Pendidikan, Biaya Hidup, Tunjangan Buku, Tunjangan Penelitian
+                requirement: WNI, Lulus S1/D4, IPK Minimal 3.00, Skor TOEFL Minimal 500, Surat Rekomendasi, Sehat Jasmani dan Rohani
+                link: lpdp.kemenkeu.go.id
+                startDate: 2024-12-01T00:00:00.000Z
+                endDate: 2024-12-10T00:00:00.000Z
+                typeId: 1
+                updatedAt: 2024-03-16T23:58:23.568Z
+                createdAt: 2024-03-16T23:58:23.568
+
+  /scholarhips/{id}/accept:
+    post:
+      summary: Accept scholarship by scholarship's id
+      description: Returns a accept status along with its details.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Unique identifier of the scholarship to accept
+      tags:
+        - Scholarships
+        - Admins
+      responses:
+        "200":
+          description: A JSON object containing scholarship details. (Successful Response)
           content:
             application/json:
               schema:
@@ -757,57 +1466,25 @@ paths:
                   data:
                     type: object
                     properties:
-                      id:
-                        type: string
-                        example: acb16514-a17d-4dc3-a3c0-2276061382ee
-                      userId:
-                        type: string
-                        example: f36ec776-552a-4b7d-b7ed-177adef2fcee
-                      name:
-                        type: string
-                        example: Beasiswa Reguler LPDP
-                      description:
-                        type: string
-                        example: Beasiswa Reguler LPDP merupakan program beasiswa yang didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP) Kementerian Keuangan Republik Indoneisa untuk jenjang magister dan doktor.
-                      company:
-                        type: string
-                        example: Kementerian Keuangan Republik Indonesia
-                      image:
-                        type: string
-                        example: lpdp.jpeg
-                      benefit:
-                        type: string
-                        example: Biaya Pendidikan, Biaya Hidup, Tunjangan Buku, Tunjangan Penelitian
-                      requirement:
-                        type: string
-                        example: WNI, Lulus S1/D4, IPK Minimal 3.00, Skor TOEFL Minimal 500, Surat Rekomendasi, Sehat Jasmani dan Rohani 
-                      link:
-                        type: string
-                        example: lpdp.kemenkeu.go.id
-                      startDate:
-                        type: string
-                        example: 2024-04-01
-                      endDate:
-                        type: string
-                        example: 2024-05-01
-                      educationId:
-                        type: string
-                        example: 2
-                      minSemester:
-                        type: string
-                        example: 2
-                      maxSemester:
-                        type: string
-                        example: 2
-                      typeId:
-                        type: string
-                        example: 2
-                      locationId:
-                        type: string
-                        example: 2
-                      categoryId:
-                        type: string
-                        example: 2024-03-14T03:32:01.000Z
+                      scholarshipId:
+                        $ref: "#/components/schemas/scholarship/properties/id"
+              example:
+                message: success
+                data:
+                  scholarshipId: 3c71e4a6-a4e9-462f-b1ea-cc98fc37ec46
+        "401":
+          description: Insufficient privilege (Unauthorized Response)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: error
+                  data:
+                    type: string
+                    example: Insufficient privilege
 
 components:
   securitySchemes:
@@ -861,7 +1538,7 @@ components:
           type: string
           description: The user's status's id. Referring to account activation status.
         otp:
-          type: string
+          type: integer
           description: The user's otp.
         createdAt:
           type: string
@@ -911,26 +1588,39 @@ components:
           type: string
           format: date-time
           description: The Scholarship's end date.
-        educationId:
-          type: string
+        educations:
+          type: array
           description: The scholarship's education's id.
-        minSemester:
-          type: string
-          description: The scholarship's minimal semester.
-        maxSemester:
-          type: string
-          description: The scholarship's maximum semester.
+          items:
+            type: object
+            properties:
+              educationLevelId:
+                type: integer
+              minSemester:
+                type: integer
+              maxSemester:
+                type: integer
         typeId:
-          type: string
+          type: integer
           description: The scholarship's type's id.
-        locationId:
-          type: string
+        locations:
+          type: array
           description: The scholarship's location's id.
-        categoryId:
-          type: string
+          items:
+            type: object
+            properties:
+              locationId:
+                type: integer
+        categories:
+          type: array
           description: The scholarship's category's id.
+          items:
+            type: object
+            properties:
+              categoryId:
+                type: integer
         statusId:
-          type: string
+          type: integer
           description: The scholarship's status's id.
         createdAt:
           type: string

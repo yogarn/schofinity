@@ -6,8 +6,8 @@ async function addComment(req, res, next) {
         const { comment } = req.body;
         const userId = req.jwt.id;
         const resourceId = req.params.resourceId;
-        await create({ comment, userId, resourceId });
-        sendResponse(res, { comment, userId, resourceId });
+        const createComment = await create({ comment, userId, resourceId });
+        sendResponse(res, { createComment });
         next();
     } catch (e) {
         console.log(e);
