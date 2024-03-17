@@ -22,7 +22,9 @@ async function auth(data) {
     if (!passwordMatch) {
         throw new Error("Incorrect password");
     }
-    const token = jwt.sign({ user }, 'secret_key', { expiresIn: '1h' });
+
+    const userId = user.id;
+    const token = jwt.sign({ userId }, 'secret_key', { expiresIn: '1h' });
     return token;
 }
 

@@ -10,7 +10,7 @@ async function addMentoring(req, res, next) {
         const mentoringDetails = {};
         const uuid = uuidv4();
         const orderId = `mentoring ${uuid}`;
-        const userId = req.jwt.id;
+        const userId = req.jwt.userId;
 
         const mentor = await mentorServices.find(mentorId);
         const user = await userServices.findByUserId(userId);

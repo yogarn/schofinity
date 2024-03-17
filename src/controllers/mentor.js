@@ -7,7 +7,7 @@ async function addMentor(req, res, next) {
     try {
         const { programs, mentoringInterval, breakTime, salaryRate } = req.body;
         const mentorDetails = { programs, mentoringInterval, breakTime, salaryRate };
-        mentorDetails.userId = req.jwt.id;
+        mentorDetails.userId = req.jwt.userId;
         const mentor = await create(mentorDetails);
         sendResponse(res, mentor);
         next();
@@ -63,7 +63,7 @@ async function updateMentor(req, res, next) {
         const { programs, mentoringInterval, breakTime, salaryRate } = req.body;
         const updateDetails = { programs, mentoringInterval, breakTime, salaryRate };
 
-        const userId = req.jwt.id;
+        const userId = req.jwt.userId;
         const mentor = await findByUserId(userId);
 
         await update(mentor.id, updateDetails);

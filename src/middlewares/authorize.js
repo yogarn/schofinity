@@ -10,7 +10,7 @@ const commentServices = require('../services/resourceComment');
 
 function checkRoleId(requiredRoleId) {
     return async function (req, res, next) {
-        const userId = req.jwt.id;
+        const userId = req.jwt.userId;
         const { roleId } = await userServices.findByUserId(userId);
 
         if (requiredRoleId.includes(roleId)) {
@@ -24,12 +24,12 @@ function checkRoleId(requiredRoleId) {
 async function checkScholarshipOwnership(req, res, next) {
     const scholarshipId = req.params.id;
     const scholarship = await scholarshipServices.find(scholarshipId);
-    const { roleId } = await userServices.findByUserId(req.jwt.id);
+    const { roleId } = await userServices.findByUserId(req.jwt.userId);
 
     if (!scholarship) {
         sendError(res, "Scholarship not found");
     } else {
-        if (roleId === 3 || scholarship.userId === req.jwt.id) {
+        if (roleId === 3 || scholarship.userId === req.jwt.userId) {
             next();
         } else {
             sendError(res, "Insufficient privilege");
@@ -40,8 +40,8 @@ async function checkScholarshipOwnership(req, res, next) {
 async function checkScheduleOwnership(req, res, next) {
     const scheduleId = req.params.id;
     const schedule = await scheduleServices.find(scheduleId);
-    const mentor = await mentorServices.findByUserId(req.jwt.id);
-    const { roleId } = await userServices.findByUserId(req.jwt.id);
+    const mentor = await mentorServices.findByUserId(req.jwt.userId);
+    const { roleId } = await userServices.findByUserId(req.jwt.userId);
 
     if (!schedule) {
         sendError(res, "Schedule not found");
@@ -57,13 +57,13 @@ async function checkScheduleOwnership(req, res, next) {
 async function checkMentoringOwnership(req, res, next) {
     const mentoringId = req.params.id;
     const mentoring = await mentoringServices.find(mentoringId);
-    const mentor = await mentorServices.findByUserId(req.jwt.id);
-    const { roleId } = await userServices.findByUserId(req.jwt.id);
+    const mentor = await mentorServices.findByUserId(req.jwt.userId);
+    const { roleId } = await userServices.findByUserId(req.jwt.userId);
 
     if (!mentoring) {
         sendError(res, "Mentoring not found");
     } else {
-        if (roleId === 3 || (mentor && mentor.id === mentoring.mentorId) || req.jwt.id === mentoring.userId) {
+        if (roleId === 3 || (mentor && mentor.id === mentoring.mentorId) || req.jwt.userId === mentoring.userId) {
             next();
         } else {
             sendError(res, "Insufficient privilege");
@@ -74,8 +74,8 @@ async function checkMentoringOwnership(req, res, next) {
 async function checkClassOwnership(req, res, next) {
     const classId = req.params.classId;
     const onlineClass = await onlineClassServices.find(classId);
-    const mentor = await mentorServices.findByUserId(req.jwt.id);
-    const { roleId } = await userServices.findByUserId(req.jwt.id);
+    const mentor = await mentorServices.findByUserId(req.jwt.userId);
+    const { roleId } = await userServices.findByUserId(req.jwt.userId);
 
     if (!onlineClass) {
         sendError(res, "Class not found");
@@ -91,12 +91,12 @@ async function checkClassOwnership(req, res, next) {
 async function checkCommentOwnership(req, res, next) {
     const { resourceId, id } = req.params;
     const comment = await commentServices.find(resourceId, id);
-    const { roleId } = await userServices.findByUserId(req.jwt.id);
+    const { roleId } = await userServices.findByUserId(req.jwt.userId);
 
     if (!comment) {
         sendError(res, "Comment not found");
     } else {
-        if (roleId === 3 || (req.jwt.id === comment.userId)) {
+        if (roleId === 3 || (req.jwt.userId === comment.userId)) {
             next();
         } else {
             sendError(res, "Insufficient privilege");
@@ -106,7 +106,7 @@ async function checkCommentOwnership(req, res, next) {
 
 async function checkClassPayment(req, res, next) {
     const classId = req.params.classId;
-    const userId = req.jwt.id;
+    const userId = req.jwt.userId;
     const { roleId } = await userServices.findByUserId(userId);
 
     const mentor = await mentorServices.findByUserId(userId);
@@ -127,7 +127,7 @@ async function checkClassPayment(req, res, next) {
 
 async function checkFavoriteOwnership(req, res, next) {
     const favoriteId = req.params.id;
-    const userId = req.jwt.id;
+    const userId = req.jwt.userId;
     const { roleId } = await userServices.findByUserId(userId);
 
     const favorite = await favoriteServices.find(favoriteId);

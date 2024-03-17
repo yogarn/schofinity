@@ -59,7 +59,7 @@ async function getAllUsers(req, res, next) {
 
 async function updateUser(req, res, next) {
     try {
-        const userId = req.jwt.id;
+        const userId = req.jwt.userId;
 
         let { username, name, password, contact, description, birthDate, gender, address, email, image } = req.body;
         if (password && !validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {

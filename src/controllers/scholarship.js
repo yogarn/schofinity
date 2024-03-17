@@ -30,7 +30,7 @@ async function getScholarship(req, res, next) {
 async function addScholarship(req, res, next) {
     try {
         let { name, description, company, image, benefit, requirement, link, startDate, endDate, typeId, locations, categories, educations } = req.body;
-        const userId = req.jwt.id;
+        const userId = req.jwt.userId;
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
             image = await uploadImage(req.file.buffer, scholarshipBucket, `${Date.now()}-${req.file.originalname}`);

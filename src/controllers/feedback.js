@@ -5,7 +5,7 @@ async function addFeedback(req, res, next) {
     try {
         const { title, body } = req.body;
         const feedbackDetails = { title, body };
-        feedbackDetails.userId = req.jwt.id;
+        feedbackDetails.userId = req.jwt.userId;
         const feedback = await create(feedbackDetails);
         sendResponse(res, feedback);
         next();

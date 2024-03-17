@@ -35,7 +35,7 @@ async function addOnlineClass(req, res, next) {
     try {
         const { name, description, image, community, typeId, subjects, startDate, endDate, price } = req.body;
         const onlineClassDetails = { name, description, image, community, typeId, subjects, startDate, endDate, price };
-        const mentor = await findByUserId(req.jwt.id);
+        const mentor = await findByUserId(req.jwt.userId);
         onlineClassDetails.mentorId = mentor.id;
 
         if (req.file && req.file.mimetype === 'image/jpeg') {
@@ -92,7 +92,7 @@ async function buyOnlineClass(req, res, next) {
         const classId = req.params.classId;
         const classPaymentDetails = {};
         const uuid = uuidv4();
-        const userId = req.jwt.id;
+        const userId = req.jwt.userId;
 
         const onlineClass = await find(classId);
         const user = await userServices.findByUserId(userId);

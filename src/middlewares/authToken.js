@@ -12,7 +12,7 @@ function authenticateToken(req, res, next) {
         if (err) {
             return sendError(res, 'Invalid jwt token');
         } else {
-            req.jwt = decoded.user;
+            req.jwt = decoded;
             next();
         }
     });

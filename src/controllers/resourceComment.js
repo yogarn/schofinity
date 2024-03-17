@@ -4,7 +4,7 @@ const { sendResponse, sendError } = require('../services/responseHandler');
 async function addComment(req, res, next) {
     try {
         const { comment } = req.body;
-        const userId = req.jwt.id;
+        const userId = req.jwt.userId;
         const resourceId = req.params.resourceId;
         const createComment = await create({ comment, userId, resourceId });
         sendResponse(res, { createComment });

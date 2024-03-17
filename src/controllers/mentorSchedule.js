@@ -7,7 +7,7 @@ async function addSchedule(req, res, next) {
     try {
         const { day, startTime, endTime } = req.body;
         const scheduleDetails = { day, startTime, endTime };
-        const mentor = await mentorServices.findByUserId(req.jwt.id);
+        const mentor = await mentorServices.findByUserId(req.jwt.userId);
 
         if (!mentor) {
             throw new Error("Insufficient privilege");
