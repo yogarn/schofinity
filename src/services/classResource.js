@@ -15,6 +15,15 @@ async function findAll(whereClause, order, limit, offset) {
     });
 };
 
+async function findByClassId(classId) {
+    return sequelize.transaction(async (t) => {
+        return ClassResource.findAll({
+            where: { classId },
+            transaction: t
+        });
+    });
+};
+
 async function find(classId, id) {
     return sequelize.transaction(async (t) => {
         return ClassResource.findOne({
@@ -44,6 +53,7 @@ async function destroy(classId, id) {
 
 module.exports = {
     findAll,
+    findByClassId,
     find,
     create,
     update,

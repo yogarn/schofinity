@@ -2,9 +2,17 @@ const { find, create, update, findAll, getUsername, destroy, findByUserId } = re
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { generateOTP } = require('../services/auth');
-const validator = require('validator');
 const { clearEndpoints } = require('../services/cache');
+const validator = require('validator');
+const onlineClassServices = require('../services/onlineClass');
+const resourceServices = require('../services/classResource');
+const scholarshipServices = require('../services/scholarship');
+const mentorServices = require('../services/mentor');
 const userBucket = process.env.USER_BUCKET;
+const scholarshipBucket = process.env.SCHOLARSHIP_BUCKET;
+const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
+
+
 
 async function addUser(req, res, next) {
     try {
@@ -107,6 +115,30 @@ async function deleteUser(req, res, next) {
 
         if (user.image) {
             await deleteImage(userBucket, user.image);
+        }
+
+        const scholarships = await scholarshipServices.findByUserId(userId);
+        for (const scholarshipItem of scholarships) {
+            if (scholarshipItem.image) {
+                deleteImage(scholarshipBucket, scholarshipItem.image);
+            }
+        }
+
+        const mentor = await mentorServices.findByUserId(userId);
+        if (mentor) {
+            const onlineClass = await onlineClassServices.findByMentorId(mentor.id);
+            for (const classItem of onlineClass) {
+                if (classItem.image) {
+                    deleteImage(onlineClassBucket, classItem.image);
+                }
+    
+                const resources = await resourceServices.findByClassId(classItem.id);
+                for (const resourceItem of resources) {
+                    if (resourceItem.image) {
+                        deleteImage(onlineClassBucket, resourceItem.image);
+                    }
+                }
+            }
         }
 
         await destroy(userId);

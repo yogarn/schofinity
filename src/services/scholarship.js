@@ -110,6 +110,37 @@ async function findAll(query) {
     });
 };
 
+async function findByUserId(userId) {
+    return sequelize.transaction(async (t) => {
+        return Scholarship.findAll({
+            include:
+                [
+                    {
+                        model: EducationLevel,
+                        as: 'educations',
+                        through: {
+                            attributes: ['minSemester', 'maxSemester'],
+                        },
+                    },
+                    { model: FundingType, as: 'fundingType' },
+                    {
+                        model: Location,
+                        as: 'locations',
+                        through: { attributes: [] }
+                    },
+                    {
+                        model: Category,
+                        as: 'categories',
+                        through: { attributes: [] }
+                    },
+                    { model: Status, as: 'scholarshipStatus' }
+                ],
+            where: { userId },
+            transaction: t
+        });
+    });
+}
+
 async function find(id) {
     return sequelize.transaction(async (t) => {
         return Scholarship.findOne({
@@ -272,6 +303,7 @@ async function destroy(id) {
 
 module.exports = {
     findAll,
+    findByUserId,
     find,
     create,
     update,

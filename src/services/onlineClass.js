@@ -82,6 +82,26 @@ async function findAll(query) {
     });
 };
 
+async function findByMentorId(mentorId) {
+    return sequelize.transaction(async (t) => {
+        return OnlineClass.findAll({
+            include: [
+                { model: Mentor },
+                {
+                    model: Subject,
+                    as: 'subjects',
+                    through: {
+                        attributes: [],
+                    }
+                },
+                { model: ClassType, as: 'classType' }
+            ],
+            where: { mentorId },
+            transaction: t
+        });
+    });
+};
+
 async function find(id) {
     return sequelize.transaction(async (t) => {
         return OnlineClass.findOne({
@@ -227,6 +247,7 @@ async function checkPayment(userId, classId) {
 
 module.exports = {
     findAll,
+    findByMentorId,
     find,
     findAllPayments,
     findPayment,

@@ -2,7 +2,10 @@ const { findAll, find, create, update, buy, destroy, findAllPayments, findPaymen
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { findByUserId } = require('../services/mentor');
+
 const userServices = require('../services/user');
+const resourceServices = require('../services/classResource');
+
 const { v4: uuidv4 } = require('uuid');
 const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
 
@@ -81,6 +84,13 @@ async function deleteOnlineClass(req, res, next) {
 
         if (onlineClass.image) {
             await deleteImage(onlineClassBucket, onlineClass.image);
+        }
+
+        const resources = await resourceServices.findByClassId(onlineClassId);
+        for (const item of resources) {
+            if (item.image) {
+                await deleteImage(onlineClassBucket, item.image);
+            }
         }
 
         await destroy(onlineClassId);

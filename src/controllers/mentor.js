@@ -1,7 +1,11 @@
 const { clearEndpoints } = require('../services/cache');
 const { create, findAll, find, update, findByUserId, destroy } = require('../services/mentor');
 const { sendResponse, sendError } = require('../services/responseHandler');
+const { uploadImage, deleteImage } = require('../services/supabase');
 const userServices = require('../services/user');
+const onlineClassServices = require('../services/onlineClass');
+const resourceServices = require('../services/classResource');
+const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
 
 async function addMentor(req, res, next) {
     try {
@@ -79,6 +83,20 @@ async function deleteMentor(req, res, next) {
     try {
         const mentorId = req.params.id;
         const mentor = await find(mentorId);
+
+        const onlineClass = await onlineClassServices.findByMentorId(mentorId);
+        for (const classItem of onlineClass) {
+            if (classItem.image) {
+                deleteImage(onlineClassBucket, classItem.image);
+            }
+
+            const resources = await resourceServices.findByClassId(classItem.id);
+            for (const resourceItem of resources) {
+                if (resourceItem.image) {
+                    deleteImage(onlineClassBucket, resourceItem.image);
+                }
+            }
+        }
 
         await destroy(mentorId)
         await userServices.update(mentor.userId, { roleId: 1 });
