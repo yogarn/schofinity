@@ -25,4 +25,4 @@ process.on('SIGTERM', () => {
     });
 });
 
-server.setTimeout(10000);
+server.setTimeout(20000);
