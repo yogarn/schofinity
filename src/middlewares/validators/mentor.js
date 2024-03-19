@@ -17,6 +17,7 @@ const addValidate = [
     body('mentoringInterval').notEmpty(),
     body('breakTime').notEmpty(),
     body('salaryRate').notEmpty(),
+    body('bank').notEmpty(),
     validate
 ];
 
@@ -25,6 +26,7 @@ const patchValidate = [
     body('mentoringInterval').customSanitizer(value => value ? value : undefined),
     body('breakTime').customSanitizer(value => value ? value : undefined),
     body('salaryRate').customSanitizer(value => value ? value : undefined),
+    body('bank').customSanitizer(value => value ? value : undefined),
 ]
 
 module.exports = {

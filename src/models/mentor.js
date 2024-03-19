@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
       defaultValue: 1
+    },
+    bank: {
+      allowNull: false,
+      type: DataTypes.STRING
     }
   }, {
     sequelize,
