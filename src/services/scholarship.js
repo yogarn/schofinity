@@ -13,6 +13,11 @@ async function findAll(query) {
     let educationsWhere = [];
 
     const order = [];
+    order.push(
+        [{ model: EducationLevel, as: 'educations' }, 'id', 'ASC'],
+        [{ model: Location, as: 'locations' }, 'id', 'ASC'],
+        [{ model: Category, as: 'categories' }, 'id', 'ASC']
+    );
 
     const validFields = Object.keys(Scholarship.rawAttributes);
     const limit = query.limit ? Math.max(1, parseInt(query.limit)) : undefined;
@@ -83,9 +88,9 @@ async function findAll(query) {
                     as: 'educations',
                     through: {
                         attributes: ['minSemester', 'maxSemester'],
-                        where: semesterWhere
+                        where: semesterWhere,
                     },
-                    where: educationsWhere.length > 0 ? { id: { [Op.in]: educationsWhere } } : undefined
+                    where: educationsWhere.length > 0 ? { id: { [Op.in]: educationsWhere } } : undefined,
                 },
                 {
                     model: Location,
@@ -121,6 +126,7 @@ async function findByUserId(userId) {
                         through: {
                             attributes: ['minSemester', 'maxSemester'],
                         },
+                        order: [['id', 'ASC']],
                     },
                     { model: FundingType, as: 'fundingType' },
                     {
@@ -136,6 +142,11 @@ async function findByUserId(userId) {
                     { model: Status, as: 'scholarshipStatus' }
                 ],
             where: { userId },
+            order: [
+                [{ model: EducationLevel, as: 'educations' }, 'id', 'ASC'],
+                [{ model: Location, as: 'locations' }, 'id', 'ASC'],
+                [{ model: Category, as: 'categories' }, 'id', 'ASC']
+            ],
             transaction: t
         });
     });
@@ -167,6 +178,11 @@ async function find(id) {
                     { model: Status, as: 'scholarshipStatus' }
                 ],
             where: { id },
+            order: [
+                [{ model: EducationLevel, as: 'educations' }, 'id', 'ASC'],
+                [{ model: Location, as: 'locations' }, 'id', 'ASC'],
+                [{ model: Category, as: 'categories' }, 'id', 'ASC']
+            ],
             transaction: t
         });
     });
