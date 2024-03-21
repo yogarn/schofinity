@@ -9,11 +9,11 @@ const { Mentor } = require('../models/index');
 const filter = require('../middlewares/filter');
 
 router
-    .get('/', authToken, cache.get, filter(Mentor), getAllMentors, cache.set)
-    .get('/:id', authToken, cache.get, getMentorById, cache.set)
     .post('/:id/accept', authToken, checkRoleId([3]), idValidate, acceptMentor, cache.clear)
+    .get('/:id', authToken, cache.get, getMentorById, cache.set)
+    .delete('/:id', authToken, checkRoleId([3]), idValidate, deleteMentor, cache.clear)
     .post('/', authToken, addValidate, addMentor, cache.clear)
     .patch('/', authToken, checkRoleId([2]), patchValidate, updateMentor, cache.clear)
-    .delete('/:id', authToken, checkRoleId([3]), idValidate, deleteMentor, cache.clear);
+    .get('/', authToken, cache.get, filter(Mentor), getAllMentors, cache.set);
 
 module.exports = router;

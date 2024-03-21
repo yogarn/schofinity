@@ -10,9 +10,9 @@ const filter = require('../middlewares/filter');
 
 
 router
-    .get('/', authToken, cache.get, filter(MentorSchedule), getAllSchedule, cache.set)
-    .post('/', authToken, checkRoleId([2]), addValidate, addSchedule, cache.clear)
     .patch('/:id', authToken, checkScheduleOwnership, patchValidate, updateSchedule, cache.clear)
-    .delete('/:id', authToken, checkScheduleOwnership, deleteSchedule, cache.clear);
+    .delete('/:id', authToken, checkScheduleOwnership, deleteSchedule, cache.clear)
+    .get('/', authToken, cache.get, filter(MentorSchedule), getAllSchedule, cache.set)
+    .post('/', authToken, checkRoleId([2]), addValidate, addSchedule, cache.clear);
 
 module.exports = router;

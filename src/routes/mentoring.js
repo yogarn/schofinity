@@ -9,9 +9,9 @@ const { Mentoring } = require('../models/index');
 const filter = require('../middlewares/filter');
 
 router
-    .get('/', authToken, cache.get, filter(Mentoring), getAllMentorings, cache.set)
     .get('/:id', authToken, cache.get, getMentoringById, cache.set)
+    .patch('/:id', authToken, checkMentoringOwnership, patchValidate, updateMentoring, cache.clear)
     .post('/', authToken, addValidate, addMentoring, cache.clear)
-    .patch('/:id', authToken, checkMentoringOwnership, patchValidate, updateMentoring, cache.clear);
+    .get('/', authToken, cache.get, filter(Mentoring), getAllMentorings, cache.set);
 
 module.exports = router;

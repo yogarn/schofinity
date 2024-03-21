@@ -11,6 +11,7 @@ const mentoringsRoute = require('./mentoring');
 const onlineClassesRoute = require('./onlineClass');
 const classResourcesRoute = require('./classResource');
 const resourceCommentsRoute = require('./resourceComment');
+const paymentRoutes = require('./payments');
 const feedbacksRoute = require('./feedback');
 const midtransRoute = require('./midtrans');
 
@@ -31,6 +32,7 @@ router.use('/favorites', favoritesRoute);
 router.use('/mentors', mentorsRoute);
 router.use('/schedules', schedulesRoute);
 router.use('/mentorings', mentoringsRoute);
+router.use('/class-payments', paymentRoutes);
 router.use('/classes', onlineClassesRoute);
 router.use('/classes/:classId/resources', classResourcesRoute);
 router.use('/classes/:classId/resources/:resourceId/comments', resourceCommentsRoute);
