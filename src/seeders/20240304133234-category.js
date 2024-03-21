@@ -39,6 +39,18 @@ module.exports = {
         categoryName: 'putra/putri daerah',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        id: 7,
+        categoryName: 'ekonomi',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: 8,
+        categoryName: 'sosial',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]);
   },
