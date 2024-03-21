@@ -14,7 +14,7 @@ async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return Mentor.findAll({
             include: [
-                { model: User, attributes: { exclude: ['roleId', 'password'] } },
+                { model: User, attributes: { exclude: ['password', 'otp'] } },
                 { model: MentorSchedule },
                 { model: Status, as: 'mentorStatus' }
             ],
@@ -31,7 +31,7 @@ async function find(id) {
     return sequelize.transaction(async (t) => {
         return Mentor.findOne({
             include: [
-                { model: User, attributes: { exclude: ['roleId', 'password'] } },
+                { model: User, attributes: { exclude: ['password', 'otp'] } },
                 { model: MentorSchedule },
                 { model: Status, as: 'mentorStatus' }
             ],
@@ -45,7 +45,7 @@ async function findByUserId(userId) {
     return sequelize.transaction(async (t) => {
         return Mentor.findOne({
             where: { userId },
-            include: [{ model: User, attributes: { exclude: ['roleId', 'password'] } }, { model: MentorSchedule }],
+            include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }, { model: MentorSchedule }],
             transaction: t
         });
     });

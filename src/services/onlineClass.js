@@ -132,7 +132,7 @@ async function find(id) {
 async function findAllPayments(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return ClassPayment.findAll({
-            include: [{ model: User }, { model: OnlineClass }],
+            include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }, { model: OnlineClass }],
             where: whereClause,
             limit: limit,
             offset: offset,
@@ -145,7 +145,7 @@ async function findAllPayments(whereClause, order, limit, offset) {
 async function findPayment(id) {
     return sequelize.transaction(async (t) => {
         return ClassPayment.findOne({
-            include: [{ model: User }, { model: OnlineClass }],
+            include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }, { model: OnlineClass }],
             where: { id },
             transaction: t
         });

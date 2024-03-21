@@ -60,7 +60,7 @@ async function getUpcomingScholarships() {
                         },
                     },
                 },
-                { model: User }
+                { model: User, attributes: { exclude: ['password', 'otp'] } }
             ],
             transaction: t
         });

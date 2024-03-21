@@ -13,7 +13,7 @@ async function create(data) {
 async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return ResourceComment.findAll({
-            include: [{ model: User, attributes: { exclude: ['roleId', 'password', 'otp'] } }, { model: ClassResource }],
+            include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }, { model: ClassResource }],
             where: whereClause,
             limit: limit,
             offset: offset,
@@ -26,7 +26,7 @@ async function findAll(whereClause, order, limit, offset) {
 async function find(resourceId, id) {
     return sequelize.transaction(async (t) => {
         return ResourceComment.findOne({
-            include: [{ model: User, attributes: { exclude: ['roleId', 'password', 'otp'] } }, { model: ClassResource }],
+            include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }, { model: ClassResource }],
             where: { resourceId, id },
             transaction: t
         });

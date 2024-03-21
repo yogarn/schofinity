@@ -7,7 +7,7 @@ const { Feedback, User } = db;
 async function findAll(whereClause, order, limit, offset) {
     return sequelize.transaction(async (t) => {
         return Feedback.findAll({
-            include: [{ model: User }],
+            include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }],
             where: whereClause,
             limit: limit,
             offset: offset,
@@ -20,7 +20,7 @@ async function findAll(whereClause, order, limit, offset) {
 async function find(id) {
     return sequelize.transaction(async (t) => {
         return Feedback.findOne({
-            include: [{ model: User }],
+            include: [{ model: User, attributes: { exclude: ['password', 'otp'] } }],
             where: { id },
             transaction: t
         });
