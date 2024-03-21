@@ -15,7 +15,7 @@ router
     .get('/payments', cache.get, filter(ClassPayment), getPayments, cache.set)
     .get('/payments/:id', cache.get, getPaymentsById, cache.set)
     .post('/', upload.single('image'), authToken, checkRoleId([2]), addValidate, addOnlineClass, cache.clear)
-    .post('/:classId/buy', authToken, idValidate, cache.clear, buyOnlineClass)
+    .post('/:classId/buy', authToken, idValidate, buyOnlineClass, cache.clear)
     .patch('/:classId', upload.single('image'), authToken, checkClassOwnership, editValidate, updateOnlineClass, cache.clear)
     .delete('/:classId', upload.single('image'), authToken, checkClassOwnership, deleteOnlineClass, cache.clear);
 

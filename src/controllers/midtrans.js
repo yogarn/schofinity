@@ -20,12 +20,12 @@ async function resolvePayments(req, res, next) {
         try {
           if (classType == "mentoring") {
             await mentoringPayments(id, transactionStatus, fraudStatus);
-            sendResponse(res, orderId);
             clearEndpoints(['/v1/mentorings']);
           } else if (classType == "class") {
             await classPayment(id, transactionStatus, fraudStatus);
             clearEndpoints(['/v1/classes/payments']);
           }
+          sendResponse(res, orderId);
         } catch (e) {
           console.log(e);
           sendError(res, e.message);

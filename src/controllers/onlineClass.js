@@ -122,8 +122,10 @@ async function buyOnlineClass(req, res, next) {
 
         const transactionToken = await buy(classPaymentDetails);
         classPaymentDetails.transactionToken = transactionToken;
-
+        
+        clearEndpoints(['/v1/classes/payments']);
         sendResponse(res, classPaymentDetails);
+        next();
     } catch (e) {
         console.log(e);
         sendError(res, e.message);

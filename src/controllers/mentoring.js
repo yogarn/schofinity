@@ -26,6 +26,7 @@ async function addMentoring(req, res, next) {
         const transactionToken = await create(mentoringDetails, user, mentor);
         mentoringDetails.transactionToken = transactionToken;
 
+        clearEndpoints(['/v1/mentorings']);
         sendResponse(res, mentoringDetails);
         next();
     } catch (e) {
