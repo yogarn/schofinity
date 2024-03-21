@@ -9,8 +9,8 @@ const onlineClassBucket = process.env.ONLINE_CLASS_BUCKET;
 
 async function addMentor(req, res, next) {
     try {
-        const { programs, mentoringInterval, breakTime, salaryRate, bank } = req.body;
-        const mentorDetails = { programs, mentoringInterval, breakTime, salaryRate, bank };
+        const { programs, mentoringInterval, breakTime, salaryRate, bank, education } = req.body;
+        const mentorDetails = { programs, mentoringInterval, breakTime, salaryRate, bank, education };
         mentorDetails.userId = req.jwt.userId;
         const mentor = await create(mentorDetails);
         sendResponse(res, mentor);
@@ -64,8 +64,8 @@ async function acceptMentor(req, res, next) {
 
 async function updateMentor(req, res, next) {
     try {
-        const { programs, mentoringInterval, breakTime, salaryRate, bank } = req.body;
-        const updateDetails = { programs, mentoringInterval, breakTime, salaryRate, bank };
+        const { programs, mentoringInterval, breakTime, salaryRate, bank, education } = req.body;
+        const updateDetails = { programs, mentoringInterval, breakTime, salaryRate, bank, education };
 
         const userId = req.jwt.userId;
         const mentor = await findByUserId(userId);

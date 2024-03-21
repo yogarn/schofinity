@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
     bank: {
       allowNull: false,
       type: DataTypes.STRING
+    },
+    education: {
+      allowNull: false,
+      type: DataTypes.STRING
     }
   }, {
     sequelize,
