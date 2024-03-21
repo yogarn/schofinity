@@ -98,7 +98,9 @@ async function findByMentorId(mentorId) {
                 { model: ClassType, as: 'classType' }
             ],
             where: { mentorId },
-            order: [{ model: Subject, as: 'subjects' }, 'id', 'ASC'],
+            order: [
+                [{ model: Subject, as: 'subjects' }, 'id', 'ASC']
+            ],
             transaction: t
         });
     });
@@ -119,7 +121,9 @@ async function find(id) {
                 { model: ClassType, as: 'classType' }
             ],
             where: { id },
-            order: [{ model: Subject, as: 'subjects' }, 'id', 'ASC'],
+            order: [
+                [{ model: Subject, as: 'subjects' }, 'id', 'ASC']
+            ],
             transaction: t
         });
     });
