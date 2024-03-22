@@ -42,6 +42,8 @@ const idValidate = [
             throw new Error('Class not found');
         }
     }),
+    body('rating').customSanitizer(value => value ? value : undefined),
+    body('feedback').customSanitizer(value => value ? value : undefined),
     validate
 ]
 

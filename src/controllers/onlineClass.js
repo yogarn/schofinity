@@ -2,6 +2,7 @@ const { findAll, find, create, update, buy, destroy, findAllPayments, findPaymen
 const { sendResponse, sendError } = require('../services/responseHandler');
 const { uploadImage, deleteImage } = require('../services/supabase');
 const { findByUserId } = require('../services/mentor');
+const { clearEndpoints } = require('../services/cache');
 
 const userServices = require('../services/user');
 const resourceServices = require('../services/classResource');
@@ -119,6 +120,8 @@ async function buyOnlineClass(req, res, next) {
         classPaymentDetails.price = onlineClass.price;
         classPaymentDetails.user = user;
         classPaymentDetails.onlineClass = onlineClass;
+        classPaymentDetails.rating = req.body.rating;
+        classPaymentDetails.feedback = req.body.feedback;
 
         const transactionToken = await buy(classPaymentDetails);
         classPaymentDetails.transactionToken = transactionToken;
